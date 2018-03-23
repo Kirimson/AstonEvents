@@ -8,7 +8,8 @@ class CreateEventsTable extends Migration
 {
     /**
      * Run the migrations.
-     *
+     *INSERT INTO `events`
+    VALUES(1, now(), now(), 'test', 'test description', now(), null, 1, 'contact details', 'venue name')
      * @return void
      */
     public function up()
@@ -19,7 +20,7 @@ class CreateEventsTable extends Migration
             $table->string('name', 255);
             $table->string('description', 255);
             $table->timestamp('time')->nullable();
-            $table->binary('picture');
+            $table->binary('picture')->nullable();
             $table->integer('organiser_id');
             $table->string('contact', 255);
             $table->string('venue', 255);

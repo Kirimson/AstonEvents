@@ -18,3 +18,6 @@ Route::get('/', function () {
 Route::get('/hello', function () {
     return 'hellotets';
 });
+
+Route::get('list', 'EventController@list');
+Route::get('show/{id}', 'EventController@show');
