@@ -15,9 +15,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/hello', function () {
-    return 'hellotets';
-});
-
 Route::get('list', 'EventController@list');
 Route::get('show/{id}', 'EventController@show');

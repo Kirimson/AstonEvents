@@ -2,9 +2,10 @@
 @extends('layouts.app')
 
 @section('title', 'Events')
+@section('pageName', 'Events')
+@section('test', 'hello')
 
 @section('content')
-<h1>Events</h1>
 <table>
     <thead>
     <tr>

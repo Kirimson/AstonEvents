@@ -13,7 +13,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-       //
+	    $pages = array("Events", "Home");
+	    view()->share('pages', $pages);
     }
 
     /**

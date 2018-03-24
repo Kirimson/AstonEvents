@@ -1,22 +1,30 @@
-
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
-
 // Variables
 @import "variables";
-
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
 .navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
-$font-stack:    Helvetica, sans-serif;
+$font-stack: Helvetica, sans-serif;
 $primary-color: #333;
+$secondary-color: #888;
+$background-color: #fdfdfd;
 
 body {
-  font: 100% $font-stack;
-  color: $primary-color;
+    font: 100% $font-stack;
+    color: $primary-color;
+    background-color: $background-color;
+}
+
+.sidebar {
+    background-color: $secondary;
+    width: 10em;
+    height: 100%;
+    position: relative;
+    float: left;
 }

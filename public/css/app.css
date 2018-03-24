@@ -10003,5 +10003,14 @@ a.text-dark:focus {
 body {
   font: 100% Helvetica, sans-serif;
   color: #333;
+  background-color: #fdfdfd;
+}
+
+.sidebar {
+  background-color: #6c757d;
+  width: 10em;
+  height: 100%;
+  position: relative;
+  float: left;
 }
 

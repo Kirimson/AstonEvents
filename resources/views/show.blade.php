@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Event {{ $event->id }}</title>
-</head>
-<body>
-<h1>{{ $event->name }} </h1>
+@extends('layouts.app')
+
+@section('title', 'Events')
+@section('pageName', 'Events')
+@section('test', 'hello')
+
+@section('content')
 <ul>
     <li>description: {{ $event->description }}</li>
     <li>time made: {{ $event->time }}</li>
@@ -12,5 +12,4 @@
     <li>contact: {{ $event->contact }}</li>
     <li>venue: {{ $event->venue }}</li>
 </ul>
-</body>
-</html>
+@endsection
