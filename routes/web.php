@@ -23,6 +23,11 @@ Route::get('events', function(){
 	return view('events');
 });
 
+//events
 Route::get('events/list', 'EventController@list');
 Route::get('events/show', 'EventController@showParser');
 Route::get('events/show/{id}', 'EventController@show');
+Route::get('events/create', function(){
+	return view('events/create');
+});
+Route::post('events/create/new', 'EventController@createEvent');

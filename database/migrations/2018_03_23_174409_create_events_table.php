@@ -20,7 +20,7 @@ class CreateEventsTable extends Migration
             $table->string('name', 255);
             $table->string('description', 255);
             $table->timestamp('time')->nullable();
-            $table->binary('picture')->nullable();
+            $table->string('picture', 191)->nullable();
             $table->integer('organiser_id');
             $table->string('contact', 255);
             $table->string('venue', 255);

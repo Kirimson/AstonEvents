@@ -1,7 +1,7 @@
 
 @extends('layouts.app')
 
-@section('title', 'Events')
+@section('title', 'Events List')
 @section('pageName', 'Events')
 
 @section('content')
