@@ -11,9 +11,18 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('list', 'EventController@list');
-Route::get('show/{id}', 'EventController@show');
+
+//Events page
+Route::get('events', function(){
+	return view('events');
+});
+
+Route::get('events/list', 'EventController@list');
+Route::get('events/show', 'EventController@showParser');
+Route::get('events/show/{id}', 'EventController@show');

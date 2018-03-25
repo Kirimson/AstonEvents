@@ -3,7 +3,6 @@
 
 @section('title', 'Events')
 @section('pageName', 'Events')
-@section('test', 'hello')
 
 @section('content')
 <table>

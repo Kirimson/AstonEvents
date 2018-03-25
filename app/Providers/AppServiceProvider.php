@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Page;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +14,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-	    $pages = array("Events", "Home");
+	    $pages = [
+	    	$home = new Page('Home', '/'),
+	    	$event = new Page('Events', '/events')
+	    ];
 	    view()->share('pages', $pages);
     }
 

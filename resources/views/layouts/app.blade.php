@@ -1,4 +1,4 @@
-<html>
+<html lang="{{ app()->getLocale() }}">
 <head>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <title>Aston Events - @yield('title')</title>

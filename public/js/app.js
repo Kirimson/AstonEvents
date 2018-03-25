@@ -38841,7 +38841,7 @@ function flushSchedulerQueue () {
 
   // Sort queue before flush.
   // This ensures that:
-  // 1. Components are updated from parent to child. (because parent is always
+  // 1. components are updated from parent to child. (because parent is always
   //    created before the child)
   // 2. A component's user watchers are run before its render watcher (because
   //    user watchers are created before the render watcher)
