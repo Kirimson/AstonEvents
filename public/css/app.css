@@ -10001,16 +10001,38 @@ a.text-dark:focus {
 }
 
 body {
-  font: 100% Helvetica, sans-serif;
+  font: 100% "Raleway", sans-serif;
   color: #333;
-  background-color: #fdfdfd;
+  background-color: #f7f7f7;
 }
 
-.sidebar {
-  background-color: #6c757d;
-  width: 10em;
-  height: 100%;
-  position: relative;
-  float: left;
+a {
+  color: inherit;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+a:hover {
+  color: inherit;
+}
+
+img {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.navbar {
+  -webkit-box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.45);
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.45);
+  position: fixed;
+  width: 100%;
+}
+
+.container {
+  padding-top: 5.5em;
+}
+
+#brandImage {
+  height: 3em;
 }
 

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Category;
 use App\Page;
 use Illuminate\Support\ServiceProvider;
 
@@ -16,8 +17,13 @@ class AppServiceProvider extends ServiceProvider
 	{
 		$pages = [
 			$home = new Page('Home', '/'),
-			$event = new Page('Events', '/events')
+			$event = new Category('Events', '/events/', array(
+				$main = new Page('Events Main', '/events/'),
+				$create = new Page('Create', '/events/create'),
+				$create = new Page('List', '/events/list'),
+			))
 		];
+
 		view()->share('pages', $pages);
 	}
 

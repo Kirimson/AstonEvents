@@ -25,7 +25,7 @@ Route::get('events', function(){
 
 //events
 Route::get('events/list', 'EventController@list');
-Route::get('events/show', 'EventController@showParser');
+Route::post('events/show', 'EventController@showParser');
 Route::get('events/show/{id}', 'EventController@show');
 Route::get('events/create', function(){
 	return view('events/create');

@@ -35,19 +35,19 @@ class EventController extends Controller
 
 		$imageName = $request->name . '.' . $request->file('picture')->getClientOriginalExtension();
 
-		$request->file('picture')->move(
-			base_path() . '/public/images/events/', $imageName
-		);
+		$imagePath = 'img/events/';
+
+		$request->file('picture')->move(base_path() . '/public/' . $imagePath, $imageName);
 
 		$event = new Event();
 
     	$fields = [
    		'created_at' => Carbon::now(),
    		'updated_at' => Carbon::now(),
-    	'name' => Input::get('name'),
+    	'name' => $request->name,
     	'description' => Input::get('description'),
     	'time' => Carbon::now(),
-    	'picture' => Input::get('picture'),
+    	'picture' => $imagePath.$imageName,
     	'organiser_id' => Input::get('organiser_id'),
     	'contact' => Input::get('contact'),
     	'venue' => Input::get('venue')

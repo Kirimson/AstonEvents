@@ -10,21 +10,38 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
-$font-stack: Helvetica, sans-serif;
-$primary-color: #333;
-$secondary-color: #888;
-$background-color: #fdfdfd;
-
 body {
-    font: 100% $font-stack;
+    font: 100% $font-family-sans-serif;
     color: $primary-color;
     background-color: $background-color;
 }
 
-.sidebar {
-    background-color: $secondary;
-    width: 10em;
-    height: 100%;
-    position: relative;
-    float: left;
+a{
+    color: inherit;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+a:hover{
+    color: inherit;
+}
+
+img{
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.navbar {
+    -webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.45);
+    -moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.45);
+    box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.45);
+    position: fixed;
+    width: 100%;
+}
+.container{
+    padding-top: $navHeight+2.5em;
+}
+
+#brandImage{
+    height: $navHeight;
 }

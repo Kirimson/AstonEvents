@@ -5,12 +5,21 @@
 @section('pageName', 'Events')
 
 @section('content')
+
     <div><a href="{{ url('events/list') }}">List events</a> </div>
     <div><a href="{{ url('events/create') }}">Create event</a> </div>
 
-    <form action=" {{ url('events/show') }}">
-        <input type="text" name="id">
-        <input type="submit" onclick="">
-    </form>
+    {!! Form::open(array('url' => 'events/show', 'class' => 'form')) !!}
+
+    <div class="form-group">
+        {{ Form::label('Event ID') }}
+        {{ Form::text('id', null) }}
+    </div>
+
+    <div class="form-group">
+        {!! Form::submit('Find Event') !!}
+    </div>
+
+    {!! Form::close() !!}
 
 @endsection
