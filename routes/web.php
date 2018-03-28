@@ -29,11 +29,14 @@ Route::post('events/show', 'EventController@showParser');
 Route::get('events/show/{id}', 'EventController@show');
 Route::get('events/create', function(){
 	return view('events/create');
-});
+})->middleware('auth');
 Route::post('events/create/new', 'EventController@createEvent');
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/myAccount', 'HomeController@index');
+
 Route::get('/signup', function(){
 	return view('/auth/register');
 });
+
+Route::get('/logout', 'Auth\LoginController@logout');

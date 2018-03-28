@@ -5,6 +5,12 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+@mixin box-shadow($voffset, $hoffset, $blur, $spread, $color) {
+    -webkit-box-shadow: $voffset $hoffset $blur $spread $color;
+    -moz-box-shadow: $voffset $hoffset $blur $spread $color;
+    box-shadow: $voffset $hoffset $blur $spread $color;
+}
+
 .navbar-laravel {
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
@@ -14,6 +20,14 @@ body {
     font: 100% $font-family-sans-serif;
     color: $primary-color;
     background-color: $background-color;
+}
+
+h1{
+    text-decoration-line: underline;
+}
+
+h2{
+    @extend %centered;
 }
 
 a{
@@ -33,12 +47,11 @@ img{
 
 .navbar {
     z-index: 1;
-    -webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.45);
-    -moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.45);
-    box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.45);
     position: fixed;
     width: 100%;
+    @include box-shadow(0, 2px, 3px, 0, rgba(0,0,0,0.45));
 }
+
 .container{
     z-index: 2;
     padding-top: $navHeight+2.5em;

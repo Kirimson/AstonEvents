@@ -44,8 +44,8 @@
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i>{{ Auth::user()->name }}</a>
                     <div class="dropdown-menu" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">My Account</a>
-                        <a class="dropdown-item" href="#">Log Out</a>
+                        <a class="dropdown-item" href="{{ url('/myAccount') }}">My Account</a>
+                        <a class="dropdown-item" href="{{ url('/logout') }}">Log Out</a>
                     </div>
                 </li>
             @else

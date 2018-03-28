@@ -2,7 +2,6 @@
 
 @section('title', 'Event')
 @section('pageName', 'Events')
-@section('test', 'hello')
 
 @section('content')
     @if($event != null)

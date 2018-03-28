@@ -4,7 +4,7 @@
 @section('pageName', 'Events')
 
 @section('content')
-    <div class="well">
+    <div>
         {!! Form::open(
         array(
             'url' => 'events/create/new',
@@ -14,54 +14,58 @@
 
         <fieldset>
             {{--Name--}}
-            <div class="form-group">
-                {!! Form::label('name', 'Event Name:', ['class' => 'col-lg-2 control-label']) !!}
-                <div class="col-lg-12">
-                    {{ Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'Event Name']) }}
+            <div class="form-group row">
+                {!! Form::label('name', 'Event Name', ['class' => 'col-lg-2 col-form-label text-md-right']) !!}
+                <div class="col-lg-10">
+                    {{ Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'Name of the event']) }}
                 </div>
             </div>
 
             {{--Description--}}
-            <div class="form-group">
-                {!! Form::label('description', 'Description:', ['class' => 'col-lg-2 control-label']) !!}
-                <div class="col-lg-12">
-                    {{ Form::text('description', null, ['class' => 'form-control', 'placeholder' => 'Description']) }}
+            <div class="form-group row">
+                {!! Form::label('description', 'Description', ['class' => 'col-lg-2 control-label col-form-label text-md-right']) !!}
+                <div class="col-lg-10">
+                    {{ Form::text('description', null, ['class' => 'form-control', 'placeholder' => 'Description of the event']) }}
                 </div>
             </div>
 
             {{--Image--}}
-            <div class="form-group">
-                {!! Form::label('picture', 'Event Image:', ['class' => 'col-lg-2 control-label']) !!}
+            <div class="form-group row">
+                {!! Form::label('picture', 'Event Image', ['class' => 'col-lg-2 control-label col-form-label text-md-right']) !!}
                 {!! Form::file('picture', null, ['class' => 'form-control-file']) !!}
             </div>
 
-            {{--Organiser--}}
-            <div class="form-group">
-                {!! Form::label('organiser', 'Organiser:', ['class' => 'col-lg-2 control-label']) !!}
-                <div class="col-lg-12">
-                    {{ Form::text('organiser_id', null, ['class' => 'form-control', 'placeholder' => 'Description']) }}
+            {{--Organiser Should be a hidden field, using your logged in user ID--}}
+            <div class="form-group row">
+                {!! Form::label('organiser', 'Organiser', ['class' => 'col-lg-2 control-label col-form-label text-md-right']) !!}
+                <div class="col-lg-10">
+                    {{ Form::text('organiser_id', null, ['class' => 'form-control', 'placeholder' => 'Organiser']) }}
                 </div>
             </div>
 
             {{--Contact--}}
-            <div class="form-group">
-                {!! Form::label('contact', 'Contact Details:', ['class' => 'col-lg-2 control-label']) !!}
-                <div class="col-lg-12">
-                    {{ Form::text('contact', null, ['class' => 'form-control', 'placeholder' => 'Description']) }}
+            <div class="form-group row">
+                {!! Form::label('contact', 'Contact Details', ['class' => 'col-lg-2 control-label col-form-label text-md-right']) !!}
+                <div class="col-lg-10">
+                    {{ Form::text('contact', null, ['class' => 'form-control', 'placeholder' => 'Contact details for the event']) }}
                 </div>
             </div>
 
             {{--Venue--}}
-            <div class="form-group">
-                {!! Form::label('venue', 'Venue', ['class' => 'col-lg-2 control-label']) !!}
-                <div class="col-lg-12">
-                    {{ Form::text('venue', null, ['class' => 'form-control', 'placeholder' => 'Description']) }}
+            <div class="form-group row">
+                {!! Form::label('venue', 'Venue', ['class' => 'col-lg-2 control-label col-form-label text-md-right']) !!}
+                <div class="col-lg-10">
+                    {{ Form::text('venue', null, ['class' => 'form-control', 'placeholder' => 'Venue event will take place at']) }}
                 </div>
             </div>
 
             {{--Create Button--}}
-            <div class="form-group">
-                {!! Form::submit('Create Event!', ['class' => 'btn btn-primary']) !!}
+            <div class="form-group row mb-0">
+                <div class="col-md-8 offset-md-2">
+                    <button type="submit" class="btn btn-outline-primary">
+                        {{ __('Create Event!') }}
+                    </button>
+                </div>
             </div>
             {!! Form::close() !!}
         </fieldset>

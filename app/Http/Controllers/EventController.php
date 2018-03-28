@@ -45,12 +45,12 @@ class EventController extends Controller
    		'created_at' => Carbon::now(),
    		'updated_at' => Carbon::now(),
     	'name' => $request->name,
-    	'description' => Input::get('description'),
+    	'description' => $request->description,
     	'time' => Carbon::now(),
     	'picture' => $imagePath.$imageName,
-    	'organiser_id' => Input::get('organiser_id'),
-    	'contact' => Input::get('contact'),
-    	'venue' => Input::get('venue')
+    	'organiser_id' => $request->organiser_id,
+    	'contact' => $request->contact,
+    	'venue' => $request->venue
     	];
 
 		$event->create($fields);
