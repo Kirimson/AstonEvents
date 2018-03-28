@@ -7,20 +7,20 @@
             @foreach($pages as $page)
 
                 @if($page->name != $app->view->getSections()['pageName']) {{-- if current page --}}
-                @if($page instanceof \App\Category)
+                @if($page instanceof \App\Category) {{-- if a category --}}
                     <li class="nav-item dropdown">
                 @else
                     <li class="nav-item">
                 @endif
                 @else
-                    @if($page instanceof \App\Category)
+                    @if($page instanceof \App\Category) {{-- if a category --}}
                         <li class="nav-item active dropdown">
                     @else
                         <li class="nav-item active">
                             @endif
                             @endif
                             {{-- content of link in bar --}}
-                            @if($page instanceof \App\Category)
+                            @if($page instanceof \App\Category) {{-- if a category, write its pages --}}
                                 <a class="nav-link dropdown-toggle" href="#"
                                    id="{{ $page->name }}Dropdown" role="button" data-toggle="dropdown"
                                    aria-haspopup="true" aria-expanded="false">{{ $page->name }}</a>
@@ -29,7 +29,7 @@
                                         <a class="dropdown-item" href="{{ url($cat->route) }}">{{ $cat->name }}</a>
                                     @endforeach
                                 </div>
-                            @else
+                            @else {{-- else, just a simple link --}}
                                 <a class="nav-link" href="{{ url($page->route) }}">{{ $page->name }}</a>
                             @endif
 
@@ -42,14 +42,14 @@
             @if(Auth::check())
                 <li class="nav-item active dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i>TOBEFILLEDIN</a>
+                       aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i>{{ Auth::user()->name }}</a>
                     <div class="dropdown-menu" aria-labelledby="userDropdown">
                         <a class="dropdown-item" href="#">My Account</a>
                         <a class="dropdown-item" href="#">Log Out</a>
                     </div>
                 </li>
             @else
-                <li class="nav-item">Login/Register</li>
+                <li class="nav-item"><a href="{{ url('/login') }}">Login/Register</a></li>
             @endif
         </ul>
     </div>

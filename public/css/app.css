@@ -10022,6 +10022,7 @@ img {
 }
 
 .navbar {
+  z-index: 1;
   -webkit-box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.45);
   box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.45);
   position: fixed;
@@ -10029,6 +10030,7 @@ img {
 }
 
 .container {
+  z-index: 2;
   padding-top: 5.5em;
 }
 

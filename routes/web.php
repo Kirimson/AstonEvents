@@ -31,3 +31,9 @@ Route::get('events/create', function(){
 	return view('events/create');
 });
 Route::post('events/create/new', 'EventController@createEvent');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/signup', function(){
+	return view('/auth/register');
+});

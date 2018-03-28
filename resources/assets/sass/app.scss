@@ -32,6 +32,7 @@ img{
 }
 
 .navbar {
+    z-index: 1;
     -webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.45);
     -moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.45);
     box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.45);
@@ -39,6 +40,7 @@ img{
     width: 100%;
 }
 .container{
+    z-index: 2;
     padding-top: $navHeight+2.5em;
 }
 
