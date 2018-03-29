@@ -32,7 +32,7 @@
                 <div class="form-group row">
                     {!! Form::label('', 'Description', ['class' => 'col-lg-2 control-label col-form-label text-md-right']) !!}
                     <div class="col-lg-10">
-                        {{ Form::text('description', null, ['required' => 'required', 'class' => 'form-control', 'placeholder' => 'Description of the event']) }}
+                        {{ Form::textarea('description', null, ['id'=> 'description', 'size' => '50x3', 'required' => 'required', 'class' => 'form-control', 'placeholder' => 'Description of the event']) }}
                     </div>
                 </div>
 
@@ -48,15 +48,12 @@
                 {{--Image--}}
                 <div class="form-group row">
                     {!! Form::label('', 'Event Image', ['class' => 'col-lg-2 control-label col-form-label text-md-right']) !!}
-                    <input type="file" name="picture" id="picture" class="hidden-input"/>
+                    <input type="file" name="picture" id="picture" class="hidden-input" accept=".png,.jpg,.bmp,.svg"/>
                     <label for="picture" class="fake-gutter">
                         <a type="button" class="btn btn-outline-secondary">Upload a file</a>
                         <small class="text-muted">Max size: 2MB</small>
                     </label>
                 </div>
-
-                {{--Organiser Should be a hidden field, using your logged in user ID--}}
-                {{ Form::hidden('organiser_id', Auth::user()->id) }}
 
                 {{--Contact--}}
                 <div class="form-group row">
@@ -87,7 +84,7 @@
         </div>
         {{--Image preview pane--}}
         <div class="col-lg-3">
-            <h2>Image Preview</h2>
+            <h2>Preview</h2>
             <div id="event-image-container">
                 <img id="event-image" class="text-md-right text-muted"
                      src="{!!asset('img/events/default/default.svg')!!}" alt=""/>
@@ -100,7 +97,7 @@
 
     <script>
 
-        $(function(){
+        $(function () {
             $('#event-name-heading').html($('#name').val())
         });
 
@@ -118,14 +115,20 @@
 
         $('#picture').change(function (e) {
 
-            var files = e.currentTarget.files;
+            let files = e.currentTarget.files;
 
-            var fileSize = ((files[0].size / 1024) / 1024).toFixed(4);
+            let fileSize = ((files[0].size / 1024) / 1024).toFixed(4);
+
+
+            let acceptedTypes = ["png", "jpg", "bmp", "svg"];
+            let fileExtension = $(this).val().split('.').pop();
+
+            console.log(fileExtension);
 
             console.log(fileSize);
 
             //if smaller than max image size
-            if (fileSize <= 2 && !isNaN(fileSize) ) {
+            if (fileSize <= 2 && !isNaN(fileSize) && (jQuery.inArray(fileExtension, acceptedTypes) !== -1)) {
                 $('#createSubmitButton').prop('disabled', false);
                 readURL(this);
             } else { //clear the image preview section

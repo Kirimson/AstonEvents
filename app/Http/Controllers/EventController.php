@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
@@ -30,12 +31,17 @@ class EventController extends Controller
 		return view('/events/search', array('events' => Event::all()));
 	}
 
+	public function create()
+	{
+		return view('/events/event', array('create' => true));
+	}
+
 	public function createEvent(Request $request)
 	{
 		$imagesql = null;
 
 		//create image details
-		if($request->file('picture') != null) {
+		if ($request->file('picture') != null) {
 			$imageName = $request->name . '.' . $request->file('picture')->getClientOriginalExtension();
 			$imagePath = 'img/events/';
 			$request->file('picture')->move(base_path() . '/public/' . $imagePath, $imageName);
@@ -48,7 +54,7 @@ class EventController extends Controller
 
 		$event = new Event();
 
-		$event->organiser_id = $request->organiser_id;
+		$event->organiser_id = Auth::user()->id;
 		$event->created_at = Carbon::now();
 		$event->updated_at = Carbon::now();
 		$event->name = $request->name;

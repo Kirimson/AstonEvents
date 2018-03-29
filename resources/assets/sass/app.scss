@@ -93,3 +93,7 @@ img{
 #event-name-heading{
     @extend %userText;
 }
+
+#description{
+    resize: none;
+}

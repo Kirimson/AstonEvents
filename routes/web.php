@@ -27,9 +27,7 @@ Route::get('events', function(){
 Route::get('events/search', 'EventController@search');
 Route::post('events/show', 'EventController@showParser');
 Route::get('events/show/{id}', 'EventController@show');
-Route::get('events/create', function(){
-	return view('events/create');
-})->middleware('auth');
+Route::get('events/create', 'EventController@create')->middleware('auth');
 Route::post('events/create/new', 'EventController@createEvent');
 Auth::routes();
 

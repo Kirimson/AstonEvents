@@ -10084,3 +10084,7 @@ img {
   border-radius: 50%;
 }
 
+#description {
+  resize: none;
+}
+
