@@ -6,3 +6,19 @@ $body-bg: #f5f8fa;
 $font-family-sans-serif: "Raleway", sans-serif;
 $font-size-base: 0.9rem;
 $line-height-base: 1.6;
+
+$primary-color: #333;
+$secondary-color: #888;
+$background-color: #f7f7f7;
+
+$navHeight: 3em;
+
+%centered{
+    text-decoration-line: underline;
+    text-align: center;
+}
+
+%userText{
+    overflow-wrap: break-word;
+    hyphens:auto;
+}

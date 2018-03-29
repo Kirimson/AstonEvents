@@ -1,14 +1,99 @@
-
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
-
 // Variables
 @import "variables";
-
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+@mixin box-shadow($voffset, $hoffset, $blur, $spread, $color) {
+    -webkit-box-shadow: $voffset $hoffset $blur $spread $color;
+    -moz-box-shadow: $voffset $hoffset $blur $spread $color;
+    box-shadow: $voffset $hoffset $blur $spread $color;
+}
+
 .navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+body {
+    font: 100% $font-family-sans-serif;
+    color: $primary-color;
+    background-color: $background-color;
+}
+
+h1{
+    text-decoration-line: underline;
+}
+
+h2{
+    @extend %centered;
+}
+
+a{
+    color: inherit;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+a:hover{
+    color: inherit;
+}
+
+img{
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.navbar {
+    z-index: 1;
+    position: fixed;
+    width: 100%;
+    @include box-shadow(0, 2px, 3px, 0, rgba(0,0,0,0.45));
+}
+
+.container{
+    z-index: 2;
+    padding-top: $navHeight+2.5em;
+}
+
+.hidden-input {
+    display: none;
+}
+
+.fake-gutter{
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#brand-image{
+    height: $navHeight;
+}
+
+
+#register-box{
+    padding: 1em;
+}
+
+#file-limit{
+    vertical-align: bottom;
+}
+
+#event-image-container{
+    text-align: center;
+    width: 100%;
+}
+
+#event-image{
+    max-height: 9em;
+    max-width: 9em;
+    border-radius: 50%;
+}
+
+#event-name-heading{
+    @extend %userText;
+}
+
+#description{
+    resize: none;
 }

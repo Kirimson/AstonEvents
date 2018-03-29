@@ -11,10 +11,30 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/hello', function () {
-    return 'hellotets';
+
+//Events page
+Route::get('events', function(){
+	return view('events');
 });
+
+//events
+Route::get('events/search', 'EventController@search');
+Route::post('events/show', 'EventController@showParser');
+Route::get('events/show/{id}', 'EventController@show');
+Route::get('events/create', 'EventController@create')->middleware('auth');
+Route::post('events/create/new', 'EventController@createEvent');
+Auth::routes();
+
+Route::get('/myAccount', 'HomeController@index');
+
+Route::get('/signup', function(){
+	return view('/auth/register');
+});
+
+Route::get('/logout', 'Auth\LoginController@logout');

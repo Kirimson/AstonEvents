@@ -17,8 +17,9 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
+    	//if logged in, redirect to this page
         if (Auth::guard($guard)->check()) {
-            return redirect('/home');
+            return redirect('/myAccount');
         }
 
         return $next($request);
