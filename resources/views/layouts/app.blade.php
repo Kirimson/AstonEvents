@@ -17,7 +17,6 @@
 
 {{--main content of page--}}
 <div class="container">
-    <h1>@yield('pageName')</h1>
     @yield('content')
 </div>
 

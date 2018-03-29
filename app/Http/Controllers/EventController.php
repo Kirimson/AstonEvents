@@ -23,7 +23,7 @@ class EventController extends Controller
 	public function show($id)
 	{
 		$event = Event::find($id);
-		return view('/events/show', array('event' => $event));
+		return view('/events/event', array('create' => false, 'event' => $event));
 	}
 
 	public function search()
@@ -33,7 +33,7 @@ class EventController extends Controller
 
 	public function create()
 	{
-		return view('/events/event', array('create' => true));
+		return view('/events/event', array('create' => true, 'event' => null));
 	}
 
 	public function createEvent(Request $request)
@@ -67,6 +67,6 @@ class EventController extends Controller
 
 		$event->save();
 
-		return back();
+		return redirect('events/show/'.$event->id);
 	}
 }
