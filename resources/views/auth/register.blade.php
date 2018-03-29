@@ -66,8 +66,4 @@
             </div>
         </div>
     </form>
-
-    <script>
-        $(':password').pwstrength();
-    </script>
 @endsection

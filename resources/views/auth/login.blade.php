@@ -59,10 +59,11 @@
             </div>
         </div>
     </form>
-
-    <h2>Want to become an Organiser?</h2>
-    <div class="row mb-0">
-        <a class="btn btn-outline-success col-lg-2 offset-5" href="{{ url('/register') }}" role="button">Create an
-            Account</a>
+    <div id="registerBox">
+        <h2>Want to become an Organiser?</h2>
+        <div class="row mb-0">
+            <a class="btn btn-outline-success col-lg-2 offset-5" href="{{ url('/register') }}" role="button">Create an
+                Account</a>
+        </div>
     </div>
 @endsection

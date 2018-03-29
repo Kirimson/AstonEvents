@@ -15,15 +15,17 @@ class CreateEventsTable extends Migration
     public function up()
     {
         Schema::create('events', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('event_id');
+	        $table->integer('organiser_id')->unsigned();
             $table->timestamps();
             $table->string('name', 255);
             $table->string('description', 255);
+            $table->enum('category', array('sport', 'culture', 'other'));
             $table->timestamp('time')->nullable();
             $table->string('picture', 191)->nullable();
-            $table->integer('organiser_id');
             $table->string('contact', 255);
             $table->string('venue', 255);
+	        $table->foreign('organiser_id')->references('id')->on('users');
         });
     }
 

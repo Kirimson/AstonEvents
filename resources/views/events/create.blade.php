@@ -29,6 +29,15 @@
                 </div>
             </div>
 
+            {{-- Category --}}
+            <div class="form-group row">
+                {!! Form::label('a', 'Category', ['class' => 'col-lg-2 control-label col-form-label text-md-right']) !!}
+                <div class="col-lg-10">
+                    {{ Form::select('category', array('sport' => 'Sport', 'culture' => 'Culture', 'other' => 'Other'), 'other',
+                    ['class' => 'form-control']) }}
+                </div>
+            </div>
+
             {{--Image--}}
             <div class="form-group row">
                 {!! Form::label('picture', 'Event Image', ['class' => 'col-lg-2 control-label col-form-label text-md-right']) !!}
@@ -36,12 +45,7 @@
             </div>
 
             {{--Organiser Should be a hidden field, using your logged in user ID--}}
-            <div class="form-group row">
-                {!! Form::label('organiser', 'Organiser', ['class' => 'col-lg-2 control-label col-form-label text-md-right']) !!}
-                <div class="col-lg-10">
-                    {{ Form::text('organiser_id', null, ['class' => 'form-control', 'placeholder' => 'Organiser']) }}
-                </div>
-            </div>
+            {{ Form::hidden('organiser_id', Auth::user()->id) }}
 
             {{--Contact--}}
             <div class="form-group row">

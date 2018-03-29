@@ -32,7 +32,6 @@ class EventController extends Controller
 
 	public function createEvent(Request $request)
 	{
-
 		$imageName = $request->name . '.' . $request->file('picture')->getClientOriginalExtension();
 
 		$imagePath = 'img/events/';
@@ -41,18 +40,19 @@ class EventController extends Controller
 
 		$event = new Event();
 
-    	$fields = [
-   		'created_at' => Carbon::now(),
-   		'updated_at' => Carbon::now(),
-    	'name' => $request->name,
-    	'description' => $request->description,
-    	'time' => Carbon::now(),
-    	'picture' => $imagePath.$imageName,
-    	'organiser_id' => $request->organiser_id,
-    	'contact' => $request->contact,
-    	'venue' => $request->venue
-    	];
+		$event->organiser_id = $request->organiser_id;
+		$event->created_at = Carbon::now();
+		$event->updated_at = Carbon::now();
+		$event->name = $request->name;
+		$event->description = $request->description;
+		$event->category = Input::get('category');
+		$event->time = Carbon::now();
+		$event->picture = $imagePath . $imageName;
+		$event->contact = $request->contact;
+		$event->venue = $request->venue;
 
-		$event->create($fields);
+		$event->save();
+
+		return back();
 	}
 }
