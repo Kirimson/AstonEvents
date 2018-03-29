@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="{{ url('/') }}"><img src="{!!asset('img/logo.svg')!!}" id="brandImage"></a>
+    <a class="navbar-brand" href="{{ url('/') }}"><img src="{!!asset('img/logo.svg')!!}" id="brand-image"></a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         {{--Left side of bar, used for pages--}}

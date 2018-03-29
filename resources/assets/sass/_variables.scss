@@ -17,3 +17,8 @@ $navHeight: 3em;
     text-decoration-line: underline;
     text-align: center;
 }
+
+%userText{
+    overflow-wrap: break-word;
+    hyphens:auto;
+}

@@ -4,6 +4,13 @@
   text-align: center;
 }
 
+#event-name-heading {
+  overflow-wrap: break-word;
+  -webkit-hyphens: auto;
+      -ms-hyphens: auto;
+          hyphens: auto;
+}
+
 /*!
  * Bootstrap v4.0.0 (https://getbootstrap.com)
  * Copyright 2011-2018 The Bootstrap Authors
@@ -10045,11 +10052,35 @@ img {
   padding-top: 5.5em;
 }
 
-#brandImage {
+.hidden-input {
+  display: none;
+}
+
+.fake-gutter {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+#brand-image {
   height: 3em;
 }
 
-#registerBox {
+#register-box {
   padding: 1em;
+}
+
+#file-limit {
+  vertical-align: bottom;
+}
+
+#event-image-container {
+  text-align: center;
+  width: 100%;
+}
+
+#event-image {
+  max-height: 9em;
+  max-width: 9em;
+  border-radius: 50%;
 }
 

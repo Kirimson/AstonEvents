@@ -57,10 +57,39 @@ img{
     padding-top: $navHeight+2.5em;
 }
 
-#brandImage{
+.hidden-input {
+    display: none;
+}
+
+.fake-gutter{
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#brand-image{
     height: $navHeight;
 }
 
-#registerBox{
+
+#register-box{
     padding: 1em;
+}
+
+#file-limit{
+    vertical-align: bottom;
+}
+
+#event-image-container{
+    text-align: center;
+    width: 100%;
+}
+
+#event-image{
+    max-height: 9em;
+    max-width: 9em;
+    border-radius: 50%;
+}
+
+#event-name-heading{
+    @extend %userText;
 }

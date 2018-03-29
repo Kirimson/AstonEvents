@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class EventController extends Controller
 {
@@ -33,17 +32,18 @@ class EventController extends Controller
 
 	public function createEvent(Request $request)
 	{
+		$imagesql = null;
+
 		//create image details
-		$imageName = $request->name . '.' . $request->file('picture')->getClientOriginalExtension();
-		$imagePath = 'img/events/';
-		$request->file('picture')->move(base_path() . '/public/' . $imagePath, $imageName);
+		if($request->file('picture') != null) {
+			$imageName = $request->name . '.' . $request->file('picture')->getClientOriginalExtension();
+			$imagePath = 'img/events/';
+			$request->file('picture')->move(base_path() . '/public/' . $imagePath, $imageName);
+			$imagesql = $imagePath . $imageName;
+		}
 
 		$request->validate([
-			'name' => 'required|unique:events|max:191',
-			'description' => 'required|max:191',
-			'category' => 'required|max:191',
-			'contact' => 'required|max:191',
-			'venue' => 'required|max:191',
+			'name' => 'required|unique:events|max:100',
 		]);
 
 		$event = new Event();
@@ -55,7 +55,7 @@ class EventController extends Controller
 		$event->description = $request->description;
 		$event->category = Input::get('category');
 		$event->time = Carbon::now();
-		$event->picture = $imagePath . $imageName;
+		$event->picture = $imagesql;
 		$event->contact = $request->contact;
 		$event->venue = $request->venue;
 
