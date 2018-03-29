@@ -17,7 +17,13 @@
             <div class="form-group row">
                 {!! Form::label('name', 'Event Name', ['class' => 'col-lg-2 col-form-label text-md-right']) !!}
                 <div class="col-lg-10">
-                    {{ Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'Name of the event']) }}
+                    <input class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}"
+                           placeholder="Name of the event" name="name" id="name" type="text">
+                    @if ($errors->has('name'))
+                        <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('name') }}</strong>
+                                    </span>
+                    @endif
                 </div>
             </div>
 

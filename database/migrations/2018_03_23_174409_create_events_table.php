@@ -18,7 +18,7 @@ class CreateEventsTable extends Migration
             $table->increments('event_id');
 	        $table->integer('organiser_id')->unsigned();
             $table->timestamps();
-            $table->string('name', 255);
+            $table->string('name', 191)->unique();
             $table->string('description', 255);
             $table->enum('category', array('sport', 'culture', 'other'));
             $table->timestamp('time')->nullable();

@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class EventController extends Controller
 {
@@ -25,18 +26,25 @@ class EventController extends Controller
 		return view('/events/show', array('event' => $event));
 	}
 
-	public function list()
+	public function search()
 	{
-		return view('/events/list', array('events' => Event::all()));
+		return view('/events/search', array('events' => Event::all()));
 	}
 
 	public function createEvent(Request $request)
 	{
+		//create image details
 		$imageName = $request->name . '.' . $request->file('picture')->getClientOriginalExtension();
-
 		$imagePath = 'img/events/';
-
 		$request->file('picture')->move(base_path() . '/public/' . $imagePath, $imageName);
+
+		$request->validate([
+			'name' => 'required|unique:events|max:191',
+			'description' => 'required|max:191',
+			'category' => 'required|max:191',
+			'contact' => 'required|max:191',
+			'venue' => 'required|max:191',
+		]);
 
 		$event = new Event();
 

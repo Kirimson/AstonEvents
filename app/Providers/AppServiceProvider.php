@@ -20,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
 			$event = new Category('Events', '/events/', array(
 				$main = new Page('Events Main', '/events/'),
 				$create = new Page('Create', '/events/create'),
-				$create = new Page('List', '/events/list'),
+				$create = new Page('Search', '/events/search'),
 			))
 		];
 

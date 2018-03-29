@@ -24,7 +24,7 @@ Route::get('events', function(){
 });
 
 //events
-Route::get('events/list', 'EventController@list');
+Route::get('events/search', 'EventController@search');
 Route::post('events/show', 'EventController@showParser');
 Route::get('events/show/{id}', 'EventController@show');
 Route::get('events/create', function(){
