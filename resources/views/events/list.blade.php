@@ -21,7 +21,7 @@
             <td> {{ $event->name }}</td>
             <td> {{ $event->description }}</td>
             <td> {{ $event->time }}</td>
-            <td> {{ $event->organiser_id }}</td>
+            <td> {{ $event->user->name }}</td>
             <td> {{ $event->contact }}</td>
             <td> {{ $event->venue }}</td>
         </tr>
