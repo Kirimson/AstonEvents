@@ -171,20 +171,50 @@
             console.log("viewing");
 
             $(function () {
+                //load liked events
+                let likedEvents = [];
+                try {
+                    likedEvents = JSON.parse(localStorage.getItem("liked-events"));
+                    let test = likedEvents[0];
+                } catch (err) {
+                    console.log(err.message);
+                    likedEvents = [];
+                }
+
+                if (likedEvents.includes({{ $event->id }})) {
+                    $('#like-event-button').removeClass('btn-outline-primary');
+                    $('#like-event-button').addClass('btn-success');
+                    $('#like-event-button').html('Liked!');
+                }
+
                 $('#like-event-button').click(function () {
+                    let shouldLike = true;
+                    if (likedEvents.includes({{ $event->id }})) {
+                        shouldLike = false;
+                    }
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
                         type: 'POST',
-                        url: 'like',
-                        data: { id : '{{ $event->id }}'},
+                        url: (shouldLike === false ? 'un' : '')+'like',
+                        data: {id: '{{ $event->id }}'},
                         success: function (response) {
-                            console.log(response);
-                            $('#like-event-button').removeClass('btn-outline-primary');
-                            $('#like-event-button').addClass('btn-success');
-                            $('#like-event-button').html('Liked!');
-                            $('#like-event-button').attr('disabled', 'true');
+                            if (shouldLike === true) {
+                                $('#like-event-button').removeClass('btn-outline-primary');
+                                $('#like-event-button').addClass('btn-success');
+                                $('#like-event-button').html('Liked!');
+                                likedEvents.push({{ $event->id }});
+                            } else {
+                                $('#like-event-button').removeClass('btn-success');
+                                $('#like-event-button').addClass('btn-outline-primary');
+                                $('#like-event-button').html('Like');
+                                let indexOf = likedEvents.indexOf({{ $event->id }});
+                                if (indexOf > -1) {
+                                    likedEvents.splice(indexOf, 1);
+                                }
+                            }
+                            localStorage.setItem("liked-events", JSON.stringify(likedEvents))
                         }
                     });
                 });

@@ -91,9 +91,13 @@ class EventController extends Controller
 
 	public function like(Request $request){
 		$event = Event::find($request->id);
-
 		$event->likes++;
+		$event->save();
+	}
 
+	public function unlike(Request $request){
+		$event = Event::find($request->id);
+		$event->likes--;
 		$event->save();
 	}
 }
