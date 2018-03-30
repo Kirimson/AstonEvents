@@ -42,7 +42,7 @@
                     @endif
                 @else
                     <h3 id="event-name-heading">{{ ucfirst($event->name) }}</h3>
-                    <button type="submit" id="createSubmitButton" class="btn btn-outline-primary">Like</button>
+                    <button type="submit" id="like-event-button" class="btn btn-outline-primary">Like</button>
                 @endif
             </div>
         </div>
@@ -165,6 +165,28 @@
                 console.log("here");
                 $('#event-name-heading').html($('#name').val())
             })
+        </script>
+    @else
+        <script>
+            console.log("viewing");
+
+            $(function () {
+                $('#like-event-button').click(function () {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        type: 'POST',
+                        url: 'like',
+                        data: 'id = {{ $event->id }}',
+                        success: function () {
+                            alert("didit");
+                        }
+                    });
+                });
+            });
+
+
         </script>
     @endif
 @endsection
