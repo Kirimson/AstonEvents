@@ -5,6 +5,7 @@
 
 @section('content')
 
+    {{-- Header, if creating, open form for page, close at end of page --}}
     @if($create == true)
         {!! Form::open(
             array(
@@ -12,26 +13,28 @@
                 'class' => 'form-horizontal',
                 'files' => true)) !!}
     @endif
-
     <div class="row">
         <div id="event-image-container">
+            {{-- if creating a new event, create label and file input. otherwise, display event image --}}
             @if($create == true)
                 <input type="file" name="picture" id="picture" class="hidden-input" accept=".png,.jpg,.bmp,.svg"/>
 
                 <label for="picture">
                     @endif
+                    {{-- if creating, display default. if not, display event image. if no image, fallback --}}
                     <img id="event-image"
                          src="{{ $create == true ? asset('img/events/default/default.svg') : $event->picture == null ?
                          asset('img/events/default/default.svg') : asset($event->picture) }}"
                          alt=""/>
                     @if($create == true)
                 </label>
-
             @endif
+            {{-- If createing, display name form, otherwise, display event name --}}
             @if($create == true)
                 <div class="col-lg-4 offset-4">
                     <input class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}"
                            placeholder="Name of the event" name="name" id="name" type="text" required>
+                    {{-- If there are errors, display them, and mark form input as invalid--}}
                     @if ($errors->has('name'))
                         <span class="invalid-feedback">
                             <strong>{{ $errors->first('name') }}</strong>
@@ -39,37 +42,40 @@
                     @endif
                 </div>
             @else
-                <h3 id="event-name-heading">{{ $event->name }}</h3>
+                <h3 id="event-name-heading">{{ ucfirst($event->name) }}</h3>
             @endif
         </div>
     </div>
 
+    {{-- Start description/details section --}}
     <div class="row">
         <div class="col-lg-6 offset-1">
             <h1>Description</h1>
 
+            {{-- If creating, display textarea for description, else display description --}}
             @if($create == true)
                 {{ Form::textarea('description', null, ['id'=> 'description', 'size' => '50x9',
                 'required' => 'required', 'class' => 'form-control', 'placeholder' => 'Description of the event']) }}
             @else
                 <div>
-                    {{ $event->description }}
+                    {{ ucfirst($event->description) }}
                 </div>
             @endif
 
         </div>
         <div class="col-lg-4">
             <h1>Details</h1>
-
+            {{-- Show dropdown if creating, else show category --}}
             <h3>Category</h3>
             <div>
                 {{ $create == true ? Form::select('category', array('sport' => 'Sport', 'culture' => 'Culture',
-                'other' => 'Other'), 'other', ['required' => 'required', 'class' => 'form-control']) : $event->category }}
+                'other' => 'Other'), 'other', ['required' => 'required', 'class' => 'form-control']) : ucfirst($event->category) }}
             </div>
 
+            {{-- Show your username if creating, else, organiser of event --}}
             <h3>Organiser</h3>
             <div>
-                {{ $create == true ? Auth::user()->name : $event->user->name }}
+                {{ $create == true ? ucfirst(Auth::user()->name) : ucfirst($event->user->name) }}
             </div>
             <div>
                 {{ $create == true ? Form::text('contact', Auth::user()->email, ['required' => 'required',
@@ -78,12 +84,13 @@
             <h3>Venue</h3>
             <div>
                 {{ $create == true ? Form::text('venue', null, ['required' => 'required',
-                'class' => 'form-control', 'placeholder' => 'Contact details for the event']) : $event->venue }}
+                'class' => 'form-control', 'placeholder' => 'Contact details for the event']) : ucfirst($event->venue) }}
             </div>
 
         </div>
     </div>
 
+    {{-- If creating, show submit button, and close form --}}
     @if($create == true)
         <div id="event-image-container">
             <button type="submit" id="createSubmitButton" class="btn btn-outline-primary">
