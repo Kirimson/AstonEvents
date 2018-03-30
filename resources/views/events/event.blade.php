@@ -178,9 +178,13 @@
                         },
                         type: 'POST',
                         url: 'like',
-                        data: 'id = {{ $event->id }}',
-                        success: function () {
-                            alert("didit");
+                        data: { id : '{{ $event->id }}'},
+                        success: function (response) {
+                            console.log(response);
+                            $('#like-event-button').removeClass('btn-outline-primary');
+                            $('#like-event-button').addClass('btn-success');
+                            $('#like-event-button').html('Liked!');
+                            $('#like-event-button').attr('disabled', 'true');
                         }
                     });
                 });
