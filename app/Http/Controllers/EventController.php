@@ -19,7 +19,7 @@ class EventController extends Controller
 		$id = Input::get(['id']);
 		$event = Event::find($id);
 
-		return Redirect::to('events/' . $event->name);
+		return Redirect::to('event/' . $event->name);
 	}
 
 //	gets input from above method, and sends off to correct view
@@ -86,7 +86,7 @@ class EventController extends Controller
 
 		$event->save();
 
-		return redirect('events/' . $event->name);
+		return redirect('event/' . $event->name);
 	}
 
 	public function likeEvent($id){

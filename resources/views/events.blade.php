@@ -8,7 +8,7 @@
     <div><a href="{{ url('events/list') }}">List events</a> </div>
     <div><a href="{{ url('events/create') }}">Create event</a> </div>
 
-    {!! Form::open(array('url' => 'events/', 'class' => 'form')) !!}
+    {!! Form::open(array('url' => 'event/', 'class' => 'form')) !!}
 
     <div class="form-group">
         {{ Form::label('Event ID') }}
