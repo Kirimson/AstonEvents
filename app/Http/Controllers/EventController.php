@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
+use DateTime;
 
 class EventController extends Controller
 {
@@ -16,14 +17,30 @@ class EventController extends Controller
 	public function showParser()
 	{
 		$id = Input::get(['id']);
-		return Redirect::to('events/show/' . $id);
+		$event = Event::find($id);
+
+		return Redirect::to('events/' . $event->name);
 	}
 
 //	gets input from above method, and sends off to correct view
-	public function show($id)
+	public function show($name)
 	{
-		$event = Event::find($id);
+		$event = Event::where('name', '=', $name)->first();
+
+		if($event == null){
+			return view('welcome');
+		}
+
+		$event->time = $this->readableDateTime($event->time);
+
 		return view('/events/event', array('create' => false, 'event' => $event));
+	}
+
+	public function readableDateTime($timeString)
+	{
+		$format = 'Y-m-d H:i:s';
+		$date = DateTime::createFromFormat($format, $timeString);
+		return date_format($date, 'l jS F Y \a\t g:ia');
 	}
 
 	public function search()
@@ -52,6 +69,8 @@ class EventController extends Controller
 			'name' => 'required|unique:events|max:100',
 		]);
 
+		$datetime = Input::get('date') . ' ' . Input::get('time');
+
 		$event = new Event();
 
 		$event->organiser_id = Auth::user()->id;
@@ -60,13 +79,17 @@ class EventController extends Controller
 		$event->name = $request->name;
 		$event->description = $request->description;
 		$event->category = Input::get('category');
-		$event->time = Carbon::now();
+		$event->time = $datetime;
 		$event->picture = $imagesql;
 		$event->contact = $request->contact;
 		$event->venue = $request->venue;
 
 		$event->save();
 
-		return redirect('events/show/'.$event->id);
+		return redirect('events/' . $event->name);
+	}
+
+	public function likeEvent($id){
+
 	}
 }

@@ -29,9 +29,9 @@
                     @if($create == true)
                 </label>
             @endif
-            {{-- If createing, display name form, otherwise, display event name --}}
-            @if($create == true)
-                <div class="col-lg-4 offset-4">
+            {{-- If creating, display name form, otherwise, display event name --}}
+            <div class="col-lg-4 offset-4">
+                @if($create == true)
                     <input class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}"
                            placeholder="Name of the event" name="name" id="name" type="text" required>
                     {{-- If there are errors, display them, and mark form input as invalid--}}
@@ -40,10 +40,11 @@
                             <strong>{{ $errors->first('name') }}</strong>
                         </span>
                     @endif
-                </div>
-            @else
-                <h3 id="event-name-heading">{{ ucfirst($event->name) }}</h3>
-            @endif
+                @else
+                    <h3 id="event-name-heading">{{ ucfirst($event->name) }}</h3>
+                    <button type="submit" id="createSubmitButton" class="btn btn-outline-primary">Like</button>
+                @endif
+            </div>
         </div>
     </div>
 
@@ -81,7 +82,20 @@
                 {{ $create == true ? Form::text('contact', Auth::user()->email, ['required' => 'required',
                 'class' => 'form-control', 'placeholder' => 'Contact details for the event']) : $event->contact }}
             </div>
-            <h3>Venue</h3>
+            <h3>When</h3>
+            <div>
+                @if($create == true)
+                    <div class="input-group">
+                        {{ Form::date('date', null, ['required' => 'required', 'class' => 'form-control']) }}
+                        <span class="input-group-addon">
+                            {{ Form::time('time', null, ['required' => 'required', 'class' => 'form-control']) }}
+                        </span>
+                    </div>
+                @else
+                    {{ $event->time }}
+                @endif
+            </div>
+            <h3>Where</h3>
             <div>
                 {{ $create == true ? Form::text('venue', null, ['required' => 'required',
                 'class' => 'form-control', 'placeholder' => 'Contact details for the event']) : ucfirst($event->venue) }}

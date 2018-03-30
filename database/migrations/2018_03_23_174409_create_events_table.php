@@ -25,6 +25,7 @@ class CreateEventsTable extends Migration
             $table->string('picture', 191)->nullable();
             $table->string('contact', 255);
             $table->string('venue', 255);
+            $table->integer('likes')->default(0);
 	        $table->foreign('organiser_id')->references('id')->on('users');
         });
     }
