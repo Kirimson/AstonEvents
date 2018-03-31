@@ -197,7 +197,7 @@
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
                         type: 'POST',
-                        url: (shouldLike === false ? 'un' : '')+'like',
+                        url: (shouldLike === true ? '{{ url('/events/like') }}' : '{{ url('/events/unlike') }}'),
                         data: {id: '{{ $event->id }}'},
                         success: function (response) {
                             if (shouldLike === true) {

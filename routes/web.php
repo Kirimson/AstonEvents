@@ -27,8 +27,8 @@ Route::get('events/', function(){
 Route::get('events/search', 'EventController@search');
 Route::post('event/', 'EventController@showParser');
 Route::get('event/{id}', 'EventController@show');
-Route::post('event/like', 'EventController@like');
-Route::post('event/unlike', 'EventController@unlike');
+Route::post('events/like', 'EventController@like');
+Route::post('events/unlike', 'EventController@unlike');
 
 
 Route::get('events/create', 'EventController@create')->middleware('auth');
