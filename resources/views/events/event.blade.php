@@ -42,8 +42,12 @@
                     @endif
                 @else
                     <h3 id="event-name-heading">{{ ucfirst($event->name) }}</h3>
-                    <button type="submit" id="like-event-button" class="btn btn-outline-primary">Like</button>
+                        <small id="like-caption">Likes: {{ $event->likes }}</small>
+                    <div class="full-padding">
+                        <button type="submit" id="like-event-button" class="btn btn-outline-primary">Like</button>
+                    </div>
                 @endif
+
             </div>
         </div>
     </div>
@@ -193,20 +197,23 @@
                     if (likedEvents.includes({{ $event->id }})) {
                         shouldLike = false;
                     }
+                    console.log(shouldLike);
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
                         type: 'POST',
-                        url: (shouldLike === true ? '{{ url('/events/like/true') }}' : '{{ url('/events/like/false') }}'),
-                        data: {id: '{{ $event->id }}'},
+                        url: '{{ url('/events/like') }}',
+                        data: {id: '{{ $event->id }}', like: shouldLike.toString()},
                         success: function (response) {
-
+                            console.log(response);
+                            $('#like-caption').html("Likes: "+response);
                             if (shouldLike === true) {
                                 likeButton.removeClass('btn-outline-primary');
                                 likeButton.addClass('btn-success');
                                 likeButton.html('Liked!');
                                 likedEvents.push({{ $event->id }});
+
                             } else {
                                 likeButton.removeClass('btn-success');
                                 likeButton.addClass('btn-outline-primary');

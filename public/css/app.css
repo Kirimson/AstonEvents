@@ -10065,6 +10065,10 @@ img {
   padding-right: 15px;
 }
 
+.full-padding {
+  padding: 15px;
+}
+
 #brand-image {
   height: 3em;
 }

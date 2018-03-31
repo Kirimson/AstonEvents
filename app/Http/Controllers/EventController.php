@@ -89,13 +89,14 @@ class EventController extends Controller
 		return redirect('event/' . $event->name);
 	}
 
-	public function like(Request $request, $like){
+	public function like(Request $request){
 		$event = Event::find($request->id);
-		if($like == 'true') {
+		if($request->like == 'true') {
 			$event->likes++;
 		} elseif ($event->likes >0){
 			$event->likes--;
 		}
 		$event->save();
+		return $event->likes;
 	}
 }
