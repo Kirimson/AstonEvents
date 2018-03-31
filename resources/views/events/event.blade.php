@@ -171,6 +171,7 @@
             console.log("viewing");
 
             $(function () {
+                let likeButton = $('#like-event-button');
                 //load liked events
                 let likedEvents = [];
                 try {
@@ -182,12 +183,12 @@
                 }
 
                 if (likedEvents.includes({{ $event->id }})) {
-                    $('#like-event-button').removeClass('btn-outline-primary');
-                    $('#like-event-button').addClass('btn-success');
-                    $('#like-event-button').html('Liked!');
+                    likeButton.removeClass('btn-outline-primary');
+                    likeButton.addClass('btn-success');
+                    likeButton.html('Liked!');
                 }
 
-                $('#like-event-button').click(function () {
+                likeButton.click(function () {
                     let shouldLike = true;
                     if (likedEvents.includes({{ $event->id }})) {
                         shouldLike = false;
@@ -197,18 +198,19 @@
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
                         type: 'POST',
-                        url: (shouldLike === true ? '{{ url('/events/like') }}' : '{{ url('/events/unlike') }}'),
+                        url: (shouldLike === true ? '{{ url('/events/like/true') }}' : '{{ url('/events/like/false') }}'),
                         data: {id: '{{ $event->id }}'},
                         success: function (response) {
+
                             if (shouldLike === true) {
-                                $('#like-event-button').removeClass('btn-outline-primary');
-                                $('#like-event-button').addClass('btn-success');
-                                $('#like-event-button').html('Liked!');
+                                likeButton.removeClass('btn-outline-primary');
+                                likeButton.addClass('btn-success');
+                                likeButton.html('Liked!');
                                 likedEvents.push({{ $event->id }});
                             } else {
-                                $('#like-event-button').removeClass('btn-success');
-                                $('#like-event-button').addClass('btn-outline-primary');
-                                $('#like-event-button').html('Like');
+                                likeButton.removeClass('btn-success');
+                                likeButton.addClass('btn-outline-primary');
+                                likeButton.html('Like');
                                 let indexOf = likedEvents.indexOf({{ $event->id }});
                                 if (indexOf > -1) {
                                     likedEvents.splice(indexOf, 1);
