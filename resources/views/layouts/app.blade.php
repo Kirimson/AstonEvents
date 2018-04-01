@@ -18,7 +18,9 @@
 
 {{--main content of page--}}
 <div class="container">
-    @yield('content')
+    <div class="fill">
+        @yield('content')
+    </div>
 </div>
 
 <script src="{{ asset('js/app.js') }}"></script>

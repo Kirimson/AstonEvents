@@ -31,9 +31,24 @@ class EventController extends Controller
 			return view('welcome');
 		}
 
+		$owner = false;
+		if(Auth::check())
+		{
+			$owner = Auth::user()->id == $event->organiser_id;
+		}
+
 		$event->time = $this->readableDateTime($event->time);
 
-		return view('/events/event', array('create' => false, 'event' => $event));
+		return view('/events/event', array('create' => false, 'event' => $event, 'owner' => $owner));
+	}
+
+	public function edit($name){
+		$event = Event::where('name', '=', $name)->first();
+
+		if(Auth::user()->id = $event->organiser_id){
+			return view('/events/event', array('create' => true, 'event' => $event));
+		}
+		return back();
 	}
 
 	public function readableDateTime($timeString)
@@ -55,9 +70,40 @@ class EventController extends Controller
 
 	public function createEvent(Request $request)
 	{
-		$imagesql = null;
+		$request->validate([
+			'name' => 'required|unique:events|max:100',
+		]);
 
+		$event = new Event();
+
+		$event = $this->setupEvent($event, $request);
+
+		$event->save();
+
+		return redirect('event/' . $event->name);
+	}
+
+	public function updateEvent($name, Request $request){
+		$event = Event::where('name', '=', $name)->first();
+
+		if($event->name != $request->name) {
+			$request->validate([
+				'name' => 'required|unique:events|max:100',
+			]);
+		}
+
+		$event = $this->setupEvent($event, $request);
+
+		$event->save();
+
+		return redirect('event/' . $event->name);
+
+	}
+
+	public function setupEvent($event, Request $request){
 		//create image details
+
+		$imagesql = $event->picture;
 		if ($request->file('picture') != null) {
 			$imageName = $request->name . '.' . $request->file('picture')->getClientOriginalExtension();
 			$imagePath = 'img/events/';
@@ -65,17 +111,9 @@ class EventController extends Controller
 			$imagesql = $imagePath . $imageName;
 		}
 
-		$request->validate([
-			'name' => 'required|unique:events|max:100',
-		]);
-
 		$datetime = Input::get('date') . ' ' . Input::get('time');
 
-		$event = new Event();
-
 		$event->organiser_id = Auth::user()->id;
-		$event->created_at = Carbon::now();
-		$event->updated_at = Carbon::now();
 		$event->name = $request->name;
 		$event->description = $request->description;
 		$event->category = Input::get('category');
@@ -84,9 +122,7 @@ class EventController extends Controller
 		$event->contact = $request->contact;
 		$event->venue = $request->venue;
 
-		$event->save();
-
-		return redirect('event/' . $event->name);
+		return $event;
 	}
 
 	public function like(Request $request){

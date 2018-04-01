@@ -19,34 +19,35 @@
 body {
     font: 100% $font-family-sans-serif;
     color: $primary-color;
-    background-color: $background-color;
+    background-color: $page-color;
+    height: 100%;
 }
 
-h1{
+h1 {
     text-decoration-line: underline;
 }
 
-h2{
+h2 {
     @extend %centered;
 }
 
-a{
+a {
     color: inherit;
     max-height: 100%;
     max-width: 100%;
 }
 
-a:hover{
+a:hover {
     color: inherit;
 }
 
-label{
-    img{
+label {
+    img {
         cursor: pointer;
     }
 }
 
-img{
+img {
     max-height: 100%;
     max-width: 100%;
 }
@@ -55,10 +56,10 @@ img{
     z-index: 1;
     position: fixed;
     width: 100%;
-    @include box-shadow(0, 2px, 3px, 0, rgba(0,0,0,0.45));
+    @include box-shadow(0, 2px, 3px, 0, rgba(0, 0, 0, 0.45));
 }
 
-.container{
+.container {
     z-index: 2;
     padding-top: $navHeight+2.5em;
 }
@@ -67,44 +68,43 @@ img{
     display: none;
 }
 
-.fake-gutter{
+.fake-gutter {
     padding-left: 15px;
     padding-right: 15px;
 }
 
-.full-padding{
+.full-padding {
     padding: 15px;
 }
 
-#brand-image{
+#brand-image {
     height: $navHeight;
 }
 
-
-#register-box{
+#register-box {
     padding: 1em;
 }
 
-#file-limit{
+#file-limit {
     vertical-align: bottom;
 }
 
-#event-image-container{
+#event-image-container {
     text-align: center;
     width: 100%;
 }
 
-#event-image{
+#event-image {
     height: 9em;
     width: 9em;
     border-radius: 50%;
     overflow: hidden;
 }
 
-#event-name-heading{
+#event-name-heading {
     @extend %userText;
 }
 
-#description{
+#description {
     resize: none;
 }

@@ -26,9 +26,11 @@ Route::get('events/', function(){
 //events
 Route::get('events/search', 'EventController@search');
 Route::post('event/', 'EventController@showParser');
-Route::get('event/{id}', 'EventController@show');
-Route::post('events/like', 'EventController@like');
+Route::get('event/{name}', 'EventController@show');
+Route::get('event/{name}/edit', 'EventController@edit');
+Route::post('event/{name}/update', 'EventController@updateEvent');
 
+Route::post('events/like', 'EventController@like');
 
 Route::get('events/create', 'EventController@create')->middleware('auth');
 Route::post('events/create/new', 'EventController@createEvent');
