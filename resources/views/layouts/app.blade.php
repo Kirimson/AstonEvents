@@ -17,11 +17,10 @@
 @include('components.navbar')
 
 {{--main content of page--}}
-<div class="container">
-    <div class="fill">
-        @yield('content')
-    </div>
+<div class="container" id="page-main">
+    @yield('content')
 </div>
+@include('components.footer')
 
 <script src="{{ asset('js/app.js') }}"></script>
 </body>

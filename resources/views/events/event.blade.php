@@ -134,9 +134,23 @@
                 $('#event-name-heading').html($('#name').val())
             });
 
-            CKEDITOR.replace( 'description', {
+            //Setup ckEditor for description textarea
+            CKEDITOR.replace('description', {
                 uiColor: '#F05223',
             });
+
+            //Reads a given (fake)path of the uploaded image and reads the image, setting the img to the uploaded image
+            function updateEventIcon(file) {
+                if (file.files && file.files[0]) {
+                    let reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#event-image').attr('src', e.target.result);
+                    };
+
+                    reader.readAsDataURL(file.files[0]);
+                }
+            }
 
             $('#picture').change(function (e) {
 
@@ -145,14 +159,13 @@
                 let acceptedTypes = ["png", "jpg", "bmp", "svg"];
                 let fileExtension = $(this).val().split('.').pop();
 
-                //if smaller than max image size
+                //if smaller than max image size and a supported image
                 if (fileSize <= 2 && !isNaN(fileSize) && (jQuery.inArray(fileExtension, acceptedTypes) !== -1)) {
-                    $('#createSubmitButton').prop('disabled', false);
-                    readURL(this);
+                    updateEventIcon(this);
                 } else { //clear the image preview section
                     $('#picture').val('');
                     $('#event-image').attr({
-                        src: '{!!asset('img/events/default/default.svg')!!}',
+                        src: '{{ asset('img/events/default/default.svg') }}',
                         alt: 'File size is larger than 2MB'
                     });
                 }
