@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use DateTime;
+use Mews\Purifier\PurifierServiceProvider;
 
 class EventController extends Controller
 {
@@ -70,6 +71,9 @@ class EventController extends Controller
 
 	public function createEvent(Request $request)
 	{
+
+		$request->description = clean($request->description);
+
 		$this->validateEvent($request);
 
 		$event = new Event();
@@ -91,6 +95,8 @@ class EventController extends Controller
 	public function updateEvent($name, Request $request)
 	{
 		$event = Event::where('name', '=', $name)->first();
+
+		$request->description = clean($request->description);
 
 //		If name has been changed
 		if ($event->name != $request->name) {
