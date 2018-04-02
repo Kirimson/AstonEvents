@@ -19,12 +19,13 @@ class CreateEventsTable extends Migration
 	        $table->integer('organiser_id')->unsigned();
             $table->timestamps();
             $table->string('name', 191)->unique();
-            $table->string('description', 255);
+            $table->longtext('description');
             $table->enum('category', array('sport', 'culture', 'other'));
             $table->timestamp('time')->nullable();
             $table->string('picture', 191)->nullable();
-            $table->string('contact', 255);
-            $table->string('venue', 255);
+            $table->string('contact', 191);
+            $table->string('venue', 191);
+            $table->integer('likes')->default(0);
 	        $table->foreign('organiser_id')->references('id')->on('users');
         });
     }

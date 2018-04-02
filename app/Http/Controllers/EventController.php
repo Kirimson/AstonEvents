@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Event;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use DateTime;
+use Mews\Purifier\PurifierServiceProvider;
 
 class EventController extends Controller
 {
@@ -16,14 +18,45 @@ class EventController extends Controller
 	public function showParser()
 	{
 		$id = Input::get(['id']);
-		return Redirect::to('events/show/' . $id);
+		$event = Event::find($id);
+
+		return Redirect::to('event/' . $event->name);
 	}
 
 //	gets input from above method, and sends off to correct view
-	public function show($id)
+	public function show($name)
 	{
-		$event = Event::find($id);
-		return view('/events/show', array('event' => $event));
+		$event = Event::where('name', '=', $name)->first();
+
+		if ($event == null) {
+			return view('welcome');
+		}
+
+		$owner = false;
+		if (Auth::check()) {
+			$owner = Auth::user()->id == $event->organiser_id;
+		}
+
+		$event->time = $this->readableDateTime($event->time);
+
+		return view('/events/event', array('create' => false, 'event' => $event, 'owner' => $owner));
+	}
+
+	public function edit($name)
+	{
+		$event = Event::where('name', '=', $name)->first();
+
+		if (Auth::user()->id == $event->organiser_id) {
+			return view('/events/event', array('create' => true, 'event' => $event));
+		}
+		return back();
+	}
+
+	public function readableDateTime($timeString)
+	{
+		$format = 'Y-m-d H:i:s';
+		$date = DateTime::createFromFormat($format, $timeString);
+		return date_format($date, 'l jS F Y \a\t g:ia');
 	}
 
 	public function search()
@@ -33,40 +66,118 @@ class EventController extends Controller
 
 	public function create()
 	{
-		return view('/events/event', array('create' => true));
+		return view('/events/event', array('create' => true, 'event' => null));
 	}
 
 	public function createEvent(Request $request)
 	{
-		$imagesql = null;
+		$this->validateName($request);
 
-		//create image details
-		if ($request->file('picture') != null) {
-			$imageName = $request->name . '.' . $request->file('picture')->getClientOriginalExtension();
-			$imagePath = 'img/events/';
-			$request->file('picture')->move(base_path() . '/public/' . $imagePath, $imageName);
-			$imagesql = $imagePath . $imageName;
-		}
-
-		$request->validate([
-			'name' => 'required|unique:events|max:100',
-		]);
+		$this->validateFields($request);
 
 		$event = new Event();
 
-		$event->organiser_id = Auth::user()->id;
-		$event->created_at = Carbon::now();
-		$event->updated_at = Carbon::now();
-		$event->name = $request->name;
-		$event->description = $request->description;
-		$event->category = Input::get('category');
-		$event->time = Carbon::now();
-		$event->picture = $imagesql;
-		$event->contact = $request->contact;
-		$event->venue = $request->venue;
+		//create image details
+		if ($request->file('picture') != null) {
+			$path = $request->file('picture')->store('img/events', 'public');
+		} else {
+			$path = null;
+		}
+
+		$event = $this->setupEvent($event, $request, $path);
 
 		$event->save();
 
-		return back();
+		return redirect('event/' . $event->name);
+	}
+
+	public function updateEvent($name, Request $request)
+	{
+		$event = Event::where('name', '=', $name)->first();
+
+//		If name has been changed
+		if ($event->name != $request->name) {
+			$this->validateName($request);
+		}
+
+		$this->validateFields($request);
+
+//		If an image was passed
+		if ($request->file('picture') != null) {
+//			if there was a picture before, delete old image
+			if ($event->picture != null) {
+				Storage::disk('public')->delete($event->picture);
+			}
+//			Create a new file for the image, and store in event
+			$path = $request->file('picture')->store('img/events', 'public');
+		} else {
+//			There is no image, check if image is already null, if not, delete image, else, just set path to null
+			if ($event->picture != null) {
+				Storage::disk('public')->delete($event->picture);
+			}
+			$path = null;
+		}
+
+		$event = $this->setupEvent($event, $request, $path);
+
+		$event->save();
+
+		return redirect('event/' . $event->name);
+
+	}
+
+	public function setupEvent($event, Request $request, $path)
+	{
+
+		$datetime = Input::get('date') . ' ' . Input::get('time');
+
+		$event->organiser_id = Auth::user()->id;
+		$event->name = $request->name;
+		$event->description = $request->description;
+		$event->category = Input::get('category');
+		$event->time = $datetime;
+		$event->picture = $path;
+		$event->contact = $request->contact;
+		$event->venue = $request->venue;
+
+		return $event;
+	}
+
+	public function like(Request $request)
+	{
+//		find event by its id, passed from the POST, then increment/decrement likes depending on POST request
+		$event = Event::find($request->id);
+		if ($request->like == 'true') {
+			$event->likes++;
+		} elseif ($event->likes > 0) {
+			$event->likes--;
+		}
+		$event->save();
+		return $event->likes;
+	}
+
+	public function validateName(Request $request)
+	{
+		$request->validate([
+			'name' => 'required|unique:events|max:100'
+		]);
+	}
+
+	private function validateFields($request)
+	{
+//		Check if all required fields are filled in, organiser not needed, done server side, so user cant set organiser
+//		to someone who isn't them
+		$request->validate([
+			'description' => 'required',
+			'category' => 'required',
+			'contact' => 'required',
+			'date' => 'required',
+			'time' => 'required',
+			'venue' => 'required',
+			'picture' => 'mimes:jpeg,bmp,png,svg'
+		]);
+
+//		Clean the description
+		$request->description = clean($request->description);
 	}
 }

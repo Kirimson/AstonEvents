@@ -5,144 +5,236 @@
 
 @section('content')
 
-    <div class="row">
-        <div class="col-lg-9">
-            {!! Form::open(
+    {{-- Header, if creating, open form for page, close at end of page --}}
+    @if($create == true)
+        {!! Form::open(
             array(
-                'url' => 'events/create/new',
-                'class' => 'form-horizontal',
-                'files' => true)) !!}
+              'id' => 'eventForm',
+              'url' => $event == null ? 'events/create/new' : 'event/'.$event->name.'/update',
+              'class' => 'form-horizontal',
+              'files' => true)) !!}
+    @endif
+    <div class="row">
+        <div id="event-image-container">
+            {{-- if creating a new event, create label and file input. otherwise, display event image --}}
+            @if($create == true)
+                <input type="file" name="picture" id="picture" class="hidden-input" accept=".png,.jpg,.bmp,.svg"/>
 
-            <fieldset>
-                {{--Name--}}
-                <div class="form-group row">
-                    {!! Form::label('', 'Event Name', ['class' => 'col-lg-2 col-form-label text-md-right']) !!}
-                    <div class="col-lg-10">
-                        <input class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}"
-                               placeholder="Name of the event" name="name" id="name" type="text" required>
-                        @if ($errors->has('name'))
-                            <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
+                <label for="picture">
+                    @endif
+                    {{-- if creating, display default. if not, display event image. if no image, fallback --}}
+                    <img id="event-image"
+                         src="{{ $event == null ? asset('img/events/default/default.svg') : $event->picture == null ?
+                         asset('img/events/default/default.svg') : asset($event->picture) }}"
+                         alt=""/>
+                    @if($create == true)
+                </label>
+            @endif
+            {{-- If creating, display name form, otherwise, display event name --}}
+            <div class="col-lg-4 offset-4">
+                @if($create == true)
+                    <input class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}"
+                           placeholder="Name of the event" name="name" id="name" type="text"
+                           value="{{ $event == null ? '' : $event->name }}" required>
+                    {{-- If there are errors, display them, and mark form input as invalid--}}
+                    @if ($errors->has('name'))
+                        <span class="invalid-feedback">
+                            <strong>{{ $errors->first('name') }}</strong>
+                        </span>
+                    @endif
+                @else
+                    {{-- Like button --}}
+                    <h3 id="event-name-heading">{{ ucfirst($event->name) }}</h3>
+                    <small id="like-caption">Likes: {{ $event->likes }}</small>
+                    <div class="full-padding">
+                        @if($owner == true)
+                            <button type="submit" id="edit-event-button" class="btn btn-outline-info"
+                                    onclick="location.href='{{ url('/event/'.$event->name.'/edit') }}'">Edit
+                            </button>
+                        @else
+                            <button type="submit" id="like-event-button" class="btn btn-outline-primary">Like</button>
                         @endif
                     </div>
-                </div>
+                @endif
 
-                {{--Description--}}
-                <div class="form-group row">
-                    {!! Form::label('', 'Description', ['class' => 'col-lg-2 control-label col-form-label text-md-right']) !!}
-                    <div class="col-lg-10">
-                        {{ Form::textarea('description', null, ['id'=> 'description', 'size' => '50x3', 'required' => 'required', 'class' => 'form-control', 'placeholder' => 'Description of the event']) }}
-                    </div>
-                </div>
-
-                {{-- Category --}}
-                <div class="form-group row">
-                    {!! Form::label('', 'Category', ['class' => 'col-lg-2 control-label col-form-label text-md-right']) !!}
-                    <div class="col-lg-10">
-                        {{ Form::select('category', array('sport' => 'Sport', 'culture' => 'Culture', 'other' => 'Other'), 'other',
-                        ['required' => 'required', 'class' => 'form-control']) }}
-                    </div>
-                </div>
-
-                {{--Image--}}
-                <div class="form-group row">
-                    {!! Form::label('', 'Event Image', ['class' => 'col-lg-2 control-label col-form-label text-md-right']) !!}
-                    <input type="file" name="picture" id="picture" class="hidden-input" accept=".png,.jpg,.bmp,.svg"/>
-                    <label for="picture" class="fake-gutter">
-                        <a type="button" class="btn btn-outline-secondary">Upload a file</a>
-                        <small class="text-muted">Max size: 2MB</small>
-                    </label>
-                </div>
-
-                {{--Contact--}}
-                <div class="form-group row">
-                    {!! Form::label('', 'Contact Details', ['class' => 'col-lg-2 control-label col-form-label text-md-right']) !!}
-                    <div class="col-lg-10">
-                        {{ Form::text('contact', Auth::user()->email, ['required' => 'required', 'class' => 'form-control', 'placeholder' => 'Contact details for the event']) }}
-                    </div>
-                </div>
-
-                {{--Venue--}}
-                <div class="form-group row">
-                    {!! Form::label('', 'Venue', ['class' => 'col-lg-2 control-label col-form-label text-md-right']) !!}
-                    <div class="col-lg-10">
-                        {{ Form::text('venue', null, ['required' => 'required', 'class' => 'form-control', 'placeholder' => 'Venue event will take place at']) }}
-                    </div>
-                </div>
-
-                {{--Create Button--}}
-                <div class="form-group row mb-0">
-                    <div class="col-md-8 offset-md-2">
-                        <button type="submit" id="createSubmitButton" class="btn btn-outline-primary">
-                            {{ __('Create Event!') }}
-                        </button>
-                    </div>
-                </div>
-                {!! Form::close() !!}
-            </fieldset>
-        </div>
-        {{--Image preview pane--}}
-        <div class="col-lg-3">
-            <h2>Preview</h2>
-            <div id="event-image-container">
-                <img id="event-image" class="text-md-right text-muted"
-                     src="{!!asset('img/events/default/default.svg')!!}" alt=""/>
-                <div>
-                    <h3 id="event-name-heading"></h3>
-                </div>
             </div>
         </div>
     </div>
 
-    <script>
+    {{-- Start description/details section --}}
+    <div class="row">
+        <div class="col-lg-6 offset-1">
+            <h1>Description</h1>
 
-        $(function () {
-            $('#event-name-heading').html($('#name').val())
-        });
+            {{-- If creating, display textarea for description, else display description --}}
+            @if($create == true)
+                <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
+                {{ Form::textarea('description', $event == null ? '' : $event->description , ['id'=> 'description']) }}
+            @else
+                <div>
+                    {!! ucfirst($event->description) !!}
+                </div>
+            @endif
 
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
+        </div>
+        <div class="col-lg-4">
+            <h1>Details</h1>
+            {{-- Show dropdown if creating, else show category --}}
+            <h3>Category</h3>
+            <div>
+                {{ $create == true ? Form::select('category', array('sport' => 'Sport', 'culture' => 'Culture',
+                'other' => 'Other'), $event == null ? 'other' : $event->category, ['required' => 'required', 'class' => 'form-control']) : ucfirst($event->category) }}
+            </div>
 
-                reader.onload = function (e) {
-                    $('#event-image').attr('src', e.target.result);
+            {{-- Show your username if creating, else, organiser of event --}}
+            <h3>Organiser</h3>
+            <div>
+                {{ $create == true ? ucfirst(Auth::user()->name) : ucfirst($event->user->name) }}
+            </div>
+            <div>
+                {{ $create == true ? Form::text('contact', $event == null ? Auth::user()->email : $event->contact, ['required' => 'required',
+                'class' => 'form-control', 'placeholder' => 'Contact details for the event']) : $event->contact }}
+            </div>
+            <h3>When</h3>
+            <div>
+                @if($create == true)
+                    <div class="input-group">
+                        {{ Form::date('date', $event == null ? null : explode(' ', $event->time)[0], ['required' => 'required', 'class' => 'form-control']) }}
+                        <span class="input-group-addon">
+                            {{ Form::time('time', $event == null ? null : explode(' ', $event->time)[1], ['required' => 'required', 'class' => 'form-control']) }}
+                        </span>
+                    </div>
+                @else
+                    {{ $event->time }}
+                @endif
+            </div>
+            <h3>Where</h3>
+            <div>
+                {{ $create == true ? Form::text('venue', $event == null ? '' : $event->venue, ['required' => 'required',
+                'class' => 'form-control', 'placeholder' => 'Contact details for the event']) : ucfirst($event->venue) }}
+            </div>
+
+        </div>
+    </div>
+
+    {{-- If creating, show submit button, and close form --}}
+    @if($create == true)
+        <div id="event-image-container">
+            <button type="submit" id="createSubmitButton" class="btn btn-outline-primary">
+                {{ $event == null ? "Create Event!" : "Update Event"}}
+            </button>
+        </div>
+        {!! Form::close() !!}
+    @endif
+
+    {{-- Script for images --}}
+    @if($create == true)
+        <script>
+            $(function () {
+                $('#event-name-heading').html($('#name').val())
+            });
+
+            //Setup ckEditor for description textarea
+            CKEDITOR.replace('description', {
+                uiColor: '#F05223',
+            });
+
+            //Reads a given (fake)path of the uploaded image and reads the image, setting the img to the uploaded image
+            function updateEventIcon(file) {
+                if (file.files && file.files[0]) {
+                    let reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#event-image').attr('src', e.target.result);
+                    };
+
+                    reader.readAsDataURL(file.files[0]);
+                }
+            }
+
+            $('#picture').change(function (e) {
+
+                let files = e.currentTarget.files;
+                let fileSize = ((files[0].size / 1024) / 1024).toFixed(4);
+                let acceptedTypes = ["png", "jpg", "bmp", "svg"];
+                let fileExtension = $(this).val().split('.').pop();
+
+                //if smaller than max image size and a supported image
+                if (fileSize <= 2 && !isNaN(fileSize) && (jQuery.inArray(fileExtension, acceptedTypes) !== -1)) {
+                    updateEventIcon(this);
+                } else { //clear the image preview section
+                    $('#picture').val('');
+                    $('#event-image').attr({
+                        src: '{{ asset('img/events/default/default.svg') }}',
+                        alt: 'File size is larger than 2MB'
+                    });
+                }
+            });
+
+            $('#name').on('input', function (e) {
+                console.log("here");
+                $('#event-name-heading').html($('#name').val())
+            })
+        </script>
+    @else
+        <script>
+            {{-- If not owner, script for like button --}}
+            @if($owner == false)
+            $(function () {
+                let likeButton = $('#like-event-button');
+                //load liked events
+                let likedEvents = [];
+                try {
+                    likedEvents = JSON.parse(localStorage.getItem("liked-events"));
+                    let test = likedEvents[0];
+                } catch (err) {
+                    console.log(err.message);
+                    likedEvents = [];
                 }
 
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
+                if (likedEvents.includes({{ $event->id }})) {
+                    likeButton.removeClass('btn-outline-primary');
+                    likeButton.addClass('btn-success');
+                    likeButton.html('Liked!');
+                }
 
-        $('#picture').change(function (e) {
+                likeButton.click(function () {
+                    let shouldLike = true;
+                    if (likedEvents.includes({{ $event->id }})) {
+                        shouldLike = false;
+                    }
+                    console.log(shouldLike);
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        type: 'POST',
+                        url: '{{ url('/events/like') }}',
+                        data: {id: '{{ $event->id }}', like: shouldLike.toString()},
+                        success: function (response) {
+                            console.log(response);
+                            $('#like-caption').html("Likes: " + response);
+                            if (shouldLike === true) {
+                                likeButton.removeClass('btn-outline-primary');
+                                likeButton.addClass('btn-success');
+                                likeButton.html('Liked!');
+                                likedEvents.push({{ $event->id }});
 
-            let files = e.currentTarget.files;
-
-            let fileSize = ((files[0].size / 1024) / 1024).toFixed(4);
-
-
-            let acceptedTypes = ["png", "jpg", "bmp", "svg"];
-            let fileExtension = $(this).val().split('.').pop();
-
-            console.log(fileExtension);
-
-            console.log(fileSize);
-
-            //if smaller than max image size
-            if (fileSize <= 2 && !isNaN(fileSize) && (jQuery.inArray(fileExtension, acceptedTypes) !== -1)) {
-                $('#createSubmitButton').prop('disabled', false);
-                readURL(this);
-            } else { //clear the image preview section
-                $('#picture').val('');
-                $('#event-image').attr({
-                    src: '{!!asset('img/events/default/default.svg')!!}',
-                    alt: 'File size is larger than 2MB'
+                            } else {
+                                likeButton.removeClass('btn-success');
+                                likeButton.addClass('btn-outline-primary');
+                                likeButton.html('Like');
+                                let indexOf = likedEvents.indexOf({{ $event->id }});
+                                if (indexOf > -1) {
+                                    likedEvents.splice(indexOf, 1);
+                                }
+                            }
+                            localStorage.setItem("liked-events", JSON.stringify(likedEvents))
+                        }
+                    });
                 });
-            }
-        });
-
-        $('#name').on('input', function (e) {
-            console.log("here");
-            $('#event-name-heading').html($('#name').val())
-        })
-    </script>
+            });
+            @endif
+        </script>
+    @endif
 @endsection

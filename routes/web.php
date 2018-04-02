@@ -19,16 +19,22 @@ Route::get('/', function () {
 
 
 //Events page
-Route::get('events', function(){
+Route::get('events/', function(){
 	return view('events');
 });
 
 //events
 Route::get('events/search', 'EventController@search');
-Route::post('events/show', 'EventController@showParser');
-Route::get('events/show/{id}', 'EventController@show');
+Route::post('event/', 'EventController@showParser');
+Route::get('event/{name}', 'EventController@show');
+Route::get('event/{name}/edit', 'EventController@edit')->middleware('auth');
+Route::post('event/{name}/update', 'EventController@updateEvent')->middleware('auth');
+
+Route::post('events/like', 'EventController@like');
+
 Route::get('events/create', 'EventController@create')->middleware('auth');
-Route::post('events/create/new', 'EventController@createEvent');
+Route::post('events/create/new', 'EventController@createEvent')->middleware('auth');
+
 Auth::routes();
 
 Route::get('/myAccount', 'HomeController@index');

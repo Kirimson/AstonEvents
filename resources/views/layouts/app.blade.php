@@ -1,5 +1,6 @@
 <html lang="{{ app()->getLocale() }}">
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon"/>
     <title>Aston Events - @yield('title')</title>
@@ -16,8 +17,7 @@
 @include('components.navbar')
 
 {{--main content of page--}}
-<div class="container">
-    <h1>@yield('pageName')</h1>
+<div class="container" id="page-main">
     @yield('content')
 </div>
 
