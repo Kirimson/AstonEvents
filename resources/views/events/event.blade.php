@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Create Event')
-@section('pageName', 'Events')
+@section('pageName', 'Create Event')
+@section('title', $create == true ? 'New Event' : $event->name)
 
 @section('content')
 
@@ -83,7 +83,7 @@
             <h3>Category</h3>
             <div>
                 {{ $create == true ? Form::select('category', array('sport' => 'Sport', 'culture' => 'Culture',
-                'other' => 'Other'), $event == null ? 'other' : $event->category, ['required' => 'required', 'class' => 'form-control']) : ucfirst($event->category) }}
+                'other' => 'Other'), $event == null ? 'other' : $event->category, ['required' => 'required', 'class' => 'form-control']) : $event->UCCategory }}
             </div>
 
             {{-- Show your username if creating, else, organiser of event --}}
@@ -105,13 +105,13 @@
                         </span>
                     </div>
                 @else
-                    {{ $event->time }}
+                    {{ $event->readableTime }}
                 @endif
             </div>
             <h3>Where</h3>
             <div>
                 {{ $create == true ? Form::text('venue', $event == null ? '' : $event->venue, ['required' => 'required',
-                'class' => 'form-control', 'placeholder' => 'Contact details for the event']) : ucfirst($event->venue) }}
+                'class' => 'form-control', 'placeholder' => 'Contact details for the event']) : $event->UCVenue }}
             </div>
 
         </div>
@@ -135,9 +135,7 @@
             });
 
             //Setup ckEditor for description textarea
-            CKEDITOR.replace('description', {
-                uiColor: '#F05223',
-            });
+            CKEDITOR.replace('description');
 
             //Reads a given (fake)path of the uploaded image and reads the image, setting the img to the uploaded image
             function updateEventIcon(file) {

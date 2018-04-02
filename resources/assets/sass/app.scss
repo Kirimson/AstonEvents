@@ -99,10 +99,15 @@ img {
 }
 
 #event-image {
+    @extend %event-image-template;
     height: 9em;
     width: 9em;
-    border-radius: 50%;
-    overflow: hidden;
+}
+
+#event-image-thumb{
+    @extend %event-image-template;
+    height: 5em;
+    width: 5em;
 }
 
 #description-editor{
@@ -115,4 +120,8 @@ img {
 
 #description {
     resize: none;
+}
+
+#event-container{
+    //border: solid thin black;
 }

@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use DateTime;
-use Mews\Purifier\PurifierServiceProvider;
 
 class EventController extends Controller
 {
@@ -37,8 +36,6 @@ class EventController extends Controller
 			$owner = Auth::user()->id == $event->organiser_id;
 		}
 
-		$event->time = $this->readableDateTime($event->time);
-
 		return view('/events/event', array('create' => false, 'event' => $event, 'owner' => $owner));
 	}
 
@@ -50,13 +47,6 @@ class EventController extends Controller
 			return view('/events/event', array('create' => true, 'event' => $event));
 		}
 		return back();
-	}
-
-	public function readableDateTime($timeString)
-	{
-		$format = 'Y-m-d H:i:s';
-		$date = DateTime::createFromFormat($format, $timeString);
-		return date_format($date, 'l jS F Y \a\t g:ia');
 	}
 
 	public function search()
