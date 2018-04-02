@@ -27,13 +27,13 @@ Route::get('events/', function(){
 Route::get('events/search', 'EventController@search');
 Route::post('event/', 'EventController@showParser');
 Route::get('event/{name}', 'EventController@show');
-Route::get('event/{name}/edit', 'EventController@edit');
-Route::post('event/{name}/update', 'EventController@updateEvent');
+Route::get('event/{name}/edit', 'EventController@edit')->middleware('auth');
+Route::post('event/{name}/update', 'EventController@updateEvent')->middleware('auth');
 
 Route::post('events/like', 'EventController@like');
 
 Route::get('events/create', 'EventController@create')->middleware('auth');
-Route::post('events/create/new', 'EventController@createEvent');
+Route::post('events/create/new', 'EventController@createEvent')->middleware('auth');
 
 Auth::routes();
 

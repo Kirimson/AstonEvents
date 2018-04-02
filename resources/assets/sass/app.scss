@@ -101,6 +101,10 @@ img {
     overflow: hidden;
 }
 
+#description-editor{
+    height: 20em;
+}
+
 #event-name-heading {
     @extend %userText;
 }

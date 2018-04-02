@@ -9,9 +9,10 @@
     @if($create == true)
         {!! Form::open(
             array(
-                'url' => $event == null ? 'events/create/new' : 'event/'.$event->name.'/update',
-                'class' => 'form-horizontal',
-                'files' => true)) !!}
+              'id' => 'eventForm',
+              'url' => $event == null ? 'events/create/new' : 'event/'.$event->name.'/update',
+              'class' => 'form-horizontal',
+              'files' => true)) !!}
     @endif
     <div class="row">
         <div id="event-image-container">
@@ -33,7 +34,8 @@
             <div class="col-lg-4 offset-4">
                 @if($create == true)
                     <input class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}"
-                           placeholder="Name of the event" name="name" id="name" type="text" value="{{ $event == null ? '' : $event->name }}" required>
+                           placeholder="Name of the event" name="name" id="name" type="text"
+                           value="{{ $event == null ? '' : $event->name }}" required>
                     {{-- If there are errors, display them, and mark form input as invalid--}}
                     @if ($errors->has('name'))
                         <span class="invalid-feedback">
@@ -66,11 +68,11 @@
 
             {{-- If creating, display textarea for description, else display description --}}
             @if($create == true)
-                {{ Form::textarea('description', $event == null ? '' : $event->description , ['id'=> 'description', 'size' => '50x9',
-                'required' => 'required', 'class' => 'form-control', 'placeholder' => 'Description of the event']) }}
+                <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
+                {{ Form::textarea('description', $event == null ? '' : $event->description , ['id'=> 'description']) }}
             @else
                 <div>
-                    {{ ucfirst($event->description)}}
+                    {!! ucfirst($event->description) !!}
                 </div>
             @endif
 
@@ -119,7 +121,7 @@
     @if($create == true)
         <div id="event-image-container">
             <button type="submit" id="createSubmitButton" class="btn btn-outline-primary">
-                {{ __('Create Event!') }}
+                {{ $event == null ? "Create Event!" : "Update Event"}}
             </button>
         </div>
         {!! Form::close() !!}
@@ -132,17 +134,9 @@
                 $('#event-name-heading').html($('#name').val())
             });
 
-            function readURL(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        $('#event-image').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
+            CKEDITOR.replace( 'description', {
+                uiColor: '#F05223',
+            });
 
             $('#picture').change(function (e) {
 

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Event;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use DateTime;
 
 class EventController extends Controller
@@ -27,13 +27,12 @@ class EventController extends Controller
 	{
 		$event = Event::where('name', '=', $name)->first();
 
-		if($event == null){
+		if ($event == null) {
 			return view('welcome');
 		}
 
 		$owner = false;
-		if(Auth::check())
-		{
+		if (Auth::check()) {
 			$owner = Auth::user()->id == $event->organiser_id;
 		}
 
@@ -42,10 +41,11 @@ class EventController extends Controller
 		return view('/events/event', array('create' => false, 'event' => $event, 'owner' => $owner));
 	}
 
-	public function edit($name){
+	public function edit($name)
+	{
 		$event = Event::where('name', '=', $name)->first();
 
-		if(Auth::user()->id = $event->organiser_id){
+		if (Auth::user()->id == $event->organiser_id) {
 			return view('/events/event', array('create' => true, 'event' => $event));
 		}
 		return back();
@@ -70,29 +70,50 @@ class EventController extends Controller
 
 	public function createEvent(Request $request)
 	{
-		$request->validate([
-			'name' => 'required|unique:events|max:100',
-		]);
+		$this->validateEvent($request);
 
 		$event = new Event();
 
-		$event = $this->setupEvent($event, $request);
+		//create image details
+		if ($request->file('picture') != null) {
+			$path = $request->file('picture')->store('img/events', 'public');
+		} else {
+			$path = null;
+		}
+
+		$event = $this->setupEvent($event, $request, $path);
 
 		$event->save();
 
 		return redirect('event/' . $event->name);
 	}
 
-	public function updateEvent($name, Request $request){
+	public function updateEvent($name, Request $request)
+	{
 		$event = Event::where('name', '=', $name)->first();
 
-		if($event->name != $request->name) {
-			$request->validate([
-				'name' => 'required|unique:events|max:100',
-			]);
+//		If name has been changed
+		if ($event->name != $request->name) {
+			$this->validateEvent($request);
 		}
 
-		$event = $this->setupEvent($event, $request);
+//		If an image was passed
+		if ($request->file('picture') != null) {
+//			if there was a picture before, delete old image
+			if ($event->picture != null) {
+				Storage::disk('public')->delete($event->picture);
+			}
+//			Create a new file for the image, and store in event
+			$path = $request->file('picture')->store('img/events', 'public');
+		} else {
+//			There is no image, check if image is already null, if not, delete image, else, just set path to null
+			if ($event->picture != null) {
+				Storage::disk('public')->delete($event->picture);
+			}
+			$path = null;
+		}
+
+		$event = $this->setupEvent($event, $request, $path);
 
 		$event->save();
 
@@ -100,16 +121,15 @@ class EventController extends Controller
 
 	}
 
-	public function setupEvent($event, Request $request){
-		//create image details
+	public function validateEvent(Request $request)
+	{
+		$request->validate([
+			'name' => 'required|unique:events|max:100'
+		]);
+	}
 
-		$imagesql = $event->picture;
-		if ($request->file('picture') != null) {
-			$imageName = $request->name . '.' . $request->file('picture')->getClientOriginalExtension();
-			$imagePath = 'img/events/';
-			$request->file('picture')->move(base_path() . '/public/' . $imagePath, $imageName);
-			$imagesql = $imagePath . $imageName;
-		}
+	public function setupEvent($event, Request $request, $path)
+	{
 
 		$datetime = Input::get('date') . ' ' . Input::get('time');
 
@@ -118,18 +138,20 @@ class EventController extends Controller
 		$event->description = $request->description;
 		$event->category = Input::get('category');
 		$event->time = $datetime;
-		$event->picture = $imagesql;
+		$event->picture = $path;
 		$event->contact = $request->contact;
 		$event->venue = $request->venue;
 
 		return $event;
 	}
 
-	public function like(Request $request){
+	public function like(Request $request)
+	{
+//		find event by its id, passed from the POST, then increment/decrement likes depending on POST request
 		$event = Event::find($request->id);
-		if($request->like == 'true') {
+		if ($request->like == 'true') {
 			$event->likes++;
-		} elseif ($event->likes >0){
+		} elseif ($event->likes > 0) {
 			$event->likes--;
 		}
 		$event->save();

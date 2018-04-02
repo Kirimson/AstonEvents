@@ -10094,6 +10094,10 @@ img {
   overflow: hidden;
 }
 
+#description-editor {
+  height: 20em;
+}
+
 #description {
   resize: none;
 }
