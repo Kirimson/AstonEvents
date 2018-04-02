@@ -20,7 +20,6 @@
 <div class="container" id="page-main">
     @yield('content')
 </div>
-@include('components.footer')
 
 <script src="{{ asset('js/app.js') }}"></script>
 </body>

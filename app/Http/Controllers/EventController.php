@@ -126,13 +126,6 @@ class EventController extends Controller
 
 	}
 
-	public function validateName(Request $request)
-	{
-		$request->validate([
-			'name' => 'required|unique:events|max:100'
-		]);
-	}
-
 	public function setupEvent($event, Request $request, $path)
 	{
 
@@ -163,6 +156,13 @@ class EventController extends Controller
 		return $event->likes;
 	}
 
+	public function validateName(Request $request)
+	{
+		$request->validate([
+			'name' => 'required|unique:events|max:100'
+		]);
+	}
+
 	private function validateFields($request)
 	{
 //		Check if all required fields are filled in, organiser not needed, done server side, so user cant set organiser
@@ -170,10 +170,11 @@ class EventController extends Controller
 		$request->validate([
 			'description' => 'required',
 			'category' => 'required',
-			'contact' =>'required',
-			'date' =>'required',
-			'time' =>'required',
-			'venue' =>'required'
+			'contact' => 'required',
+			'date' => 'required',
+			'time' => 'required',
+			'venue' => 'required',
+			'picture' => 'mimes:jpeg,bmp,png,svg'
 		]);
 
 //		Clean the description
