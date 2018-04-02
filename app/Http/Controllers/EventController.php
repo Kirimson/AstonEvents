@@ -71,10 +71,9 @@ class EventController extends Controller
 
 	public function createEvent(Request $request)
 	{
+		$this->validateName($request);
 
-		$request->description = clean($request->description);
-
-		$this->validateEvent($request);
+		$this->validateFields($request);
 
 		$event = new Event();
 
@@ -96,12 +95,12 @@ class EventController extends Controller
 	{
 		$event = Event::where('name', '=', $name)->first();
 
-		$request->description = clean($request->description);
-
 //		If name has been changed
 		if ($event->name != $request->name) {
-			$this->validateEvent($request);
+			$this->validateName($request);
 		}
+
+		$this->validateFields($request);
 
 //		If an image was passed
 		if ($request->file('picture') != null) {
@@ -127,7 +126,7 @@ class EventController extends Controller
 
 	}
 
-	public function validateEvent(Request $request)
+	public function validateName(Request $request)
 	{
 		$request->validate([
 			'name' => 'required|unique:events|max:100'
@@ -162,5 +161,22 @@ class EventController extends Controller
 		}
 		$event->save();
 		return $event->likes;
+	}
+
+	private function validateFields($request)
+	{
+//		Check if all required fields are filled in, organiser not needed, done server side, so user cant set organiser
+//		to someone who isn't them
+		$request->validate([
+			'description' => 'required',
+			'category' => 'required',
+			'contact' =>'required',
+			'date' =>'required',
+			'time' =>'required',
+			'venue' =>'required'
+		]);
+
+//		Clean the description
+		$request->description = clean($request->description);
 	}
 }
