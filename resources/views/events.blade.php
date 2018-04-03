@@ -82,7 +82,6 @@
             updateValueField();
         });
 
-
         function updateValueField() {
             if (formAtr.val() === 'category') {
                 valueinput.html('{{ Form::select('search', array('sport' => 'Sport', 'culture' => 'Culture',
