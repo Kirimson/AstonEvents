@@ -13,6 +13,13 @@ use DateTime;
 class EventController extends Controller
 {
 
+	public function main($attribute = 'name', $value = '', $orderBy = 'name', $orderType = 'asc'){
+
+		$events = Event::where($attribute, 'like', '%'.$value.'%')->orderBy($orderBy, $orderType)->get();
+
+		return view('events', array('events' => $events));
+	}
+
 //	gets input from form, redirects using form param, to correct route for good formatting
 	public function showParser()
 	{

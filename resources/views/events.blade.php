@@ -5,8 +5,7 @@
 
 @section('content')
 
-    <div><a href="{{ url('events/list') }}">List events</a> </div>
-    <div><a href="{{ url('events/create') }}">Create event</a> </div>
+    <h1>Events</h1>
 
     {!! Form::open(array('url' => 'event/', 'class' => 'form')) !!}
 
@@ -20,5 +19,7 @@
     </div>
 
     {!! Form::close() !!}
+
+    @include('components.eventList', array('events' => $events))
 
 @endsection

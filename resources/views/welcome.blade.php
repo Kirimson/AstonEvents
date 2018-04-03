@@ -11,7 +11,8 @@
     @include('components.eventList', array('events' => $upcomingEvents))
     <h2>About</h2>
     <div class="col-lg-8 offset-2">
-        <p>Aston Events is a site dedicated to university organised events.</p> <p>It is made to be a  one-stop-shop for
+        <p>Aston Events is a site dedicated to university organised events.</p>
+        <p>It is made to be a one-stop-shop for
             all Aston University events. Each event has it's own page with a description organiser details, venue and
             date. Each event falls into one of three categories, Sport, Culver and Other. Look around and see if there
             is anything that interests you!</p>
@@ -26,8 +27,10 @@
             events, and access your own dashboard, where your events can be managed and updated. Either click the
             register button in the login page, or click the button below to register as an organiser!</p>
     </div>
-    <div class="row mb-0">
-        <a class="btn btn-outline-success col-lg-2 offset-5" href="{{ url('/register') }}" role="button">Create an
-            Account</a>
-    </div>
+    @if(!Auth::check())
+        <div class="row mb-0">
+            <a class="btn btn-outline-success col-lg-2 offset-5" href="{{ url('/register') }}" role="button">Create an
+                Account</a>
+        </div>
+    @endif
 @endsection

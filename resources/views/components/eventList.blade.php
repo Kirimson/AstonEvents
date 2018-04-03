@@ -1,6 +1,5 @@
 {{-- Heading --}}
 <div class="col-lg-10 offset-1">
-{{--    {{ $events-> }}--}}
     @if($events->first())
         <div id="event-container">
             <div class="row">
@@ -21,6 +20,7 @@
                 </div>
                 <div class="col-lg-2">
                     <h4>Likes</h4>
+                    {{ Auth::user()->id }}
                 </div>
             </div>
             <hr/>

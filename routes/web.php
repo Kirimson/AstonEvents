@@ -17,12 +17,9 @@ Route::get('/', 'WelcomeController@index');
 
 
 //Events page
-Route::get('events/', function(){
-	return view('events');
-});
-
-//events
+Route::get('events/', 'EventController@main');
 Route::get('events/search', 'EventController@search');
+
 Route::post('event/', 'EventController@showParser');
 Route::get('event/{name}', 'EventController@show');
 Route::get('event/{name}/edit', 'EventController@edit')->middleware('auth');
