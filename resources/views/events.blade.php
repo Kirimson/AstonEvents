@@ -83,31 +83,16 @@
         });
 
 
-
-            function updateValueField() {
+        function updateValueField() {
             if (formAtr.val() === 'category') {
                 valueinput.html('{{ Form::select('search', array('sport' => 'Sport', 'culture' => 'Culture',
                 'other' => 'Other'), 'other', ['required' => 'required',
                 'class' => 'form-control']) }}')
             } else if (formAtr.val() === 'organiser_id') {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    type: 'POST',
-                    url: '{{ url('/getUsers') }}',
-                    success: function (response) {
-                        let organiserDropdown = '<select name="search" required="required" default="{{ app('request')->input('search') }}" class="form-control" id="form-atr" ' +
-                            'name="atr">';
-                        Object.keys(response).forEach(function(key){
-                           organiserDropdown += '<option value="'+key+'">'+response[key]+'</option>';
-                        });
-                        organiserDropdown += '</select>';
-                        valueinput.html(organiserDropdown);
-                    }
-                });
+                valueinput.html('{{ Form::select('search', $users, '1', ['required' => 'required',
+                'class' => 'form-control']) }}');
             } else {
-                valueinput.html('<input class="form-control" id="search-textbox" name="search" type="text" value="'+oldSearch+'">');
+                valueinput.html('<input class="form-control" id="search-textbox" name="search" type="text" value="' + oldSearch + '">');
             }
         }
 

@@ -39,5 +39,3 @@ Route::get('/signup', function(){
 });
 
 Route::get('/logout', 'Auth\LoginController@logout');
-
-Route::post('/getUsers', 'UserController@listUsers');

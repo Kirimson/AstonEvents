@@ -34,7 +34,9 @@ class EventController extends Controller
 			$events = Event::where($attribute, 'like', '%'.$search.'%')->orderBy($orderBy, $orderType)->get();
 		}
 
-		return view('events', array('events' => $events));
+		$users = User::all()->pluck('name', 'id');
+
+		return view('events', array('events' => $events, 'users' => $users));
 	}
 
 //	gets input from form, redirects using form param, to correct route for good formatting
