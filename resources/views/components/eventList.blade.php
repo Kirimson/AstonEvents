@@ -20,7 +20,6 @@
                 </div>
                 <div class="col-lg-2">
                     <h4>Likes</h4>
-                    {{ Auth::user()->id }}
                 </div>
             </div>
             <hr/>

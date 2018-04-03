@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Event;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -13,9 +14,25 @@ use DateTime;
 class EventController extends Controller
 {
 
-	public function main($attribute = 'name', $value = '', $orderBy = 'name', $orderType = 'asc'){
+	public function main(Request $request){
 
-		$events = Event::where($attribute, 'like', '%'.$value.'%')->orderBy($orderBy, $orderType)->get();
+		$attribute = null;
+		empty($request->input('atr')) ? $attribute = 'name' : $attribute = $request->input('atr');
+
+		$search = null;
+		empty($request->input('search')) ? $search = '' : $search = $request->input('search');
+
+		$orderBy = null;
+		empty($request->input('orderBy')) ? $orderBy = 'name' : $orderBy = $request->input('orderBy');
+
+		$orderType = null;
+		empty($request->input('order')) ? $orderType = 'asc' : $orderType = $request->input('order');
+
+		if($attribute == 'organiser_id' || $attribute == 'category'){
+			$events = Event::where($attribute, $search)->orderBy($orderBy, $orderType)->get();
+		} else {
+			$events = Event::where($attribute, 'like', '%'.$search.'%')->orderBy($orderBy, $orderType)->get();
+		}
 
 		return view('events', array('events' => $events));
 	}

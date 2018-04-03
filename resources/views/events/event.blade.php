@@ -83,7 +83,8 @@
             <h3>Category</h3>
             <div>
                 {{ $create == true ? Form::select('category', array('sport' => 'Sport', 'culture' => 'Culture',
-                'other' => 'Other'), $event == null ? 'other' : $event->category, ['required' => 'required', 'class' => 'form-control']) : $event->UCCategory }}
+                'other' => 'Other'), $event == null ? 'other' : $event->category, ['required' => 'required',
+                'class' => 'form-control']) : $event->UCCategory }}
             </div>
 
             {{-- Show your username if creating, else, organiser of event --}}
