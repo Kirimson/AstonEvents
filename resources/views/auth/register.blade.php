@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('pageName', 'Register')
 @section('content')
+    <h1>Register</h1>
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -43,8 +44,8 @@
 
                 @if ($errors->has('password'))
                     <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
+                        <strong>{{ $errors->first('password') }}</strong>
+                    </span>
                 @endif
             </div>
         </div>

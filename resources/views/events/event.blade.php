@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('pageName', 'Create Event')
+@section('pageName', 'Events')
 @section('title', $create == true ? 'New Event' : $event->name)
 
 @section('content')

@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Category;
 use App\Page;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,10 +17,12 @@ class AppServiceProvider extends ServiceProvider
 	public function boot()
 	{
 		$pages = [
-			$home = new Page('Home', '/'),
+			new Page('Home', '/'),
 			$event = new Category('Events', '/events/', array(
-				$main = new Page('Events', '/events/'),
-				$create = new Page('Create', '/events/create'),
+				new Page('Search', '/events/'),
+				new Page('Most Liked', '/events/'),
+				new Page('Upcoming', '/events/'),
+				new Page('Create Event', '/events/create')
 			))
 		];
 
