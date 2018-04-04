@@ -50,16 +50,22 @@ class EventController extends Controller
 		$id = Input::get(['id']);
 		$event = Event::find($id);
 
-		return Redirect::to('event/' . $event->name);
+		$htmlName = rawurlencode($event->name);
+
+		return Redirect::to('event/' . $htmlName);
 	}
 
 //	gets input from above method, and sends off to correct view
-	public function show($name)
+	public function show($htmlName)
 	{
+		$name = $htmlName;
+
+//		return $name;
+
 		$event = Event::where('name', '=', $name)->first();
 
 		if ($event == null) {
-			return view('welcome');
+			return redirect('/');
 		}
 
 		$owner = false;
@@ -72,6 +78,7 @@ class EventController extends Controller
 
 	public function edit($name)
 	{
+
 		$event = Event::where('name', '=', $name)->first();
 
 		if (Auth::user()->id == $event->organiser_id) {
@@ -109,7 +116,9 @@ class EventController extends Controller
 
 		$event->save();
 
-		return redirect('event/' . $event->name);
+		$urlName = rawurlencode($event->name);
+
+		return redirect('event/' . $urlName);
 	}
 
 	public function updateEvent($name, Request $request)
@@ -187,7 +196,7 @@ class EventController extends Controller
 	private function validateFields($request)
 	{
 //		Check if all required fields are filled in, organiser not needed, done server side, so user cant set organiser
-//		to someone who isn't them
+//		to someone who isn't them, or mess up the client code to remove checking. Never trust the user.
 		$request->validate([
 			'description' => 'required',
 			'category' => 'required',

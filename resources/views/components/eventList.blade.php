@@ -27,7 +27,7 @@
             @foreach($events as $event)
                 <div class="row">
                     <div class="col-lg-2">
-                        <a href="{{ url('/event/'.$event->name) }}">
+                        <a href="{{ url('/event/'.rawurlencode($event->name)) }}">
                             <div id="event-image-container">
                                 {{ Html::image($event->picture == null ? asset('img/events/default/default.svg') :
                                 $event->picture, null, array('id' => 'event-image-thumb')) }}

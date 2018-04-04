@@ -10,7 +10,7 @@
         {!! Form::open(
             array(
               'id' => 'eventForm',
-              'url' => $event == null ? 'events/create/new' : 'event/'.$event->name.'/update',
+              'url' => $event == null ? 'events/create/new' : 'event/'.rawurlencode($event->name).'/update',
               'class' => 'form-horizontal',
               'files' => true)) !!}
     @endif
@@ -49,7 +49,7 @@
                     <div class="full-padding">
                         @if($owner == true)
                             <button type="submit" id="edit-event-button" class="btn btn-outline-info"
-                                    onclick="location.href='{{ url('/event/'.$event->name.'/edit') }}'">Edit
+                                    onclick="location.href='{{ url('/event/'.rawurlencode($event->name).'/edit') }}'">Edit
                             </button>
                         @else
                             <button type="submit" id="like-event-button" class="btn btn-outline-primary">Like</button>
