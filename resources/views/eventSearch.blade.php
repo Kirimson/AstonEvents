@@ -93,15 +93,23 @@
         });
 
         function updateValueField() {
-            if (formAtr.val() === 'category') {
-                valueinput.html('{{ Form::select('search', array('sport' => 'Sport', 'culture' => 'Culture',
+            switch(formAtr.val()){
+                case 'category':
+                    valueinput.html('{{ Form::select('search', array('sport' => 'Sport', 'culture' => 'Culture',
                 'other' => 'Other'), 'other', ['required' => 'required',
-                'class' => 'form-control']) }}')
-            } else if (formAtr.val() === 'organiser_id') {
-                valueinput.html('{{ Form::select('search', $users, '1', ['required' => 'required',
                 'class' => 'form-control']) }}');
-            } else {
-                valueinput.html('<input class="form-control" id="search-textbox" name="search" type="text" value="' + oldSearch + '">');
+                    break;
+                case 'organiser_id':
+                    valueinput.html('{{ Form::select('search', $users, '1', ['required' => 'required',
+                'class' => 'form-control']) }}');
+                    break;
+                case 'time':
+                    valueinput.html('{{ Form::date('search', $users, ['required' => 'required',
+                'class' => 'form-control']) }}');
+                    break;
+                default:
+                    valueinput.html('<input class="form-control" id="search-textbox" name="search" type="text" value="' + oldSearch + '">');
+                    break;
             }
         }
 
