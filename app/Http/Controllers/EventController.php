@@ -16,22 +16,27 @@ class EventController extends Controller
 
 	public function main(Request $request){
 
+//		Set default search terms if the input is empty
 		$attribute = null;
 		empty($request->input('atr')) ? $attribute = 'name' : $attribute = $request->input('atr');
-
 		$search = null;
 		empty($request->input('search')) ? $search = '' : $search = $request->input('search');
-
 		$orderBy = null;
 		empty($request->input('orderBy')) ? $orderBy = 'name' : $orderBy = $request->input('orderBy');
+		$sortType = null;
+		empty($request->input('order')) ? $sortType = '0' : $sortType = $request->input('order');
 
-		$orderType = null;
-		empty($request->input('order')) ? $orderType = 'asc' : $orderType = $request->input('order');
+//		Set sorting to make human sense. Ascending words sorts A-Z, Ascending likes go 99-0
+		if($orderBy == 'likes'){
+			$sortType = ($sortType+1)%2;
+		}
+
+		$sort = array('asc', 'desc');
 
 		if($attribute == 'organiser_id' || $attribute == 'category'){
-			$events = Event::where($attribute, $search)->orderBy($orderBy, $orderType)->get();
+			$events = Event::where($attribute, $search)->orderBy($orderBy, $sort[$sortType])->get();
 		} else {
-			$events = Event::where($attribute, 'like', '%'.$search.'%')->orderBy($orderBy, $orderType)->get();
+			$events = Event::where($attribute, 'like', '%'.$search.'%')->orderBy($orderBy, $sort[$sortType])->get();
 		}
 
 		$users = User::all()->pluck('name', 'id');

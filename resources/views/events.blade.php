@@ -6,61 +6,71 @@
 @section('content')
 
     <h1>Events</h1>
+    @if(Request::get('preset') != true)
+        {!! Form::open(array('url' => 'events/','id' => 'event-search-form', 'class' => 'form', 'method' => 'GET', 'onsubmit' => 'disablefields();')) !!}
 
-    {!! Form::open(array('url' => 'events/','id' => 'event-search-form', 'class' => 'form', 'method' => 'GET', 'onsubmit' => 'disablefields();')) !!}
-
-    {{-- Search for --}}
-    <div class="form-group row">
-        <div class="col-lg-2 offset-3 text-md-right">
-            {{ Form::label('Search for:') }}
+        {{-- Search for --}}
+        <div class="form-group row">
+            <div class="col-lg-2 offset-md-3 text-md-right">
+                {{ Form::label('Search for:') }}
+            </div>
+            <div class="input-group col-lg-3">
+                {{ Form::select('atr', array('name' => 'Name', 'category' => 'Category',
+                        'organiser_id' => 'Organiser', 'time' => 'When', 'venue' => 'Venue'), 'name', [
+                        'class' => 'form-control', 'id' => 'form-atr']) }}
+            </div>
         </div>
-        {{ Form::select('atr', array('name' => 'Name', 'category' => 'Category',
-                'organiser_id' => 'Organiser', 'time' => 'When', 'venue' => 'Venue'), 'name', [
-                'class' => 'form-control col-3', 'id' => 'form-atr']) }}
-    </div>
-    {{-- What value to find --}}
-    <div class="form-group row">
-        <div class="col-lg-2 offset-3 text-md-right">
-            {{ Form::label('What') }}
+
+        {{-- What value to find --}}
+        <div class="form-group row">
+            <div class="col-lg-2 offset-md-3 text-md-right">
+                {{ Form::label('Search Query:') }}
+            </div>
+            <div id="value-field" class="col-lg-3">
+                {{ Form::text('search', null, ['required' => 'required',
+                'class' => 'form-control ', 'id' => 'search-textbox']) }}
+            </div>
         </div>
-        <div id="value-field" class="col-lg-3">
-            {{ Form::text('search', 'hello', ['required' => 'required',
-                    'class' => 'form-control ', 'id' => 'search-textbox']) }}
+
+        <div class="form-group row">
+            <div class="col-lg-2 offset-md-3 text-md-right">
+                {{ Form::label('Sort By:') }}
+            </div>
+            <div class="input-group col-lg-3">
+                {{ Form::select('orderBy', array('name' => 'Name', 'category' => 'Category',
+                    'organiser_id' => 'Organiser', 'time' => 'When', 'venue' => 'Venue', 'likes' => 'Likes'), 'name', [
+                    'class' => 'form-control', 'id' => 'form-atr']) }}
+                <span class="input-group-addon">
+                {{ Form::select('order', array(0 => 'Ascending', 1 => 'Descending'), 'name', [
+                    'class' => 'form-control', 'id' => 'form-atr']) }}
+            </span>
+            </div>
         </div>
-    </div>
 
-    {{--<div class="form-group row">--}}
-    {{--<div class="col-3 offset-2 col-form-label text-md-right">--}}
-    {{--{{ Form::label('What') }}--}}
-    {{--</div>--}}
-    {{--{{ Form::text('search', null) }}--}}
-    {{--</div>--}}
-    {{--<div class="form-group row">--}}
-    {{--<div class="col-3 offset-2 col-form-label text-md-right">--}}
-    {{--{{ Form::label('Order By') }}--}}
-    {{--</div>--}}
-    {{--{{ Form::text('orderBy', null, array('class' => 'form-control col-lg-3')) }}--}}
-    {{--</div>--}}
-    {{--<div class="form-group row">--}}
-    {{--<div class="col-3 offset-2 col-form-label text-md-right">--}}
-    {{--{{ Form::label('Order Type') }}--}}
-    {{--</div>--}}
-    {{--{{ Form::text('order', null) }}--}}
-    {{--</div>--}}
+        <div id="event-image-container">
+            <button type="submit" id="createSubmitButton" class="btn btn-outline-primary">
+                Find event!
+            </button>
+        </div>
 
-    <div class="form-group row">
-        {!! Form::submit('Find Event') !!}
-    </div>
-
-    {!! Form::close() !!}
-
+        {!! Form::close() !!}
+    @else
+        @switch(Request::get('orderBy'))
+            @case('likes')
+            <h2>Most liked events</h2>
+            @break
+            @case('time')
+            <h2>Upcoming events</h2>
+            @break
+        @endswitch
+    @endif
     @include('components.eventList', array('events' => $events))
 
     {{-- Disables any inputs that are empty, so URL doesn't get clogged up with empty GET parameters --}}
     <script>
         $(function () {
+            oldSearch = $('#search-textbox').val();
             updateValueField();
-
             $('#search-textbox').on('input', function () {
                 oldSearch = $('#search-textbox').val();
             });

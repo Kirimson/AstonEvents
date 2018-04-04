@@ -3,22 +3,22 @@
     @if($events->first())
         <div id="event-container">
             <div class="row">
-                <div class="col-lg-2">
+                <div class="col-sm-2">
                     <h3>Name</h3>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-sm-2">
                     <h4>Category</h4>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-sm-2">
                     <h4>Organiser</h4>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-sm-2">
                     <h4>When</h4>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-sm-2">
                     <h4>Where</h4>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-sm-2">
                     <h4>Likes</h4>
                 </div>
             </div>
