@@ -38,7 +38,7 @@
             </div>
             <div class="input-group col-lg-3">
                 {{ Form::select('orderBy', array('name' => 'Name', 'category' => 'Category',
-                    'organiser_id' => 'Organiser', 'time' => 'When', 'venue' => 'Venue', 'likes' => 'Likes'), 'name', [
+                    'organiser_id' => 'Organiser', 'time' => 'When', 'venue' => 'Venue', 'likes' => 'Likes', 'created_at' => 'Recently Made'), 'name', [
                     'class' => 'form-control', 'id' => 'form-atr']) }}
                 <span class="input-group-addon">
                 {{ Form::select('order', array(0 => 'Ascending', 1 => 'Descending'), 'name', [

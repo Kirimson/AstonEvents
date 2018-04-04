@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use DateTime;
 
 class EventController extends Controller
 {
 
-	public function main(Request $request){
+	public function main(Request $request)
+	{
 
 //		Set default search terms if the input is empty
 		$attribute = null;
@@ -27,21 +27,21 @@ class EventController extends Controller
 		empty($request->input('order')) ? $sortType = '0' : $sortType = $request->input('order');
 
 //		Set sorting to make human sense. Ascending words sorts A-Z, Ascending likes go 99-0
-		if($orderBy == 'likes'){
-			$sortType = ($sortType+1)%2;
+		if ($orderBy == 'likes' || $orderBy == 'created_at') {
+			$sortType = ($sortType + 1) % 2;
 		}
 
 		$sort = array('asc', 'desc');
 
-		if($attribute == 'organiser_id' || $attribute == 'category'){
+		if ($attribute == 'organiser_id' || $attribute == 'category') {
 			$events = Event::where($attribute, $search)->orderBy($orderBy, $sort[$sortType])->get();
 		} else {
-			$events = Event::where($attribute, 'like', '%'.$search.'%')->orderBy($orderBy, $sort[$sortType])->get();
+			$events = Event::where($attribute, 'like', '%' . $search . '%')->orderBy($orderBy, $sort[$sortType])->get();
 		}
 
 		$users = User::all()->pluck('name', 'id');
 
-		return view('events', array('events' => $events, 'users' => $users));
+		return view('eventSearch', array('events' => $events, 'users' => $users));
 	}
 
 //	gets input from form, redirects using form param, to correct route for good formatting
@@ -58,11 +58,10 @@ class EventController extends Controller
 //	gets input from above method, and sends off to correct view
 	public function show($htmlName)
 	{
-		$name = $htmlName;
 
-//		return $name;
+		$id = explode('.', $htmlName)[1];
 
-		$event = Event::where('name', '=', $name)->first();
+		$event = Event::find($id);
 
 		if ($event == null) {
 			return redirect('/');
@@ -79,7 +78,9 @@ class EventController extends Controller
 	public function edit($name)
 	{
 
-		$event = Event::where('name', '=', $name)->first();
+		$id = explode('.', $name)[1];
+
+		$event = Event::find($id);
 
 		if (Auth::user()->id == $event->organiser_id) {
 			return view('/events/event', array('create' => true, 'event' => $event));
@@ -99,11 +100,11 @@ class EventController extends Controller
 
 	public function createEvent(Request $request)
 	{
+		$event = new Event();
+
 		$this->validateName($request);
 
 		$this->validateFields($request);
-
-		$event = new Event();
 
 		//create image details
 		if ($request->file('picture') != null) {
@@ -116,14 +117,15 @@ class EventController extends Controller
 
 		$event->save();
 
-		$urlName = rawurlencode($event->name);
+		$this->createurlName($event);
 
-		return redirect('event/' . $urlName);
+		return redirect('event/' . $event->urlname);
 	}
 
 	public function updateEvent($name, Request $request)
 	{
-		$event = Event::where('name', '=', $name)->first();
+
+		$event = Event::where('urlname', '=', $name)->first();
 
 //		If name has been changed
 		if ($event->name != $request->name) {
@@ -152,8 +154,24 @@ class EventController extends Controller
 
 		$event->save();
 
-		return redirect('event/' . $event->name);
+		$this->createurlName($event);
 
+		return redirect('event/' . $event->urlname);
+
+	}
+
+	public function createurlName($event)
+	{
+		$symbolpattern = '/[^\p{L}\p{N}\s]/u';
+		$noSymbols = preg_replace($symbolpattern, '', $event->name);
+
+		$pattern = '/(\W)+/';
+		$replacement = '-';
+		$urlName = preg_replace($pattern, $replacement, $noSymbols) . '.' . $event->id;
+
+		$event->urlname = $urlName;
+
+		$event->save();
 	}
 
 	public function setupEvent($event, Request $request, $path)
@@ -190,8 +208,10 @@ class EventController extends Controller
 	{
 //		Require name to be unique, and not contain '/' as it messes with routes
 		$request->validate([
-			'name' => 'required|unique:events|max:100|not_regex:/\//'
+			'name' => 'required|unique:events|max:100'
 		]);
+
+
 	}
 
 	private function validateFields($request)

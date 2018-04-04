@@ -14,7 +14,7 @@ class Event extends Model
 	}
 
 	protected $fillable = [
-		'organiser_id', 'name', 'description', 'category', 'time', 'picture', 'contact', 'venue', 'likes',
+		'organiser_id', 'name', 'description', 'category', 'time', 'picture', 'contact', 'venue', 'likes', 'urlname'
 	];
 
 	public function getReadableTimeAttribute(){
