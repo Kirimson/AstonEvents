@@ -13684,20 +13684,6 @@ module.exports = __webpack_require__(36);
 
 __webpack_require__(12);
 
-// window.Vue = require('vue');
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-// Vue.component('example-component', require('./components/ExampleComponent.vue'));
-
-// const app = new Vue({
-//     el: '#app'
-// });
-
 /***/ }),
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {

@@ -10022,9 +10022,16 @@ a.text-dark:focus {
 body {
   font: 100% "Raleway", sans-serif;
   color: #333;
-  background-color: #e7e7e7;
   height: 100%;
   position: relative;
+}
+
+.cke_editable {
+  padding: 1em;
+}
+
+#app {
+  background-color: #e7e7e7;
 }
 
 h1 {

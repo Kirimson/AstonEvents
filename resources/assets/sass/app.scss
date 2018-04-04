@@ -19,9 +19,16 @@
 body {
     font: 100% $font-family-sans-serif;
     color: $primary-color;
-    background-color: $background-color;
     height: 100%;
     position: relative;
+}
+
+.cke_editable{
+    padding: 1em;
+}
+
+#app{
+    background-color: $background-color;
 }
 
 h1 {

@@ -188,8 +188,9 @@ class EventController extends Controller
 
 	public function validateName(Request $request)
 	{
+//		Require name to be unique, and not contain '/' as it messes with routes
 		$request->validate([
-			'name' => 'required|unique:events|max:100'
+			'name' => 'required|unique:events|max:100|not_regex:/\//'
 		]);
 	}
 

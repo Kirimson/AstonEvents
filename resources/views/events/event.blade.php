@@ -136,7 +136,9 @@
             });
 
             //Setup ckEditor for description textarea
-            CKEDITOR.replace('description');
+            CKEDITOR.replace('description',{
+                contentsCss: '{{ asset('css/app.css') }}'
+            });
 
             //Reads a given (fake)path of the uploaded image and reads the image, setting the img to the uploaded image
             function updateEventIcon(file) {
