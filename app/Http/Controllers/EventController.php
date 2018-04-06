@@ -150,13 +150,9 @@ class EventController extends Controller
 //			Create a new file for the image, and store in event
 			$path = $request->file('picture')->store('img/events', 'public');
 		} else {
-//			There is no image, check if image is already null, if not, delete image, else, just set path to null
-			if ($event->picture != null) {
-				Storage::disk('public')->delete($event->picture);
-			}
-			$path = null;
+//			There is no image, keep it the same
+			$path = $event->picture;
 		}
-
 		$event = $this->setupEvent($event, $request, $path);
 
 		$event->save();
