@@ -5,6 +5,8 @@
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
+        <input type="hidden" id="likes" name="likes" />
+
         <div class="form-group row">
             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
@@ -67,4 +69,19 @@
             </div>
         </div>
     </form>
+
+    <script>
+        let likedEvents;
+        try {
+            likedEvents = JSON.parse(localStorage.getItem("liked-events"));
+            let test = likedEvents[0];
+        } catch (err) {
+            console.log(err.message);
+            likedEvents = [];
+        }
+
+        $('#likes').val(likedEvents);
+
+    </script>
+
 @endsection

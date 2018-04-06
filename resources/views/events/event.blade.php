@@ -136,7 +136,7 @@
             });
 
             //Setup ckEditor for description textarea
-            CKEDITOR.replace('description',{
+            CKEDITOR.replace('description', {
                 contentsCss: '{{ asset('css/app.css') }}'
             });
 
@@ -183,28 +183,58 @@
             @if($owner == false)
             $(function () {
                 let likeButton = $('#like-event-button');
-                //load liked events
+
                 let likedEvents = [];
-                try {
-                    likedEvents = JSON.parse(localStorage.getItem("liked-events"));
-                    let test = likedEvents[0];
-                } catch (err) {
-                    console.log(err.message);
-                    likedEvents = [];
+                let loggedin = false;
+                let liked = false;
+
+                @if(Auth::check())
+                    loggedin = true;
+                @endif
+
+                console.log('loggedin '+loggedin);
+
+                //check if user is logged in
+                if (loggedin === false) {
+                    console.log("ls");
+                    //load liked events
+                    try {
+                        likedEvents = JSON.parse(localStorage.getItem("liked-events"));
+                        let test = likedEvents[0];
+                    } catch (err) {
+                        console.log(err.message);
+                        likedEvents = [];
+                    }
+
+                    liked = likedEvents.includes({{ $event->id }});
+                } else {
+                    console.log("is a user");
+                    liked = {{ json_encode($liked) }};
                 }
 
-                if (likedEvents.includes({{ $event->id }})) {
+                console.log('liked: '+liked);
+
+                if (liked === true) {
                     likeButton.removeClass('btn-outline-primary');
                     likeButton.addClass('btn-success');
                     likeButton.html('Liked!');
                 }
 
                 likeButton.click(function () {
-                    let shouldLike = true;
-                    if (likedEvents.includes({{ $event->id }})) {
-                        shouldLike = false;
+                    let shouldLike;
+                    //if not logged in, use likeEvents ls
+                    if(loggedin === false) {
+                        shouldLike = true;
+                        if (likedEvents.includes({{ $event->id }})) {
+                            shouldLike = false;
+                        }
+                        console.log('shouldlike '+shouldLike);
+                    } else{
+                    //    use $liked from controller
+                        console.log("using controller")
+                        shouldLike = !liked;
                     }
-                    console.log(shouldLike);
+
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -213,6 +243,8 @@
                         url: '{{ url('/events/like') }}',
                         data: {id: '{{ $event->id }}', like: shouldLike.toString()},
                         success: function (response) {
+                            liked = !liked;
+
                             console.log(response);
                             $('#like-caption').html("Likes: " + response);
                             if (shouldLike === true) {
@@ -230,7 +262,10 @@
                                     likedEvents.splice(indexOf, 1);
                                 }
                             }
-                            localStorage.setItem("liked-events", JSON.stringify(likedEvents))
+                            //If a guest, store like data locally
+                            if(loggedin === false) {
+                                localStorage.setItem("liked-events", JSON.stringify(likedEvents))
+                            }
                         }
                     });
                 });

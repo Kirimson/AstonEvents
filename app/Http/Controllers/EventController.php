@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Event;
+use App\Like;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -41,7 +42,7 @@ class EventController extends Controller
 
 		$users = User::all()->pluck('name', 'id');
 
-		return view('eventSearch', array('events' => $events, 'users' => $users));
+		return view('events.eventSearch', array('events' => $events, 'users' => $users));
 	}
 
 //	gets input from form, redirects using form param, to correct route for good formatting
@@ -68,11 +69,17 @@ class EventController extends Controller
 		}
 
 		$owner = false;
+		$liked = false;
+//		If logged in
 		if (Auth::check()) {
+//			check if you are owner
 			$owner = Auth::user()->id == $event->organiser_id;
+
+//			Check if you liked this event
+			$liked = (Like::whereRaw('`organiser_id` = ' . Auth::user()->id . ' and `event_id` = ' . $event->id)->first() != null);
 		}
 
-		return view('/events/event', array('create' => false, 'event' => $event, 'owner' => $owner));
+		return view('/events/event', array('create' => false, 'event' => $event, 'owner' => $owner, 'liked' => $liked));
 	}
 
 	public function edit($name)
@@ -197,8 +204,23 @@ class EventController extends Controller
 		$event = Event::find($request->id);
 		if ($request->like == 'true') {
 			$event->likes++;
+
+//			If user logged in, add this like to the table
+			if (Auth::check()) {
+				$like = new Like();
+				$like->organiser_id = Auth::user()->id;
+				$like->event_id = $request->id;
+
+				$like->save();
+			}
+
 		} elseif ($event->likes > 0) {
 			$event->likes--;
+
+//			If user logged in, remove this like to the table
+			if(Auth::check()){
+				Like::whereRaw('`organiser_id` = ' . Auth::user()->id . ' and `event_id` = ' . $event->id)->delete();
+			}
 		}
 		$event->save();
 		return $event->likes;

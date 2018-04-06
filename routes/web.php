@@ -33,6 +33,7 @@ Route::post('events/create/new', 'EventController@createEvent')->middleware('aut
 Auth::routes();
 
 Route::get('/myAccount', 'HomeController@index');
+Route::get('/registered', 'HomeController@registered');
 
 Route::get('/signup', function(){
 	return view('/auth/register');
