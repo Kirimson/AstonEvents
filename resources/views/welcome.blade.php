@@ -22,15 +22,18 @@
         <h3>Finding Events</h3>
         <p>Use the search feature to find new events, search by name, venue, and organiser. Events can then be sorted
             by their name, amount of likes and time of the event.</p>
-        <h3>Registering as an Organiser</h3>
-        <p>Want to contribute to Aston Events and become an Organiser? Great! As an organiser, you can create multiple
-            events, and access your own dashboard, where your events can be managed and updated. Either click the
-            register button in the login page, or click the button below to register as an organiser!</p>
+        @if(!Auth::check())
+            <h3>Registering as an Organiser</h3>
+            <p>Want to contribute to Aston Events and become an Organiser? Great! As an organiser, you can create
+                multiple
+                events, and access your own dashboard, where your events can be managed and updated. Either click the
+                register button in the login page, or click the button below to register as an organiser!</p>
+
+            <div class="row">
+                <a class="btn btn-outline-success offset-5" href="{{ url('/register') }}" role="button">Create
+                    an
+                    Account</a>
+            </div>
+        @endif
     </div>
-    @if(!Auth::check())
-        <div class="row mb-0">
-            <a class="btn btn-outline-success col-lg-2 offset-5" href="{{ url('/register') }}" role="button">Create an
-                Account</a>
-        </div>
-    @endif
 @endsection
