@@ -1,8 +1,11 @@
 @extends('layouts.app')
 @section('pageName', 'Register')
 @section('content')
+    <h1>Register</h1>
     <form method="POST" action="{{ route('register') }}">
         @csrf
+
+        <input type="hidden" id="likes" name="likes" />
 
         <div class="form-group row">
             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
@@ -43,8 +46,8 @@
 
                 @if ($errors->has('password'))
                     <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
+                        <strong>{{ $errors->first('password') }}</strong>
+                    </span>
                 @endif
             </div>
         </div>
@@ -66,4 +69,19 @@
             </div>
         </div>
     </form>
+
+    <script>
+        let likedEvents;
+        try {
+            likedEvents = JSON.parse(localStorage.getItem("liked-events"));
+            let test = likedEvents[0];
+        } catch (err) {
+            console.log(err.message);
+            likedEvents = [];
+        }
+
+        $('#likes').val(likedEvents);
+
+    </script>
+
 @endsection

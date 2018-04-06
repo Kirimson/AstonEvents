@@ -19,9 +19,16 @@
 body {
     font: 100% $font-family-sans-serif;
     color: $primary-color;
-    background-color: $background-color;
     height: 100%;
     position: relative;
+}
+
+.cke_editable{
+    padding: 1em;
+}
+
+#app{
+    background-color: $background-color;
 }
 
 h1 {
@@ -99,10 +106,15 @@ img {
 }
 
 #event-image {
+    @extend %event-image-template;
     height: 9em;
     width: 9em;
-    border-radius: 50%;
-    overflow: hidden;
+}
+
+#event-image-thumb{
+    @extend %event-image-template;
+    height: 5em;
+    width: 5em;
 }
 
 #description-editor{
@@ -115,4 +127,8 @@ img {
 
 #description {
     resize: none;
+}
+
+#event-container{
+    //border: solid thin black;
 }

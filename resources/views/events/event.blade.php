@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Create Event')
 @section('pageName', 'Events')
+@section('title', $create == true ? 'New Event' : $event->name)
 
 @section('content')
 
@@ -10,7 +10,7 @@
         {!! Form::open(
             array(
               'id' => 'eventForm',
-              'url' => $event == null ? 'events/create/new' : 'event/'.$event->name.'/update',
+              'url' => $event == null ? 'events/create/new' : 'event/'.$event->urlname.'/update',
               'class' => 'form-horizontal',
               'files' => true)) !!}
     @endif
@@ -49,7 +49,7 @@
                     <div class="full-padding">
                         @if($owner == true)
                             <button type="submit" id="edit-event-button" class="btn btn-outline-info"
-                                    onclick="location.href='{{ url('/event/'.$event->name.'/edit') }}'">Edit
+                                    onclick="location.href='{{ url('/event/'.$event->urlname.'/edit') }}'">Edit
                             </button>
                         @else
                             <button type="submit" id="like-event-button" class="btn btn-outline-primary">Like</button>
@@ -83,7 +83,8 @@
             <h3>Category</h3>
             <div>
                 {{ $create == true ? Form::select('category', array('sport' => 'Sport', 'culture' => 'Culture',
-                'other' => 'Other'), $event == null ? 'other' : $event->category, ['required' => 'required', 'class' => 'form-control']) : ucfirst($event->category) }}
+                'other' => 'Other'), $event == null ? 'other' : $event->category, ['required' => 'required',
+                'class' => 'form-control']) : $event->UCCategory }}
             </div>
 
             {{-- Show your username if creating, else, organiser of event --}}
@@ -105,13 +106,13 @@
                         </span>
                     </div>
                 @else
-                    {{ $event->time }}
+                    {{ $event->readableTime }}
                 @endif
             </div>
             <h3>Where</h3>
             <div>
                 {{ $create == true ? Form::text('venue', $event == null ? '' : $event->venue, ['required' => 'required',
-                'class' => 'form-control', 'placeholder' => 'Contact details for the event']) : ucfirst($event->venue) }}
+                'class' => 'form-control', 'placeholder' => 'Contact details for the event']) : $event->UCVenue }}
             </div>
 
         </div>
@@ -136,7 +137,7 @@
 
             //Setup ckEditor for description textarea
             CKEDITOR.replace('description', {
-                uiColor: '#F05223',
+                contentsCss: '{{ asset('css/app.css') }}'
             });
 
             //Reads a given (fake)path of the uploaded image and reads the image, setting the img to the uploaded image
@@ -182,28 +183,50 @@
             @if($owner == false)
             $(function () {
                 let likeButton = $('#like-event-button');
-                //load liked events
+
                 let likedEvents = [];
-                try {
-                    likedEvents = JSON.parse(localStorage.getItem("liked-events"));
-                    let test = likedEvents[0];
-                } catch (err) {
-                    console.log(err.message);
-                    likedEvents = [];
+                let loggedin = false;
+                let liked = false;
+
+                @if(Auth::check())
+                    loggedin = true;
+                @endif
+
+                //check if user is logged in
+                if (loggedin === false) {
+                    //load liked events
+                    try {
+                        likedEvents = JSON.parse(localStorage.getItem("liked-events"));
+                        let test = likedEvents[0];
+                    } catch (err) {
+                        likedEvents = [];
+                    }
+
+                    liked = likedEvents.includes({{ $event->id }});
+                } else {
+                    liked = {{ json_encode($liked) }};
                 }
 
-                if (likedEvents.includes({{ $event->id }})) {
+                if (liked === true) {
                     likeButton.removeClass('btn-outline-primary');
                     likeButton.addClass('btn-success');
                     likeButton.html('Liked!');
                 }
 
                 likeButton.click(function () {
-                    let shouldLike = true;
-                    if (likedEvents.includes({{ $event->id }})) {
-                        shouldLike = false;
+                    let shouldLike;
+                    //if not logged in, use likeEvents ls
+                    if(loggedin === false) {
+                        shouldLike = true;
+                        if (likedEvents.includes({{ $event->id }})) {
+                            shouldLike = false;
+                        }
+                        console.log('shouldlike '+shouldLike);
+                    } else{
+                    //    use $liked from controller
+                        shouldLike = !liked;
                     }
-                    console.log(shouldLike);
+
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -212,6 +235,8 @@
                         url: '{{ url('/events/like') }}',
                         data: {id: '{{ $event->id }}', like: shouldLike.toString()},
                         success: function (response) {
+                            liked = !liked;
+
                             console.log(response);
                             $('#like-caption').html("Likes: " + response);
                             if (shouldLike === true) {
@@ -229,7 +254,10 @@
                                     likedEvents.splice(indexOf, 1);
                                 }
                             }
-                            localStorage.setItem("liked-events", JSON.stringify(likedEvents))
+                            //If a guest, store like data locally
+                            if(loggedin === false) {
+                                localStorage.setItem("liked-events", JSON.stringify(likedEvents))
+                            }
                         }
                     });
                 });

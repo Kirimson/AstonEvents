@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Category;
 use App\Page;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,12 +16,14 @@ class AppServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
+//		Provides pages with knowledge of pages ont he site and their page links. shared for the navbar to create links
 		$pages = [
-			$home = new Page('Home', '/'),
+			new Page('Home', '/'),
 			$event = new Category('Events', '/events/', array(
-				$main = new Page('Events Main', '/events/'),
-				$create = new Page('Create', '/events/create'),
-				$create = new Page('Search', '/events/search'),
+				new Page('Search', '/events/'),
+				new Page('Most Liked', '/events?orderBy=likes&order=0&preset=true'),
+				new Page('Upcoming', '/events?orderBy=time&order=0&preset=true'),
+				new Page('Create Event', '/events/create')
 			))
 		];
 

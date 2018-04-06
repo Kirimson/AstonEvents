@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('pageName', 'Login')
 @section('content')
+    <h1>Login</h1>
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
@@ -52,10 +53,6 @@
                 <button type="submit" class="btn btn-outline-primary">
                     {{ __('Login') }}
                 </button>
-
-                <a class="btn btn-link" href="{{ route('password.request') }}">
-                    {{ __('Forgot Your Password?') }}
-                </a>
             </div>
         </div>
     </form>

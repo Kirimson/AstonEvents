@@ -1,6 +1,6 @@
 <html lang="{{ app()->getLocale() }}">
 <head>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon"/>
     <title>Aston Events - @yield('title')</title>
@@ -12,7 +12,7 @@
             crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
-<body>
+<body id="app">
 
 @include('components.navbar')
 

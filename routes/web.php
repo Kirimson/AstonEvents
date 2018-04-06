@@ -13,18 +13,13 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'WelcomeController@index');
 
 
 //Events page
-Route::get('events/', function(){
-	return view('events');
-});
-
-//events
+Route::get('events/', 'EventController@main');
 Route::get('events/search', 'EventController@search');
+
 Route::post('event/', 'EventController@showParser');
 Route::get('event/{name}', 'EventController@show');
 Route::get('event/{name}/edit', 'EventController@edit')->middleware('auth');
@@ -38,6 +33,7 @@ Route::post('events/create/new', 'EventController@createEvent')->middleware('aut
 Auth::routes();
 
 Route::get('/myAccount', 'HomeController@index');
+Route::get('/registered', 'HomeController@registered');
 
 Route::get('/signup', function(){
 	return view('/auth/register');

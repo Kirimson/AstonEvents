@@ -23,3 +23,8 @@ $navHeight: 3em;
     overflow-wrap: break-word;
     hyphens:auto;
 }
+
+%event-image-template{
+    border-radius: 50%;
+    overflow: hidden;
+}

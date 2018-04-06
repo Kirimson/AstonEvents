@@ -3,16 +3,47 @@
 namespace App\Http\Controllers;
 
 use App\Event;
+use App\Like;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use DateTime;
-use Mews\Purifier\PurifierServiceProvider;
 
 class EventController extends Controller
 {
+
+	public function main(Request $request)
+	{
+
+//		Set default search terms if the input is empty
+		$attribute = null;
+		empty($request->input('atr')) ? $attribute = 'name' : $attribute = $request->input('atr');
+		$search = null;
+		empty($request->input('search')) ? $search = '' : $search = $request->input('search');
+		$orderBy = null;
+		empty($request->input('orderBy')) ? $orderBy = 'name' : $orderBy = $request->input('orderBy');
+		$sortType = null;
+		empty($request->input('order')) ? $sortType = '0' : $sortType = $request->input('order');
+
+//		Set sorting to make human sense. Ascending words sorts A-Z, Ascending likes go 99-0
+		if ($orderBy == 'likes' || $orderBy == 'created_at') {
+			$sortType = ($sortType + 1) % 2;
+		}
+
+		$sort = array('asc', 'desc');
+
+		if ($attribute == 'organiser_id' || $attribute == 'category') {
+			$events = Event::where($attribute, $search)->orderBy($orderBy, $sort[$sortType])->get();
+		} else {
+			$events = Event::where($attribute, 'like', '%' . $search . '%')->orderBy($orderBy, $sort[$sortType])->get();
+		}
+
+		$users = User::all()->pluck('name', 'id');
+
+		return view('events.eventSearch', array('events' => $events, 'users' => $users));
+	}
 
 //	gets input from form, redirects using form param, to correct route for good formatting
 	public function showParser()
@@ -20,43 +51,48 @@ class EventController extends Controller
 		$id = Input::get(['id']);
 		$event = Event::find($id);
 
-		return Redirect::to('event/' . $event->name);
+		$htmlName = rawurlencode($event->name);
+
+		return Redirect::to('event/' . $htmlName);
 	}
 
 //	gets input from above method, and sends off to correct view
-	public function show($name)
+	public function show($htmlName)
 	{
-		$event = Event::where('name', '=', $name)->first();
+
+		$id = explode('.', $htmlName)[1];
+
+		$event = Event::find($id);
 
 		if ($event == null) {
-			return view('welcome');
+			return redirect('/');
 		}
 
 		$owner = false;
+		$liked = false;
+//		If logged in
 		if (Auth::check()) {
+//			check if you are owner
 			$owner = Auth::user()->id == $event->organiser_id;
+
+//			Check if you liked this event
+			$liked = (Like::whereRaw('`organiser_id` = ' . Auth::user()->id . ' and `event_id` = ' . $event->id)->first() != null);
 		}
 
-		$event->time = $this->readableDateTime($event->time);
-
-		return view('/events/event', array('create' => false, 'event' => $event, 'owner' => $owner));
+		return view('/events/event', array('create' => false, 'event' => $event, 'owner' => $owner, 'liked' => $liked));
 	}
 
 	public function edit($name)
 	{
-		$event = Event::where('name', '=', $name)->first();
+
+		$id = explode('.', $name)[1];
+
+		$event = Event::find($id);
 
 		if (Auth::user()->id == $event->organiser_id) {
 			return view('/events/event', array('create' => true, 'event' => $event));
 		}
 		return back();
-	}
-
-	public function readableDateTime($timeString)
-	{
-		$format = 'Y-m-d H:i:s';
-		$date = DateTime::createFromFormat($format, $timeString);
-		return date_format($date, 'l jS F Y \a\t g:ia');
 	}
 
 	public function search()
@@ -71,11 +107,11 @@ class EventController extends Controller
 
 	public function createEvent(Request $request)
 	{
+		$event = new Event();
+
 		$this->validateName($request);
 
 		$this->validateFields($request);
-
-		$event = new Event();
 
 		//create image details
 		if ($request->file('picture') != null) {
@@ -88,12 +124,15 @@ class EventController extends Controller
 
 		$event->save();
 
-		return redirect('event/' . $event->name);
+		$this->createurlName($event);
+
+		return redirect('event/' . $event->urlname);
 	}
 
 	public function updateEvent($name, Request $request)
 	{
-		$event = Event::where('name', '=', $name)->first();
+
+		$event = Event::where('urlname', '=', $name)->first();
 
 //		If name has been changed
 		if ($event->name != $request->name) {
@@ -122,8 +161,24 @@ class EventController extends Controller
 
 		$event->save();
 
-		return redirect('event/' . $event->name);
+		$this->createurlName($event);
 
+		return redirect('event/' . $event->urlname);
+
+	}
+
+	public function createurlName($event)
+	{
+		$symbolpattern = '/[^\p{L}\p{N}\s]/u';
+		$noSymbols = preg_replace($symbolpattern, '', $event->name);
+
+		$pattern = '/(\W)+/';
+		$replacement = '-';
+		$urlName = preg_replace($pattern, $replacement, $noSymbols) . '.' . $event->id;
+
+		$event->urlname = $urlName;
+
+		$event->save();
 	}
 
 	public function setupEvent($event, Request $request, $path)
@@ -149,8 +204,23 @@ class EventController extends Controller
 		$event = Event::find($request->id);
 		if ($request->like == 'true') {
 			$event->likes++;
+
+//			If user logged in, add this like to the table
+			if (Auth::check()) {
+				$like = new Like();
+				$like->organiser_id = Auth::user()->id;
+				$like->event_id = $request->id;
+
+				$like->save();
+			}
+
 		} elseif ($event->likes > 0) {
 			$event->likes--;
+
+//			If user logged in, remove this like to the table
+			if(Auth::check()){
+				Like::whereRaw('`organiser_id` = ' . Auth::user()->id . ' and `event_id` = ' . $event->id)->delete();
+			}
 		}
 		$event->save();
 		return $event->likes;
@@ -158,15 +228,18 @@ class EventController extends Controller
 
 	public function validateName(Request $request)
 	{
+//		Require name to be unique, and not contain '/' as it messes with routes
 		$request->validate([
 			'name' => 'required|unique:events|max:100'
 		]);
+
+
 	}
 
 	private function validateFields($request)
 	{
 //		Check if all required fields are filled in, organiser not needed, done server side, so user cant set organiser
-//		to someone who isn't them
+//		to someone who isn't them, or mess up the client code to remove checking. Never trust the user.
 		$request->validate([
 			'description' => 'required',
 			'category' => 'required',
