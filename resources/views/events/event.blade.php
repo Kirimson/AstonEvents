@@ -192,27 +192,20 @@
                     loggedin = true;
                 @endif
 
-                console.log('loggedin '+loggedin);
-
                 //check if user is logged in
                 if (loggedin === false) {
-                    console.log("ls");
                     //load liked events
                     try {
                         likedEvents = JSON.parse(localStorage.getItem("liked-events"));
                         let test = likedEvents[0];
                     } catch (err) {
-                        console.log(err.message);
                         likedEvents = [];
                     }
 
                     liked = likedEvents.includes({{ $event->id }});
                 } else {
-                    console.log("is a user");
                     liked = {{ json_encode($liked) }};
                 }
-
-                console.log('liked: '+liked);
 
                 if (liked === true) {
                     likeButton.removeClass('btn-outline-primary');
@@ -231,7 +224,6 @@
                         console.log('shouldlike '+shouldLike);
                     } else{
                     //    use $liked from controller
-                        console.log("using controller")
                         shouldLike = !liked;
                     }
 
