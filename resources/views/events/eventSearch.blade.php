@@ -12,7 +12,7 @@
         {{-- Search for --}}
         <div class="form-group row">
             <div class="col-lg-2 offset-md-3 text-md-right">
-                {{ Form::label('Search for:') }}
+                {{ Form::label('atr', 'Search for:') }}
             </div>
             <div class="input-group col-lg-3">
                 {{ Form::select('atr', array('name' => 'Name', 'category' => 'Category',
@@ -24,7 +24,7 @@
         {{-- What value to find --}}
         <div class="form-group row">
             <div class="col-lg-2 offset-md-3 text-md-right">
-                {{ Form::label('Search Query:') }}
+                {{ Form::label('search', 'Search Query:', array('id' => 'search-label')) }}
             </div>
             <div id="value-field" class="col-lg-3">
                 {{ Form::text('search', null, ['class' => 'form-control ', 'id' => 'search-textbox']) }}
