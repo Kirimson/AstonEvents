@@ -27,6 +27,11 @@ class EventController extends Controller
 		$sortType = null;
 		empty($request->input('order')) ? $sortType = '0' : $sortType = $request->input('order');
 
+//		if sort type is set, convert it to its binary counterpart. done here so GET displays ascending/descending
+		if($sortType != '0'){
+			$sortType = $sortType == 'ascending' ? 0 : 1;
+		}
+
 //		Set sorting to make human sense. Ascending words sorts A-Z, Ascending likes go 99-0
 		if ($orderBy == 'likes' || $orderBy == 'created_at') {
 			$sortType = ($sortType + 1) % 2;
@@ -75,7 +80,7 @@ class EventController extends Controller
 //			check if you are owner
 			$owner = Auth::user()->id == $event->organiser_id;
 
-//			Check if you liked this event
+//			Check if user liked this event
 			$liked = (Like::whereRaw('`organiser_id` = ' . Auth::user()->id . ' and `event_id` = ' . $event->id)->first() != null);
 		}
 
@@ -150,13 +155,9 @@ class EventController extends Controller
 //			Create a new file for the image, and store in event
 			$path = $request->file('picture')->store('img/events', 'public');
 		} else {
-//			There is no image, check if image is already null, if not, delete image, else, just set path to null
-			if ($event->picture != null) {
-				Storage::disk('public')->delete($event->picture);
-			}
-			$path = null;
+//			There is no image, keep it the same
+			$path = $event->picture;
 		}
-
 		$event = $this->setupEvent($event, $request, $path);
 
 		$event->save();

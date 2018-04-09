@@ -132,7 +132,7 @@
     @if($create == true)
         <script>
             $(function () {
-                $('#event-name-heading').html($('#name').val())
+                console.log($('#picture').val());
             });
 
             //Setup ckEditor for description textarea
@@ -154,6 +154,8 @@
             }
 
             $('#picture').change(function (e) {
+
+                console.log($('#picture').val());
 
                 let files = e.currentTarget.files;
                 let fileSize = ((files[0].size / 1024) / 1024).toFixed(4);
