@@ -4,7 +4,7 @@
 @section('content')
     <h1>Register</h1>
     <form method="POST" action="{{ route('register') }}">
-        @csrf
+        {{ csrf_field() }}
 
         <input type="hidden" id="likes" name="likes" />
 

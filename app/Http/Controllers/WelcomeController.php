@@ -12,7 +12,7 @@ class WelcomeController extends Controller
     	$topEvents = Event::all()->sortByDesc('likes')->take(3);
     	$upcomingEvents = Event::all()->sortBy('time')->take(3);
 
-    	return view('welcome', array('topEvents' => $topEvents, 'upcomingEvents' => $upcomingEvents));
+    	return view('main', array('topEvents' => $topEvents, 'upcomingEvents' => $upcomingEvents));
 
     }
 }
