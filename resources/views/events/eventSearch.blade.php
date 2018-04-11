@@ -81,7 +81,7 @@
         });
 
         let formAtr = $('#form-atr');
-        let valueinput = $('#value-field');
+        let valueInput = $('#value-field');
 
         formAtr.change(function (e) {
             updateValueField('');
@@ -90,17 +90,17 @@
         function updateValueField(textFieldText) {
             switch (formAtr.val()) {
                 case 'category':
-                    valueinput.html('{{ Form::select('search', array('sport' => 'Sport', 'culture' => 'Culture',
+                    valueInput.html('{{ Form::select('search', array('sport' => 'Sport', 'culture' => 'Culture',
                     'other' => 'Other'), 'other', ['class' => 'form-control']) }}');
                     break;
                 case 'organiser_id':
-                    valueinput.html('{{ Form::select('search', $users, '1', ['class' => 'form-control']) }}');
+                    valueInput.html('{{ Form::select('search', $users, '1', ['class' => 'form-control']) }}');
                     break;
                 case 'time':
-                    valueinput.html('{{ Form::date('search', $users, ['class' => 'form-control']) }}');
+                    valueInput.html('{{ Form::date('search', $users, ['class' => 'form-control']) }}');
                     break;
                 default:
-                    valueinput.html('<input class="form-control" id="search-textbox" name="search" type="text" value="'+textFieldText+'">');
+                    valueInput.html('<input class="form-control" id="search-textbox" name="search" type="text" value="'+textFieldText+'">');
                     break;
             }
         }

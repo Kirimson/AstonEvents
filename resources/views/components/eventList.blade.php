@@ -4,22 +4,22 @@
         <div id="event-container">
             <div class="row">
                 <div class="col-sm-2">
-                    <h3>Name</h3>
+                    <a href="{{ url()->current() }}?order=name"><h4>Name</h4></a>
                 </div>
                 <div class="col-sm-2">
-                    <h4>Category</h4>
+                    <a href="{{ url()->current() }}?order=name"><h4>Category</h4></a>
                 </div>
                 <div class="col-sm-2">
-                    <h4>Organiser</h4>
+                    <a href="{{ url()->current() }}?order=name"><h4>Organiser</h4></a>
                 </div>
                 <div class="col-sm-2">
-                    <h4>When</h4>
+                    <a href="{{ url()->current() }}?order=name"><h4>When</h4></a>
                 </div>
                 <div class="col-sm-2">
-                    <h4>Where</h4>
+                    <a href="{{ url()->current() }}?order=name"><h4>Where</h4></a>
                 </div>
                 <div class="col-sm-2">
-                    <h4>Likes</h4>
+                    <a href="{{ url()->current() }}?order=name"><h4>Likes</h4></a>
                 </div>
             </div>
             <hr/>
