@@ -2,53 +2,36 @@
 <div class="col-lg-10 offset-1">
     @if($events->first())
         <div id="event-container">
-            <div class="row">
-                <div class="col-sm-2">
-                    <a href="{{ url()->current() }}?order=name"><h4>Name</h4></a>
-                </div>
-                <div class="col-sm-2">
-                    <a href="{{ url()->current() }}?order=name"><h4>Category</h4></a>
-                </div>
-                <div class="col-sm-2">
-                    <a href="{{ url()->current() }}?order=name"><h4>Organiser</h4></a>
-                </div>
-                <div class="col-sm-2">
-                    <a href="{{ url()->current() }}?order=name"><h4>When</h4></a>
-                </div>
-                <div class="col-sm-2">
-                    <a href="{{ url()->current() }}?order=name"><h4>Where</h4></a>
-                </div>
-                <div class="col-sm-2">
-                    <a href="{{ url()->current() }}?order=name"><h4>Likes</h4></a>
-                </div>
-            </div>
-            <hr/>
             {{-- Events --}}
             @foreach($events as $event)
                 <div class="row">
-                    <div class="col-lg-2">
+                    <div class="col-lg-4 event-image-list">
                         <a href="{{ url('/event/'.$event->urlname) }}">
-                            <div id="event-image-container">
+                            <div class="list-image">
                                 {{ Html::image($event->picture == null ? asset('img/events/default/default.svg') :
                                 $event->picture, null, array('id' => 'event-image-thumb')) }}
-                                <h3>{{ $event->name }}</h3>
                             </div>
+                            <h3 id="event-name-heading">{{ $event->UCName }}</h3>
                         </a>
                     </div>
-                    <div class="col-lg-2">
-                        {{ $event->UCCategory }}
-                    </div>
-                    <div class="col-lg-2">
-                        {{ $event->user->name }}
-                    </div>
-                    <div class="col-lg-2">
-                        {{ $event->readableTime }}
-                    </div>
-                    <div class="col-lg-2">
-                        {{ $event->UCVenue }}
-                    </div>
-                    <div class="col-lg-2">
-                        {{ $event->likes }}
+                    <div class="col-lg-8">
+                        <div>
+                            <h4>Description</h4>
+                            {{ $event->ShortDescription }}
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div><h5>Organiser</h5><span>{{ $event->user->name }}</span></div>
+                                <hr/>
+                                <div><h5>When</h5><span>{{ $event->readableTime }}</span></div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div><h5>Where</h5><span>{{ $event->UCVenue }}</span></div>
+                                <hr/>
+                                <div><h5>Likes</h5><span>{{ $event->likes }}</span></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <hr/>

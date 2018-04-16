@@ -44,7 +44,7 @@
                     @endif
                 @else
                     {{-- Like button --}}
-                    <h3 id="event-name-heading">{{ ucfirst($event->name) }}</h3>
+                    <h3 id="event-name-heading">{{ ucfirst($event->UCName) }}</h3>
                     <small id="like-caption">Likes: {{ $event->likes }}</small>
                     <div class="full-padding">
                         @if($owner == true)

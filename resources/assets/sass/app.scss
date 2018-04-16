@@ -6,7 +6,7 @@
 @import "variables";
 
 // Bootstrap
-@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+@import "~bootstrap/scss/bootstrap";
 
 @mixin box-shadow($hoffset, $voffset, $blur, $spread, $color) {
     -webkit-box-shadow: $hoffset $voffset $blur $spread $color;
@@ -108,6 +108,16 @@ img {
     width: 100%;
 }
 
+.event-image-list{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.list-image{
+    text-align: center;
+}
+
 #event-image {
     @extend %event-image-template;
     height: 9em;
@@ -116,8 +126,8 @@ img {
 
 #event-image-thumb{
     @extend %event-image-template;
-    height: 5em;
-    width: 5em;
+    height: 9em;
+    width: 9em;
 }
 
 #description-editor{
