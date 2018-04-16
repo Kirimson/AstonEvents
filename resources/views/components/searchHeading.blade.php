@@ -1,8 +1,8 @@
 <div class="row">
         <h4 class="col-lg-2">
             <a href="#" onclick="sort('name', '{{ url()->full() }}')">Name
-            @if($orderBy == "name")
-                    <i class="fas {{ $order == "ascending" ? "fa-arrow-up" : "fa-arrow-down"}}"></i>
+            @if($orderBy == "name" || $orderBy == "")
+                    <i class="fas {{ $order == "descending" ? "fa-arrow-down" : "fa-arrow-up"}}"></i>
             @endif
             </a>
         </h4>
