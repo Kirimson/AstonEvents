@@ -14,10 +14,9 @@ use Illuminate\Support\Facades\Storage;
 class EventController extends Controller
 {
 
-	public function main(Request $request)
+	public function findSpecifics(Request $request)
 	{
-
-//		Set default search terms if the input is empty
+		//Set default search terms if the input is empty
 		$attribute = null;
 		empty($request->input('atr')) ? $attribute = 'name' : $attribute = $request->input('atr');
 		$search = null;
@@ -28,7 +27,7 @@ class EventController extends Controller
 		empty($request->input('order')) ? $sortType = '0' : $sortType = $request->input('order');
 
 //		if sort type is set, convert it to its binary counterpart. done here so GET displays ascending/descending
-		if($sortType != '0'){
+		if ($sortType != '0') {
 			$sortType = $sortType == 'ascending' ? 0 : 1;
 		}
 
@@ -40,10 +39,16 @@ class EventController extends Controller
 		$sort = array('asc', 'desc');
 
 		if ($attribute == 'organiser_id' || $attribute == 'category') {
-			$events = Event::where($attribute, $search)->orderBy($orderBy, $sort[$sortType])->get();
+			$events = Event::where($attribute, $search)->orderBy($orderBy, $sort[$sortType]);
 		} else {
-			$events = Event::where($attribute, 'like', '%' . $search . '%')->orderBy($orderBy, $sort[$sortType])->get();
+			$events = Event::where($attribute, 'like', '%' . $search . '%')->orderBy($orderBy, $sort[$sortType]);
 		}
+		return $events;
+	}
+
+	public function main(Request $request)
+	{
+		$events = $this->findSpecifics($request)->get();
 
 		$users = User::all()->pluck('name', 'id');
 
@@ -64,7 +69,6 @@ class EventController extends Controller
 //	gets input from above method, and sends off to correct view
 	public function show($htmlName)
 	{
-
 		$id = explode('.', $htmlName)[1];
 
 		$event = Event::find($id);
@@ -98,11 +102,6 @@ class EventController extends Controller
 			return view('/events/event', array('create' => true, 'event' => $event));
 		}
 		return back();
-	}
-
-	public function search()
-	{
-		return view('/events/search', array('events' => Event::all()));
 	}
 
 	public function create()
@@ -219,7 +218,7 @@ class EventController extends Controller
 			$event->likes--;
 
 //			If user logged in, remove this like to the table
-			if(Auth::check()){
+			if (Auth::check()) {
 				Like::whereRaw('`organiser_id` = ' . Auth::user()->id . ' and `event_id` = ' . $event->id)->delete();
 			}
 		}

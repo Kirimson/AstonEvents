@@ -18,7 +18,6 @@ Route::get('/', 'WelcomeController@index');
 
 //Events page
 Route::get('events/', 'EventController@main');
-Route::get('events/search', 'EventController@search');
 
 Route::post('event/', 'EventController@showParser');
 Route::get('event/{name}', 'EventController@show');

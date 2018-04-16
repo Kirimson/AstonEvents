@@ -1,5 +1,9 @@
 {{-- Heading --}}
 <div class="col-lg-10 offset-1">
+    @if($app->view->getSections()['pageName'] == "Events")
+        @include('components.searchHeading',
+                array('orderBy' => app('request')->input('orderBy'), 'order' => app('request')->input('order')))
+    @endif
     @if($events->first())
         <div id="event-container">
             {{-- Events --}}
@@ -41,3 +45,4 @@
         <h2>Oh. There aren't any events. That's a bit sad...</h2>
     @endif
 </div>
+<script src="{{ asset('js/manageSort.js') }}"></script>

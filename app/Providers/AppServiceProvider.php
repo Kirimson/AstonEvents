@@ -20,8 +20,8 @@ class AppServiceProvider extends ServiceProvider
             new Page('Home', '/'),
             $event = new Category('Events', '/events/', array(
                 new Page('Search', '/events/'),
-                new Page('Most Liked', '/events?orderBy=likes&order=0&preset=true'),
-                new Page('Upcoming', '/events?orderBy=time&order=0&preset=true'),
+                new Page('Most Liked', '/events?orderBy=likes&order=ascending&preset=true'),
+                new Page('Upcoming', '/events?orderBy=time&order=ascending&preset=true'),
                 new Page('Create Event', '/events/create')
             ))
         ];

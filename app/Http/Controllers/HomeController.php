@@ -23,8 +23,9 @@ class HomeController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
+
 		$myEvents = Event::where('organiser_id', Auth::user()->id)->orderBy('time')->get();
 
 		return view('myAccount', array('myEvents' => $myEvents));
