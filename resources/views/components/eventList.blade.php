@@ -10,13 +10,15 @@
             @foreach($events as $event)
                 <div class="row">
                     <div class="col-lg-4 event-image-list">
-                        <a href="{{ url('/event/'.$event->urlname) }}">
-                            <div class="list-image">
+                        <div class="list-image">
+                            <a href="{{ url('/event/'.$event->urlname) }}">
                                 {{ Html::image($event->picture == null ? asset('img/events/default/default.svg') :
                                 $event->picture, null, array('id' => 'event-image-thumb')) }}
-                            </div>
-                            <h3 id="event-name-heading">{{ $event->UCName }}</h3>
-                        </a>
+                                <h3 id="event-name-heading">{{ $event->UCName }}</h3>
+                            </a>
+                            <span>Category: {{ $event->UCCategory }}</span>
+                        </div>
+
                     </div>
                     <div class="col-lg-8">
                         <div>
@@ -26,7 +28,7 @@
                         <hr/>
                         <div class="row">
                             <div class="col-lg-6">
-                                <div><h5>Organiser</h5><span>{{ $event->user->name }}</span></div>
+                                <div><h5>Organiser</h5><span>{{ $event->user->username }}</span></div>
                                 <hr/>
                                 <div><h5>When</h5><span>{{ $event->readableTime }}</span></div>
                             </div>
@@ -42,7 +44,7 @@
             @endforeach
         </div>
     @else
-        <h2>Oh. There aren't any events. That's a bit sad...</h2>
+        <h2>Sorry, no events could be found!</h2>
     @endif
 </div>
 <script src="{{ asset('js/manageSort.js') }}"></script>

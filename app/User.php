@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+Use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -30,4 +31,13 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token', 'id'
     ];
+
+    public function getUserNameAttribute(){
+    	if(Auth::check()) {
+		    if ($this->name === Auth::user()->name) {
+			    return ucfirst($this->name . " (You)");
+		    }
+	    }
+	    return ucfirst($this->name);
+    }
 }

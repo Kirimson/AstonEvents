@@ -88,21 +88,33 @@
             </div>
 
             {{-- Show your username if creating, else, organiser of event --}}
-            <h3>Organiser</h3>
+            <h3>Contact</h3>
+            {{--<div>--}}
+            {{--{{ $create == true ? ucfirst(Auth::user()->name)." (You)" : ucfirst($event->user->userName) }}--}}
+            {{--</div>--}}
             <div>
-                {{ $create == true ? ucfirst(Auth::user()->name) : ucfirst($event->user->name) }}
-            </div>
-            <div>
-                {{ $create == true ? Form::text('contact', $event == null ? Auth::user()->email : $event->contact, ['required' => 'required',
-                'class' => 'form-control', 'placeholder' => 'Contact details for the event']) : $event->contact }}
+                @if($create == true)
+                    {{ Form::text('contact', $event == null ? Auth::user()->email : $event->contact, ['required' =>
+                    'required',
+                    'class' => 'form-control', 'placeholder' => 'Contact details for the event']) }}
+                @else
+
+                    @if($owner !== true)
+                        <a id="mailto" href="mailto:{{ $event->contact }}" role="button">{{ $event->user->userName }}</a>
+                    @else
+                        {{ $event->user->userName }}
+                    @endif
+                @endif
             </div>
             <h3>When</h3>
             <div>
                 @if($create == true)
                     <div class="input-group">
-                        {{ Form::date('date', $event == null ? null : explode(' ', $event->time)[0], ['required' => 'required', 'class' => 'form-control']) }}
-                        <span class="input-group-addon">
-                            {{ Form::time('time', $event == null ? null : explode(' ', $event->time)[1], ['required' => 'required', 'class' => 'form-control']) }}
+                        {{ Form::date('date', $event == null ? null : explode(' ', $event->time)[0],
+                        ['required' => 'required', 'class' => 'form-control']) }}
+                        <span class="input-group-append">
+                            {{ Form::time('time', $event == null ? null : explode(' ', $event->time)[1],
+                            ['required' => 'required', 'class' => 'form-control']) }}
                         </span>
                     </div>
                 @else
@@ -187,20 +199,14 @@
                 let likeButton = $('#like-event-button');
 
                 let likedEvents = [];
-                let loggedin = false;
+                let loggedin = {{ json_encode(Auth::check()) }};
                 let liked = false;
-
-                @if(Auth::check())
-                    loggedin = true;
-                @endif
 
                 //check if user is logged in
                 if (loggedin === false) {
                     //load liked events
-                    try {
-                        likedEvents = JSON.parse(localStorage.getItem("liked-events"));
-                        let test = likedEvents[0];
-                    } catch (err) {
+                    likedEvents = JSON.parse(localStorage.getItem("liked-events"));
+                    if(likedEvents === null){
                         likedEvents = [];
                     }
 
@@ -215,17 +221,17 @@
                     likeButton.html('Liked!');
                 }
 
+                //When like button is clicked, fire event
                 likeButton.click(function () {
                     let shouldLike;
                     //if not logged in, use likeEvents ls
-                    if(loggedin === false) {
+                    if (loggedin === false) {
                         shouldLike = true;
                         if (likedEvents.includes({{ $event->id }})) {
                             shouldLike = false;
                         }
-                        console.log('shouldlike '+shouldLike);
-                    } else{
-                    //    use $liked from controller
+                    } else {
+                        //use $liked from controller
                         shouldLike = !liked;
                     }
 
@@ -239,7 +245,6 @@
                         success: function (response) {
                             liked = !liked;
 
-                            console.log(response);
                             $('#like-caption').html("Likes: " + response);
                             if (shouldLike === true) {
                                 likeButton.removeClass('btn-outline-primary');
@@ -257,7 +262,7 @@
                                 }
                             }
                             //If a guest, store like data locally
-                            if(loggedin === false) {
+                            if (loggedin === false) {
                                 localStorage.setItem("liked-events", JSON.stringify(likedEvents))
                             }
                         }

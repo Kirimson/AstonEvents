@@ -1,10 +1,7 @@
-
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
-
 // Variables
 @import "variables";
-
 // Bootstrap
 @import "~bootstrap/scss/bootstrap";
 
@@ -26,11 +23,11 @@ body {
     position: relative;
 }
 
-.cke_editable{
+.cke_editable {
     padding: 1em;
 }
 
-#app{
+#app {
     background-color: $background-color;
 }
 
@@ -39,7 +36,7 @@ h1 {
 }
 
 h2 {
-    @extend %centered;
+    @extend %centered-underline;
 }
 
 a {
@@ -63,11 +60,19 @@ img {
     max-width: 100%;
 }
 
+.main-page-heading {
+    font-size: 2.5em;
+}
+
 .navbar {
     z-index: 1;
     position: fixed;
     width: 100%;
     @include box-shadow(0, 1px, 3px, 0, rgba(0, 0, 0, 0.45));
+}
+
+.dropdown-toggle {
+    outline: none;
 }
 
 .hidden-input {
@@ -81,6 +86,15 @@ img {
 
 .full-padding {
     padding: 15px;
+}
+
+#information-container{
+    width: 75%;
+    margin: auto;
+}
+
+.information{
+    width: 100%;
 }
 
 #page-main {
@@ -99,22 +113,18 @@ img {
     padding: 1em;
 }
 
-#file-limit {
-    vertical-align: bottom;
-}
-
 #event-image-container {
     text-align: center;
     width: 100%;
 }
 
-.event-image-list{
+.event-image-list {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.list-image{
+.list-image {
     text-align: center;
 }
 
@@ -124,24 +134,12 @@ img {
     width: 9em;
 }
 
-#event-image-thumb{
+#event-image-thumb {
     @extend %event-image-template;
     height: 9em;
     width: 9em;
 }
 
-#description-editor{
-    height: 20em;
-}
-
 #event-name-heading {
     @extend %userText;
-}
-
-#description {
-    resize: none;
-}
-
-#event-container{
-    //border: solid thin black;
 }

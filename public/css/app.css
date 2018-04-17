@@ -10453,12 +10453,20 @@ img {
   max-width: 100%;
 }
 
+.main-page-heading {
+  font-size: 2.5em;
+}
+
 .navbar {
   z-index: 1;
   position: fixed;
   width: 100%;
   -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.45);
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.45);
+}
+
+.dropdown-toggle {
+  outline: none;
 }
 
 .hidden-input {
@@ -10472,6 +10480,15 @@ img {
 
 .full-padding {
   padding: 15px;
+}
+
+#information-container {
+  width: 75%;
+  margin: auto;
+}
+
+.information {
+  width: 100%;
 }
 
 #page-main {
@@ -10488,10 +10505,6 @@ img {
 
 #register-box {
   padding: 1em;
-}
-
-#file-limit {
-  vertical-align: bottom;
 }
 
 #event-image-container {
@@ -10523,13 +10536,5 @@ img {
 #event-image-thumb {
   height: 9em;
   width: 9em;
-}
-
-#description-editor {
-  height: 20em;
-}
-
-#description {
-  resize: none;
 }
 

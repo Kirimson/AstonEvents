@@ -9,46 +9,28 @@
     @if(Request::get('preset') != true)
         {!! Form::open(array('url' => 'events/','id' => 'event-search-form', 'class' => 'form', 'method' => 'GET')) !!}
 
+        <h2>Search</h2>
+
         {{-- Search for --}}
-        <div class="form-group row">
-            <div class="col-lg-2 offset-md-3 text-md-right">
-                {{ Form::label('atr', 'Search for:') }}
-            </div>
-            <div class="input-group col-lg-3">
+        <div class="form-group row col-lg-4 offset-4">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="">Search For:</span>
+                </div>
                 {{ Form::select('atr', array('name' => 'Name', 'category' => 'Category',
-                        'organiser_id' => 'Organiser', 'time' => 'When', 'venue' => 'Venue'), 'name', [
-                        'class' => 'form-control', 'id' => 'form-atr']) }}
+                'organiser_id' => 'Organiser', 'time' => 'When', 'venue' => 'Venue'), 'name',
+                ['class' => 'form-control', 'id' => 'form-atr']) }}
             </div>
         </div>
 
         {{-- What value to find --}}
-        <div class="form-group row">
-            <div class="col-lg-2 offset-md-3 text-md-right">
-                {{ Form::label('search', 'Search Query:', array('id' => 'search-label')) }}
-            </div>
-            <div id="value-field" class="col-lg-3">
-                {{ Form::text('search', null, ['class' => 'form-control ', 'id' => 'search-textbox']) }}
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="col-lg-2 offset-md-3 text-md-right">
-                {{ Form::label('Sort By:') }}
-            </div>
-            <div class="input-group col-lg-3">
-                {{ Form::select('orderBy', array('name' => 'Name', 'category' => 'Category',
-                    'organiser_id' => 'Organiser', 'time' => 'When', 'venue' => 'Venue', 'likes' => 'Likes',
-                    'created_at' => 'Recently Made'), 'name', ['class' => 'form-control', 'id' => 'form-atr']) }}
-                <span class="input-group-addon">
-                {{ Form::select('order', array('ascending' => 'Ascending', 'descending' => 'Descending'), 'name', [
-                    'class' => 'form-control', 'id' => 'form-atr']) }}
-            </span>
-            </div>
+        <div class="form-group row col-lg-4 offset-4" id="value-field">
+            {{ Form::text('search', null, ['class' => 'form-control ', 'id' => 'search-textbox']) }}
         </div>
 
         <div id="event-image-container">
             <button type="submit" id="createSubmitButton" class="btn btn-outline-primary">
-                Find event!
+                Find events
             </button>
         </div>
 
@@ -72,7 +54,7 @@
             updateValueField($('#search-textbox').val());
         });
 
-        $('#event-search-form').submit(function(){
+        $('#event-search-form').submit(function () {
             $('#event-search-form :input').each(function () {
                 if (!$(this).val()) {
                     $(this).prop('disabled', true);
@@ -100,7 +82,7 @@
                     valueInput.html('{{ Form::date('search', $users, ['class' => 'form-control']) }}');
                     break;
                 default:
-                    valueInput.html('<input class="form-control" id="search-textbox" name="search" type="text" value="'+textFieldText+'">');
+                    valueInput.html('<input class="form-control" id="search-textbox" name="search" type="text" value="' + textFieldText + '">');
                     break;
             }
         }

@@ -14,7 +14,7 @@ $page-color: #f7f7f7;
 
 $navHeight: 3em;
 
-%centered{
+%centered-underline{
     text-decoration-line: underline;
     text-align: center;
 }
@@ -28,4 +28,5 @@ $navHeight: 3em;
 %event-image-template{
     border-radius: 50%;
     overflow: hidden;
+    //border: solid black thin;
 }

@@ -5,11 +5,9 @@
         {{--Left side of bar, used for pages--}}
         <ul class="navbar-nav mr-auto">
             @foreach($pages as $page)
-
                 {{-- If active page, add active class, if a category, add dropdown class --}}
                 <li class="nav-item {{ $page->name == $app->view->getSections()['pageName'] ? 'active' : ''}}
                 {{ $page instanceof \App\Category ? 'dropdown' : '' }}">
-
                     {{-- if page is a category --}}
                     @if($page instanceof \App\Category) {{-- if a category, write its pages --}}
                     <a class="nav-link dropdown-toggle" href="#"
@@ -45,4 +43,5 @@
             @endif
         </ul>
     </div>
+
 </nav>

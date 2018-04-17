@@ -124,7 +124,7 @@ class EventController extends Controller
 			$path = null;
 		}
 
-		$event = $this->setupEvent($event, $request, $path);
+		$event = $this->saveEvent($event, $request, $path);
 
 		$event->save();
 
@@ -157,7 +157,7 @@ class EventController extends Controller
 //			There is no image, keep it the same
 			$path = $event->picture;
 		}
-		$event = $this->setupEvent($event, $request, $path);
+		$event = $this->saveEvent($event, $request, $path);
 
 		$event->save();
 
@@ -169,19 +169,24 @@ class EventController extends Controller
 
 	public function createurlName($event)
 	{
+//		Find any symbols in the name, and remove it, symbols don't play nice with urls
 		$symbolpattern = '/[^\p{L}\p{N}\s]/u';
 		$noSymbols = preg_replace($symbolpattern, '', $event->name);
 
+//		replace any whitespace with a hyphen, makes url look nicer, spaces look odd in a url, even though they accept them
 		$pattern = '/(\W)+/';
 		$replacement = '-';
+
+//		append the id of the event, ensures every url is unique.
+//      as names could become the same from alterations from the patterns
 		$urlName = preg_replace($pattern, $replacement, $noSymbols) . '.' . $event->id;
 
+//		Fill in urlname field of event, and save to database
 		$event->urlname = $urlName;
-
 		$event->save();
 	}
 
-	public function setupEvent($event, Request $request, $path)
+	public function saveEvent($event, Request $request, $path)
 	{
 
 		$datetime = Input::get('date') . ' ' . Input::get('time');
@@ -213,7 +218,6 @@ class EventController extends Controller
 
 				$like->save();
 			}
-
 		} elseif ($event->likes > 0) {
 			$event->likes--;
 
