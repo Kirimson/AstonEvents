@@ -15,7 +15,7 @@ class Event extends Model
 	}
 
 	protected $fillable = [
-		'organiser_id', 'name', 'description', 'category', 'time', 'picture', 'contact', 'venue', 'likes', 'urlname'
+		'organiser_id', 'name', 'description', 'category', 'time', 'picture', 'contact', 'venue', 'likes'
 	];
 
 	public function getUCNameAttribute(){
@@ -71,5 +71,20 @@ class Event extends Model
 		}
 
 		return "No description available";
+	}
+
+	public function geturlNameAttribute()
+	{
+//		Find any symbols in the name, and remove it, symbols don't play nice with urls
+		$symbolpattern = '/[^\p{L}\p{N}\s]/u';
+		$noSymbols = preg_replace($symbolpattern, '', $this->name);
+
+//		replace any whitespace with a hyphen, makes url look nicer, spaces look odd in a url, even though they accept them
+		$pattern = '/(\W)+/';
+		$replacement = '-';
+
+//		append the id of the event, ensures every url is unique.
+//      as names could become the same from alterations from the patterns
+		return preg_replace($pattern, $replacement, $noSymbols) . '.' . $this->id;
 	}
 }

@@ -19,7 +19,6 @@ Route::get('/', 'WelcomeController@index');
 //Events page
 Route::get('events/', 'EventController@main');
 
-Route::post('event/', 'EventController@showParser');
 Route::get('event/{name}', 'EventController@show');
 Route::get('event/{name}/edit', 'EventController@edit')->middleware('auth');
 Route::post('event/{name}/update', 'EventController@updateEvent')->middleware('auth');

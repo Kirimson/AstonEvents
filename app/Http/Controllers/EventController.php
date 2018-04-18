@@ -55,21 +55,10 @@ class EventController extends Controller
 		return view('events.eventSearch', array('events' => $events, 'users' => $users));
 	}
 
-//	gets input from form, redirects using form param, to correct route for good formatting
-	public function showParser()
-	{
-		$id = Input::get(['id']);
-		$event = Event::find($id);
-
-		$htmlName = rawurlencode($event->name);
-
-		return Redirect::to('event/' . $htmlName);
-	}
-
 //	gets input from above method, and sends off to correct view
-	public function show($htmlName)
+	public function show($urlname)
 	{
-		$id = explode('.', $htmlName)[1];
+		$id = explode('.', $urlname)[1];
 
 		$event = Event::find($id);
 
@@ -126,17 +115,13 @@ class EventController extends Controller
 
 		$event = $this->saveEvent($event, $request, $path);
 
-		$event->save();
-
-		$this->createurlName($event);
-
 		return redirect('event/' . $event->urlname);
 	}
 
 	public function updateEvent($name, Request $request)
 	{
-
-		$event = Event::where('urlname', '=', $name)->first();
+		$id = explode('.', $name)[1];
+		$event = Event::find($id);
 
 //		If name has been changed
 		if ($event->name != $request->name) {
@@ -157,33 +142,11 @@ class EventController extends Controller
 //			There is no image, keep it the same
 			$path = $event->picture;
 		}
+
 		$event = $this->saveEvent($event, $request, $path);
-
-		$event->save();
-
-		$this->createurlName($event);
 
 		return redirect('event/' . $event->urlname);
 
-	}
-
-	public function createurlName($event)
-	{
-//		Find any symbols in the name, and remove it, symbols don't play nice with urls
-		$symbolpattern = '/[^\p{L}\p{N}\s]/u';
-		$noSymbols = preg_replace($symbolpattern, '', $event->name);
-
-//		replace any whitespace with a hyphen, makes url look nicer, spaces look odd in a url, even though they accept them
-		$pattern = '/(\W)+/';
-		$replacement = '-';
-
-//		append the id of the event, ensures every url is unique.
-//      as names could become the same from alterations from the patterns
-		$urlName = preg_replace($pattern, $replacement, $noSymbols) . '.' . $event->id;
-
-//		Fill in urlname field of event, and save to database
-		$event->urlname = $urlName;
-		$event->save();
 	}
 
 	public function saveEvent($event, Request $request, $path)
@@ -199,6 +162,8 @@ class EventController extends Controller
 		$event->picture = $path;
 		$event->contact = $request->contact;
 		$event->venue = $request->venue;
+
+		$event->save();
 
 		return $event;
 	}
