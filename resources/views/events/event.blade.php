@@ -31,7 +31,7 @@
                 </label>
             @endif
             {{-- If creating, display name form, otherwise, display event name --}}
-            <div class="col-lg-4 offset-4">
+            <div class="col-lg-4 col-sm-10 offset-lg-4">
                 @if($create == true)
                     <input class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}"
                            placeholder="Name of the event" name="name" id="name" type="text"
@@ -62,8 +62,8 @@
     </div>
 
     {{-- Start description/details section --}}
-    <div class="row">
-        <div class="col-lg-6 offset-1">
+    <div class="row centered-items">
+        <div class="col-lg-6">
             <h1>Description</h1>
 
             {{-- If creating, display textarea for description, else display description --}}

@@ -10512,7 +10512,7 @@ img {
   width: 100%;
 }
 
-.event-image-list {
+.centered-items {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

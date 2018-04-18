@@ -9,7 +9,7 @@
             {{-- Events --}}
             @foreach($events as $event)
                 <div class="row">
-                    <div class="col-lg-4 event-image-list">
+                    <div class="col-lg-4 centered-items">
                         <div class="list-image">
                             <a href="{{ url('/event/'.$event->urlname) }}">
                                 {{ Html::image($event->picture == null ? asset('img/events/default/default.svg') :
@@ -18,7 +18,6 @@
                             </a>
                             <span>Category: {{ $event->UCCategory }}</span>
                         </div>
-
                     </div>
                     <div class="col-lg-8">
                         <div>
