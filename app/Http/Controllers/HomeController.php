@@ -28,7 +28,7 @@ class HomeController extends Controller
 
 		$searchQuery = empty($request->input('search')) ? '' : $request->input('search');
 
-		$myEvents = Event::whereRaw("organiser_id = 1 and name like '%".$searchQuery."%'")->orderBy('time')->paginate(5);
+		$myEvents = Event::whereRaw("organiser_id = ".Auth::user()->id." and name like '%".$searchQuery."%'")->orderBy('time')->paginate(5);
 
 		return view('myAccount', array('myEvents' => $myEvents));
 	}
