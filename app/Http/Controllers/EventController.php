@@ -48,11 +48,11 @@ class EventController extends Controller
 
 	public function main(Request $request)
 	{
-		$events = $this->findSpecifics($request)->get();
+		$events = $this->findSpecifics($request)->paginate(5);
 
 		$users = User::all()->pluck('name', 'id');
 
-		return view('events.eventSearch', array('events' => $events, 'users' => $users));
+		return view('events.eventSearch', array('events' => $events->appends(Input::except('page')), 'users' => $users));
 	}
 
 //	gets input from above method, and sends off to correct view

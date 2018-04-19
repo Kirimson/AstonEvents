@@ -19,24 +19,28 @@ function sort(type, url) {
 
             //Build new query
             params.forEach(function (element) {
-                if (element.includes("order=")) {
-                    if (element.includes("ascending")) {
-                        newGet += "order=descending&";
-                    } else {
-                        newGet += "order=ascending&";
-                    }
-                } else newGet += element + "&";
+                if(!element.includes("page=")) {
+                    if (element.includes("order=")) {
+                        if (element.includes("ascending")) {
+                            newGet += "order=descending&";
+                        } else {
+                            newGet += "order=ascending&";
+                        }
+                    } else newGet += element + "&";
+                }
             });
         } else {
             //if new atr, replace the value with new value, and set order to ascending
 
             //Build new query
             params.forEach(function (element) {
-                if (element.includes("orderBy=")) {
-                    newGet += "orderBy=" + type + "&";
-                } else if (element.includes("order")) {
-                    newGet += "order=ascending&";
-                } else newGet += element + "&";
+                if(!element.includes("page=")) {
+                    if (element.includes("orderBy=")) {
+                        newGet += "orderBy=" + type + "&";
+                    } else if (element.includes("order")) {
+                        newGet += "order=ascending&";
+                    } else newGet += element + "&";
+                }
             });
         }
         //Remove last & in params, too much work to check if on last if this always works

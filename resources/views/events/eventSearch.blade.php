@@ -46,6 +46,7 @@
         @endswitch
     @endif
     @include('components.eventList', array('events' => $events))
+    {{ $events->links() }}
 
     {{-- Disables any inputs that are empty, so URL doesn't get clogged up with empty GET parameters --}}
     <script>

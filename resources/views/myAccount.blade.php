@@ -9,5 +9,5 @@
     <h2>My Events</h2>
 
     @include('components.eventList',  array('events' => $myEvents))
-
+    {{ $myEvents->links() }}
 @endsection
