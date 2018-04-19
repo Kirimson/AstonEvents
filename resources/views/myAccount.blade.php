@@ -11,19 +11,15 @@
     {!! Form::open(array('url' => 'myAccount/','id' => 'event-search-form', 'class' => 'form', 'method' => 'GET')) !!}
 
     {{-- What name to find --}}
-    <div class="form-group row col-lg-6 offset-3">
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="">Search For:</span>
-            </div>
-            {{ Form::text('search', null, ['class' => 'form-control ', 'id' => 'search-textbox']) }}
-            <div class="input-group-append">
-                <button type="submit" id="createSubmitButton" class="btn btn-outline-primary">
-                    Find events
-                </button>
-            </div>
+    <div class="col-lg-4 offset-lg-4">
+        <div class="row">
+            {{ Form::text('search', null, ['class' => 'form-control col-lg-8 col-sm-12', 'id' => 'search-textbox']) }}
+            <button type="submit" class="btn btn-outline-primary col-lg-4">
+                Search Events
+            </button>
         </div>
     </div>
+
 
     {!! Form::close() !!}
 

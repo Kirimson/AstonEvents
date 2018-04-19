@@ -4,12 +4,12 @@
   text-align: center;
 }
 
-#event-name-heading {
+#event-name-heading,
+#event-description {
   overflow-wrap: break-word;
   -webkit-hyphens: auto;
       -ms-hyphens: auto;
           hyphens: auto;
-  text-align: center;
 }
 
 #event-image,
@@ -10536,5 +10536,9 @@ img {
 #event-image-thumb {
   height: 9em;
   width: 9em;
+}
+
+#event-name-heading {
+  text-align: center;
 }
 

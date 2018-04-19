@@ -142,4 +142,9 @@ img {
 
 #event-name-heading {
     @extend %userText;
+    text-align: center;
+}
+
+#event-description{
+    @extend %userText;
 }

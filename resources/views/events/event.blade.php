@@ -56,14 +56,13 @@
                         @endif
                     </div>
                 @endif
-
             </div>
         </div>
     </div>
 
     {{-- Start description/details section --}}
-    <div class="row">
-        <div class="col-lg-12">
+    <div class="row col-lg-10 offset-lg-2">
+        <div class="col-lg-6">
             <h1>Description</h1>
 
             {{-- If creating, display textarea for description, else display description --}}
@@ -71,7 +70,7 @@
                 <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
                 {{ Form::textarea('description', $event == null ? '' : $event->description , ['id'=> 'description']) }}
             @else
-                <div>
+                <div id="event-description">
                     {!! ucfirst($event->description) !!}
                 </div>
             @endif
@@ -89,9 +88,6 @@
 
             {{-- Show your username if creating, else, organiser of event --}}
             <h3>Contact</h3>
-            {{--<div>--}}
-            {{--{{ $create == true ? ucfirst(Auth::user()->name)." (You)" : ucfirst($event->user->userName) }}--}}
-            {{--</div>--}}
             <div>
                 @if($create == true)
                     {{ Form::text('contact', $event == null ? Auth::user()->email : $event->contact, ['required' =>
