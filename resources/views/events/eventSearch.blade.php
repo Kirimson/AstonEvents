@@ -12,7 +12,7 @@
         <h2>Search</h2>
 
         {{-- Search for --}}
-        <div class="form-group row col-lg-4 offset-4">
+        <div class="form-group col-lg-4 col-sm-12 offset-lg-4">
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="">Search For:</span>
@@ -24,7 +24,7 @@
         </div>
 
         {{-- What value to find --}}
-        <div class="form-group row col-lg-4 offset-4" id="value-field">
+        <div class="form-group col-lg-4 col-sm-12 offset-lg-4" id="value-field">
             {{ Form::text('search', null, ['class' => 'form-control ', 'id' => 'search-textbox']) }}
         </div>
 
@@ -45,6 +45,7 @@
             @break
         @endswitch
     @endif
+
     @include('components.eventList', array('events' => $events))
     {{ $events->links("pagination::bootstrap-4") }}
 

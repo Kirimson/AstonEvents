@@ -1,9 +1,9 @@
 {{-- Heading --}}
+@if($app->view->getSections()['pageName'] == "Events")
+    @include('components.searchHeading',
+            array('orderBy' => app('request')->input('orderBy'), 'order' => app('request')->input('order')))
+@endif
 <div class="col-lg-10 offset-1">
-    @if($app->view->getSections()['pageName'] == "Events")
-        @include('components.searchHeading',
-                array('orderBy' => app('request')->input('orderBy'), 'order' => app('request')->input('order')))
-    @endif
     @if($events->first())
         <div id="event-container">
             {{-- Events --}}

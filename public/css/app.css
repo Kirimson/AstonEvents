@@ -10542,3 +10542,7 @@ img {
   text-align: center;
 }
 
+.border-rec {
+  border: solid thin black;
+}
+

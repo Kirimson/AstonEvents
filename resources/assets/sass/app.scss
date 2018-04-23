@@ -148,3 +148,7 @@ img {
 #event-description{
     @extend %userText;
 }
+
+.border-rec{
+    border: solid thin black;
+}

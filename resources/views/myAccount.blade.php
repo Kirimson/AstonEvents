@@ -20,7 +20,6 @@
         </div>
     </div>
 
-
     {!! Form::close() !!}
 
     @include('components.eventList',  array('events' => $myEvents))
