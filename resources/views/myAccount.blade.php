@@ -25,6 +25,6 @@
 
     {!! Form::close() !!}
 
-    @include('components.eventList',  array('events' => $myEvents))
+    @include('components.eventList',  array('events' => $myEvents, 'includeHeading' => false))
     {{ $myEvents->links("pagination::bootstrap-4") }}
 @endsection

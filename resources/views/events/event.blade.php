@@ -127,9 +127,43 @@
                 {{ $create == true ? Form::text('venue', $event == null ? '' : $event->venue, ['required' => 'required',
                 'class' => 'form-control', 'placeholder' => 'Contact details for the event']) : $event->UCVenue }}
             </div>
-
         </div>
+        @if($create == true)
+            <div class="col-lg-10">
+                <h2>Related Events</h2>
+            </div>
+            <div id="related-events" class="card col-lg-8 offset-1">
+                <div class="card-body row">
+                    @foreach($eventList as $relevent)
+                        @if($event == null)
+                            <div class="col-lg-6">
+                                {{ Form::checkbox('related_events[]', $relevent->id,
+                                $event == null ? null :
+                                $event->RelatedEvents->contains($relevent) == true ? 'true' : null,
+                                ['id' => $relevent->urlname]) }}
+
+                                {{ Form::label($relevent->urlname, $relevent->name) }}
+                            </div>
+                        @elseif($event->id != $relevent->id)
+                            <div class="col-lg-6">
+                                {{ Form::checkbox('related_events[]', $relevent->id,
+                                $event == null ? null :
+                                $event->RelatedEvents->contains($relevent) == true ? 'true' : null,
+                                ['id' => $relevent->urlname]) }}
+
+                                {{ Form::label($relevent->urlname, $relevent->name) }}
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+        @endif
     </div>
+    @if($create == false && $event->relatedEvents->first())
+        <hr/>
+        <h2>Related Events</h2>
+        @include('components.eventList', array('events' => $event->relatedEvents, 'includeHeading' => false))
+    @endif
 
     {{-- If creating, show submit button, and close form --}}
     @if($create == true)
@@ -156,11 +190,13 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        Deleting an event will totally remove it from the site, all likes for this event will be removed.
+                        Deleting an event will totally remove it from the site, all likes for this event will be
+                        removed.
                         Are you sure you want to do this?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">I don't want this!</button>
+                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">I don't want this!
+                        </button>
                         <a href="{{ url('events/delete/'.$event->urlname) }}">
                             <button type="button" class="btn btn-outline-danger">Delete</button>
                         </a>

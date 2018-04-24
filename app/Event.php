@@ -87,4 +87,17 @@ class Event extends Model
 //      as names could become the same from alterations from the patterns
 		return preg_replace($pattern, $replacement, $noSymbols) . '.' . $this->id;
 	}
+
+	public function getRelatedEventsAttribute(){
+
+		$relatedIDs = RelatedEvent::where('event_id', $this->id)->pluck('related_event_id');
+
+		$events = null;
+
+		if(!empty($relatedIDs)){
+			$events = Event::find($relatedIDs);
+		}
+
+		return $events;
+	}
 }

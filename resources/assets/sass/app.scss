@@ -11,11 +11,6 @@
     box-shadow: $hoffset $voffset $blur $spread $color;
 }
 
-.navbar-laravel {
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-}
-
 body {
     font: 100% $font-family-sans-serif;
     color: $primary-color;
@@ -159,4 +154,9 @@ img {
 
 .warning-text-description{
     font-size: 2em;
+}
+
+#related-events{
+    max-height: 8em;
+    overflow-y: scroll;
 }

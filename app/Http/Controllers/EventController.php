@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Event;
 use App\Like;
+use App\RelatedEvent;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -91,15 +92,19 @@ class EventController extends Controller
 
 		$event = Event::find($id);
 
+		$events = Event::all('id','name');
+
 		if (Auth::user()->id == $event->organiser_id) {
-			return view('/events/event', array('create' => true, 'event' => $event));
+			return view('/events/event', array('create' => true, 'event' => $event, 'eventList' => $events));
 		}
 		return back();
 	}
 
 	public function create()
 	{
-		return view('/events/event', array('create' => true, 'event' => null));
+		$events = Event::all('id','name');
+
+		return view('/events/event', array('create' => true, 'event' => null, 'eventList' => $events));
 	}
 
 	public function createEvent(Request $request)
@@ -118,6 +123,10 @@ class EventController extends Controller
 		}
 
 		$event = $this->saveEvent($event, $request, $path);
+
+		if(!empty($request->input('related_events'))) {
+			$this->createRelated($event->id, $request->input('related_events'));
+		}
 
 		return redirect('event/' . $event->urlname)->with('status', 'Event Created Successfully!');
 	}
@@ -148,6 +157,13 @@ class EventController extends Controller
 		}
 
 		$event = $this->saveEvent($event, $request, $path);
+
+		$related = RelatedEvent::where('event_id', $event->id);
+		$related->delete();
+
+		if(!empty($request->input('related_events'))) {
+			$this->createRelated($event->id, $request->input('related_events'));
+		}
 
 		return redirect('event/' . $event->urlname)->with('status', 'Event Updated Successfully!');
 	}
@@ -234,11 +250,26 @@ class EventController extends Controller
 //			Delete likes for the event, so there are no foreign key constraint fails
 			$likes = Like::where('event_id', $event->id);
 			$likes->delete();
+
+			//delete all its related events the user made
+			$related = RelatedEvent::where('event_id', $event->id);
+			$related->delete();
+
 //			Delete the event
 			$event->delete();
 			return redirect('/myAccount')->with('status', 'Event Deleted Successfully!');
 		}
 		return redirect('unauthorised');
+	}
+
+	private function createRelated($id, $input)
+	{
+		foreach($input as $relatedEvent){
+			$relation = new RelatedEvent();
+			$relation->event_id = $id;
+			$relation->related_event_id = $relatedEvent;
+			$relation->save();
+		}
 	}
 
 }

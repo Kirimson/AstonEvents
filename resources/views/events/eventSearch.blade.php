@@ -46,7 +46,7 @@
         @endswitch
     @endif
 
-    @include('components.eventList', array('events' => $events))
+    @include('components.eventList', array('events' => $events, 'includeHeading' => true))
     {{ $events->links("pagination::bootstrap-4") }}
 
     {{-- Disables any inputs that are empty, so URL doesn't get clogged up with empty GET parameters --}}

@@ -1,5 +1,5 @@
 {{-- Heading --}}
-@if($app->view->getSections()['pageName'] == "Events")
+@if($includeHeading)
     @include('components.searchHeading',
             array('orderBy' => app('request')->input('orderBy'), 'order' => app('request')->input('order')))
 @endif
