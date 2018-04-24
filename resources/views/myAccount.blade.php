@@ -3,11 +3,14 @@
 @section('title', 'My Account')
 
 @section('content')
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
     <h1>My Account</h1>
-
     <h3>Welcome to your page, {{ Auth::user()->name }}</h3>
     <h2>My Events</h2>
-
     {!! Form::open(array('url' => 'myAccount/','id' => 'event-search-form', 'class' => 'form', 'method' => 'GET')) !!}
 
     {{-- What name to find --}}

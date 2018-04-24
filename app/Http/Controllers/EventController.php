@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Storage;
 class EventController extends Controller
 {
 
+	public function __construct()
+	{
+		$this->middleware('auth',['except' => ['show', 'like', 'main']]);
+	}
+
 	public function findSpecifics(Request $request)
 	{
 		//Set default search terms if the input is empty
@@ -82,7 +87,6 @@ class EventController extends Controller
 
 	public function edit($name)
 	{
-
 		$id = explode('.', $name)[1];
 
 		$event = Event::find($id);
@@ -115,18 +119,13 @@ class EventController extends Controller
 
 		$event = $this->saveEvent($event, $request, $path);
 
-		return redirect('event/' . $event->urlname);
+		return redirect('event/' . $event->urlname)->with('status', 'Event Created Successfully!');
 	}
 
 	public function updateEvent($name, Request $request)
 	{
 		$id = explode('.', $name)[1];
 		$event = Event::find($id);
-
-		if($event->user->id != Auth::user()->id)
-			{
-				return "Fuck you";
-			}
 
 //		If name has been changed
 		if ($event->name != $request->name) {
@@ -150,13 +149,13 @@ class EventController extends Controller
 
 		$event = $this->saveEvent($event, $request, $path);
 
-		return redirect('event/' . $event->urlname);
-
+		return redirect('event/' . $event->urlname)->with('status', 'Event Updated Successfully!');
 	}
 
 	public function saveEvent($event, Request $request, $path)
 	{
 
+//		Concatenate the date and time together to create a valid timestamp
 		$datetime = Input::get('date') . ' ' . Input::get('time');
 
 		$event->organiser_id = Auth::user()->id;
@@ -206,8 +205,6 @@ class EventController extends Controller
 		$request->validate([
 			'name' => 'required|unique:events|max:100'
 		]);
-
-
 	}
 
 	private function validateFields($request)
@@ -234,14 +231,14 @@ class EventController extends Controller
 
 		if($event->user->id == Auth::user()->id){
 
+//			Delete likes for the event, so there are no foreign key constraint fails
 			$likes = Like::where('event_id', $event->id);
-
 			$likes->delete();
-
+//			Delete the event
 			$event->delete();
-			return redirect('/events');
+			return redirect('/myAccount')->with('status', 'Event Deleted Successfully!');
 		}
-
+		return redirect('unauthorised');
 	}
 
 }

@@ -4,7 +4,11 @@
 @section('title', $create == true ? 'New Event' : $event->name)
 
 @section('content')
-
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
     {{-- Header, if creating, open form for page, close at end of page --}}
     @if($create == true)
         {!! Form::open(
@@ -96,7 +100,8 @@
                 @else
 
                     @if($owner !== true)
-                        <a id="mailto" href="mailto:{{ $event->contact }}" role="button">{{ $event->user->userName }}</a>
+                        <a id="mailto" href="mailto:{{ $event->contact }}"
+                           role="button">{{ $event->user->userName }}</a>
                     @else
                         {{ $event->user->userName }}
                     @endif
@@ -128,17 +133,40 @@
 
     {{-- If creating, show submit button, and close form --}}
     @if($create == true)
-        <div id="event-image-container">
+        <div class="text-center full-padding">
             <button type="submit" id="createSubmitButton" class="btn btn-outline-primary">
                 {{ $event == null ? "Create Event!" : "Update Event"}}
             </button>
         </div>
         {!! Form::close() !!}
     @elseif($owner == true)
-        <div id="event-image-container">
-            <a href="{{ url('events/delete/'.$event->urlname) }}" role="button" id="createSubmitButton" class="btn btn-outline-danger">
+        <div class="text-center full-padding">
+            <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal">
                 Delete Event
-            </a>
+            </button>
+        </div>
+        <div class="fade modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete Event?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Deleting an event will totally remove it from the site, all likes for this event will be removed.
+                        Are you sure you want to do this?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">I don't want this!</button>
+                        <a href="{{ url('events/delete/'.$event->urlname) }}">
+                            <button type="button" class="btn btn-outline-danger">Delete</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     @endif
 
@@ -208,7 +236,7 @@
                 if (loggedin === false) {
                     //load liked events
                     likedEvents = JSON.parse(localStorage.getItem("liked-events"));
-                    if(likedEvents === null){
+                    if (likedEvents === null) {
                         likedEvents = [];
                     }
 
