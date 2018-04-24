@@ -123,6 +123,11 @@ class EventController extends Controller
 		$id = explode('.', $name)[1];
 		$event = Event::find($id);
 
+		if($event->user->id != Auth::user()->id)
+			{
+				return "Fuck you";
+			}
+
 //		If name has been changed
 		if ($event->name != $request->name) {
 			$this->validateName($request);
@@ -222,4 +227,21 @@ class EventController extends Controller
 //		Clean the description
 		$request->description = clean($request->description);
 	}
+
+	public function deleteEvent($name){
+		$id = explode('.', $name)[1];
+		$event = Event::find($id);
+
+		if($event->user->id == Auth::user()->id){
+
+			$likes = Like::where('event_id', $event->id);
+
+			$likes->delete();
+
+			$event->delete();
+			return redirect('/events');
+		}
+
+	}
+
 }

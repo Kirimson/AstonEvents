@@ -28,6 +28,8 @@ Route::post('events/like', 'EventController@like');
 Route::get('events/create', 'EventController@create')->middleware('auth');
 Route::post('events/create/new', 'EventController@createEvent')->middleware('auth');
 
+Route::get('events/delete/{name}', 'EventController@deleteEvent')->middleware('auth');
+
 Auth::routes();
 
 Route::get('/myAccount', 'HomeController@index');

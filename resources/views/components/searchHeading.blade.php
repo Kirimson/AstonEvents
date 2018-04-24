@@ -1,7 +1,4 @@
-<button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#sort-headings" aria-expanded="false" aria-controls="collapseExample">
-    Sort
-</button>
-<div class="collapse row" id="sort-headings">
+<div class="row" id="sort-headings">
         <h4 class="col-lg-2">
             <a href="#" onclick="sort('name', '{{ url()->full() }}')">Name
             @if($orderBy == "name" || $orderBy == "")

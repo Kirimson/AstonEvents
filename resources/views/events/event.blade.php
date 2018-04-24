@@ -134,6 +134,12 @@
             </button>
         </div>
         {!! Form::close() !!}
+    @elseif($owner == true)
+        <div id="event-image-container">
+            <a href="{{ url('events/delete/'.$event->urlname) }}" role="button" id="createSubmitButton" class="btn btn-outline-danger">
+                Delete Event
+            </a>
+        </div>
     @endif
 
     {{-- Script for images --}}
