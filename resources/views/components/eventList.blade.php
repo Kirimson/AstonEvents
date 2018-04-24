@@ -22,7 +22,9 @@
                     <div class="col-lg-8">
                         <div>
                             <h4>Description</h4>
-                            {{ $event->ShortDescription }}
+                            <div id="event-description">
+                                {{ $event->ShortDescription }}
+                            </div>
                         </div>
                         <hr/>
                         <div class="row">
