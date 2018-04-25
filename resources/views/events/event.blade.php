@@ -148,16 +148,21 @@
                 <div id="relatedContainer" class="card-body row">
                     {{--Loop through each event, getting their name and id for a checkbox, and place into the card--}}
                     @foreach($eventList as $relEvent)
-
                         {{--If create is true, show all events, else, check if relevent is same as event--}}
                         @if($create == true)
-                            <div class="col-lg-6">
-                                {{ Form::checkbox('related_events[]', $relEvent->id,
-                                $event == null ? null :
-                                $event->RelatedEvents->contains($relEvent) == true ? 'true' : null,
-                                ['id' => $relEvent->urlname]) }}
+                            <div class="col-lg-6 pretty-checkbox-div">
+                                <div class="pretty p-icon p-curve p-smooth">
+                                    {{ Form::checkbox('related_events[]', $relEvent->id,
+                                    $event == null ? null :
+                                    $event->RelatedEvents->contains($relEvent) == true ? 'true' : null,
+                                    ['id' => $relEvent->urlname]) }}
 
-                                {{ Form::label($relEvent->urlname, $relEvent->name) }}
+                                    <div class="state p-success">
+                                        <!-- svg path -->
+                                        <i class="icon fas fa-check"></i>
+                                        <label>{{$relEvent->name}}</label>
+                                    </div>
+                                </div>
                             </div>
                         @elseif($event->id != $relEvent->id)
                             <div class="col-lg-6">

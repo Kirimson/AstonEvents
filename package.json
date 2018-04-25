@@ -20,6 +20,7 @@
     },
     "dependencies": {
         "bootstrap": "^4.1.0",
-        "popper.js": "^1.14.3"
+        "popper.js": "^1.14.3",
+        "pretty-checkbox": "^3.0.3"
     }
 }
