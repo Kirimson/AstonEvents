@@ -5,13 +5,7 @@
 
 @section('content')
     <h1>Welcome to Aston Events</h1>
-    <h2 class="main-page-heading">Top Rated Events</h2>
-    {{--Show top liked events--}}
-    @include('components.eventList', array('events' => $topEvents, 'includeHeading' => false))
-    <h2 class="main-page-heading">Newest Events</h2>
-    {{--Show newest created events--}}
-    @include('components.eventList', array('events' => $newestEvents, 'includeHeading' => false))
-    <h2>About</h2>
+    <h2 class="main-page-heading">About</h2>
     <div class="col-lg-12" id="information-container">
         <p class="information">Aston Events is a site dedicated to university organised events.</p>
         <p class="information">It is made to be a one-stop-shop for
@@ -38,4 +32,10 @@
             </div>
         @endif
     </div>
+    <h2 class="main-page-heading">Top Rated Events</h2>
+    {{--Show top liked events--}}
+    @include('components.eventList', array('events' => $topEvents, 'includeHeading' => false))
+    <h2 class="main-page-heading">Newest Events</h2>
+    {{--Show newest created events--}}
+    @include('components.eventList', array('events' => $newestEvents, 'includeHeading' => false))
 @endsection
