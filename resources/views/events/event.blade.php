@@ -75,61 +75,69 @@
                 <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
                 {{ Form::textarea('description', $event == null ? '' : $event->description , ['id'=> 'description']) }}
             @else
-                <div id="event-description">
-                    {!! ucfirst($event->description) !!}
+                <div class="card" id="event-description">
+                    <div class="card-body">
+                        {!! ucfirst($event->description) !!}
+                    </div>
                 </div>
             @endif
 
         </div>
         <div class="col-lg-4">
             <h1>Details</h1>
-            {{-- Show dropdown if creating, else show category --}}
-            <h3>Category</h3>
-            <div>
-                {{ $create == true ? Form::select('category', array('sport' => 'Sport', 'culture' => 'Culture',
-                'other' => 'Other'), $event == null ? 'other' : $event->category, ['required' => 'required',
-                'class' => 'form-control']) : $event->UCCategory }}
-            </div>
+            <div class="card">
+                <div class="card-body">
+                    {{-- Show dropdown if creating, else show category --}}
+                    <h3>Category</h3>
+                    <div>
+                        {{ $create == true ? Form::select('category', array('sport' => 'Sport', 'culture' => 'Culture',
+                        'other' => 'Other'), $event == null ? 'other' : $event->category, ['required' => 'required',
+                        'class' => 'form-control']) : $event->UCCategory }}
+                    </div>
+                    <hr/>
+                    {{-- Show your username if creating, else, organiser of event --}}
+                    <h3>Contact</h3>
+                    <div>
+                        @if($create == true)
+                            {{ Form::text('contact', $event == null ? Auth::user()->email : $event->contact, ['required' =>
+                            'required',
+                            'class' => 'form-control', 'placeholder' => 'Contact details for the event']) }}
+                        @else
 
-            {{-- Show your username if creating, else, organiser of event --}}
-            <h3>Contact</h3>
-            <div>
-                @if($create == true)
-                    {{ Form::text('contact', $event == null ? Auth::user()->email : $event->contact, ['required' =>
-                    'required',
-                    'class' => 'form-control', 'placeholder' => 'Contact details for the event']) }}
-                @else
-
-                    @if($owner !== true)
-                        <a id="mailto" href="mailto:{{ $event->contact }}"
-                           role="button">{{ $event->user->userName }}</a>
-                    @else
-                        {{ $event->user->userName }}
-                    @endif
-                @endif
-            </div>
-            {{--Show date/time of event when viewing, when creating show empty date time picker, when editing, show
-            date time picker filled with event's value--}}
-            <h3>When</h3>
-            <div>
-                @if($create == true)
-                    <div class="input-group">
-                        {{ Form::date('date', $event == null ? null : explode(' ', $event->time)[0],
-                        ['required' => 'required', 'class' => 'form-control']) }}
-                        <span class="input-group-append">
+                            @if($owner !== true)
+                                <a id="mailto" href="mailto:{{ $event->contact }}"
+                                   role="button">{{ $event->user->userName }}</a>
+                            @else
+                                {{ $event->user->userName }}
+                            @endif
+                        @endif
+                    </div>
+                    <hr/>
+                    {{--Show date/time of event when viewing, when creating show empty date time picker, when editing, show
+                    date time picker filled with event's value--}}
+                    <h3>When</h3>
+                    <div>
+                        @if($create == true)
+                            <div class="input-group">
+                                {{ Form::date('date', $event == null ? null : explode(' ', $event->time)[0],
+                                ['required' => 'required', 'class' => 'form-control']) }}
+                                <span class="input-group-append">
                             {{ Form::time('time', $event == null ? null : explode(' ', $event->time)[1],
                             ['required' => 'required', 'class' => 'form-control']) }}
                         </span>
+                            </div>
+                        @else
+                            {{ $event->readableTime }}
+                        @endif
                     </div>
-                @else
-                    {{ $event->readableTime }}
-                @endif
-            </div>
-            {{--Show venue when viewing, empty textfield when creating, textfield filled with events venue--}}
-            <h3>Where</h3>
-            <div>
-                {{ $create == true ? Form::text('venue', $event == null ? '' : $event->venue, ['required' => 'required',
-                'class' => 'form-control', 'placeholder' => 'Contact details for the event']) : $event->UCVenue }}
+                    <hr/>
+                    {{--Show venue when viewing, empty textfield when creating, textfield filled with events venue--}}
+                    <h3>Where</h3>
+                    <div>
+                        {{ $create == true ? Form::text('venue', $event == null ? '' : $event->venue, ['required' => 'required',
+                        'class' => 'form-control', 'placeholder' => 'Contact details for the event']) : $event->UCVenue }}
+                    </div>
+                </div>
             </div>
         </div>
         {{--Related events, if creating, chow list of events, if viewing, use components.eventList to show events--}}
@@ -149,8 +157,8 @@
                 <div id="relatedContainer" class="card-body row">
                     {{--Loop through each event, getting their name and id for a checkbox, and place into the card--}}
                     @foreach($eventList as $relEvent)
-                        {{--If create is true, show all events, else, check if relevent is same as event--}}
-                        @if($create == true)
+                        {{--If event is null (new event), show all events, else, check if relevent is same as event--}}
+                        @if($event == null)
                             <div class="col-lg-6 pretty-checkbox-div">
                                 <div class="pretty p-icon p-curve p-smooth">
                                     {{ Form::checkbox('related_events[]', $relEvent->id,
@@ -165,14 +173,21 @@
                                     </div>
                                 </div>
                             </div>
+                            {{-- If event is not null (editing) make sure this event isnt shown in list --}}
                         @elseif($event->id != $relEvent->id)
-                            <div class="col-lg-6">
-                                {{ Form::checkbox('related_events[]', $relEvent->id,
-                                $event == null ? null :
-                                $event->RelatedEvents->contains($relEvent) == true ? 'true' : null,
-                                ['id' => $relEvent->urlname]) }}
+                            <div class="col-lg-6 pretty-checkbox-div">
+                                <div class="pretty p-icon p-curve p-smooth">
+                                    {{ Form::checkbox('related_events[]', $relEvent->id,
+                                    $event == null ? null :
+                                    $event->RelatedEvents->contains($relEvent) == true ? 'true' : null,
+                                    ['id' => $relEvent->urlname]) }}
 
-                                {{ Form::label($relEvent->urlname, $relEvent->name) }}
+                                    <div class="state p-success">
+                                        <!-- svg path -->
+                                        <i class="icon fas fa-check"></i>
+                                        <label>{{$relEvent->name}}</label>
+                                    </div>
+                                </div>
                             </div>
                         @endif
                     @endforeach
@@ -235,7 +250,8 @@
                         Are you sure you want to do this?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">I don't want this!
+                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">I don't want
+                            this!
                         </button>
                         <a href="{{ url('events/delete/'.$event->urlname) }}">
                             <button type="button" class="btn btn-outline-danger">Delete</button>

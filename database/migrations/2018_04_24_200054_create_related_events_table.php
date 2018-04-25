@@ -15,11 +15,11 @@ class CreateRelatedEventsTable extends Migration
     {
         Schema::create('related_events', function (Blueprint $table) {
             $table->increments('id');
-	        $table->timestamps();
-            $table->integer('event_id')->unsigned();
-            $table->integer('related_event_id')->unsigned();
+	        $table->integer('event_id')->unsigned();
+	        $table->integer('related_event_id')->unsigned();
 	        $table->foreign('event_id')->references('id')->on('events');
 	        $table->foreign('related_event_id')->references('id')->on('events');
+	        $table->timestamps();
         });
     }
 
