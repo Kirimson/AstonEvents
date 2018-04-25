@@ -1,3 +1,4 @@
+{{-- Show sort headings for event lists. show current sorted attribute as well as the sort type, denoted by an arrow --}}
 <div class="row" id="sort-headings">
         <h4 class="col-lg-2">
             <a href="#" onclick="sort('name', '{{ url()->full() }}')">Name

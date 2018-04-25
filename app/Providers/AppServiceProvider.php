@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-//      Provides pages with knowledge of pages ont he site and their page links. shared for the navbar to create links
+//      Provides pages with knowledge of pages on the site and their page links. shared for the navbar to create links
         $pages = [
             new Page('Home', '/'),
             $event = new Category('Events', '/events/', array(

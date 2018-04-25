@@ -28,7 +28,10 @@ class User extends Authenticatable
         'password', 'remember_token', 'id'
     ];
 
-//    Get the user name, however if the user is the same as the current user, append (You) at the end
+	/**
+	 * Get the users name. If the user is the same as the current user, append (You) at the end
+	 * @return string of users name
+	 */
     public function getUserNameAttribute(){
     	if(Auth::check()) {
 		    if ($this->name === Auth::user()->name) {

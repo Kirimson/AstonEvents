@@ -6,7 +6,8 @@
 @section('content')
 
     <h1>Events</h1>
-    @if(Request::get('preset') != true)
+    {{-- If not using a preset search, such as most liked/upcoming from the event dropdown, display a search form --}}
+    @if(Request::get('preset') == false)
         {!! Form::open(array('url' => 'events/','id' => 'event-search-form', 'class' => 'form', 'method' => 'GET')) !!}
 
         <h2>Search</h2>
@@ -33,9 +34,9 @@
                 Find events
             </button>
         </div>
-
         {!! Form::close() !!}
     @else
+        {{-- Show what preset you are using --}}
         @switch(Request::get('orderBy'))
             @case('likes')
             <h2>Most liked events</h2>
@@ -46,7 +47,9 @@
         @endswitch
     @endif
 
-    @include('components.eventList', array('events' => $events, 'includeHeading' => true))
+    {{-- Include the event list --}}
+    @include('components.eventList', array('events' => $events,
+    'includeHeading' => app('request')->input('preset') == true ? false : true))
     {{ $events->links("pagination::bootstrap-4") }}
 
     {{-- Disables any inputs that are empty, so URL doesn't get clogged up with empty GET parameters --}}

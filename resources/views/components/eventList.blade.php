@@ -1,12 +1,13 @@
-{{-- Heading --}}
+{{-- Heading only displayed if parent page specifies it wants it --}}
 @if($includeHeading)
     @include('components.searchHeading',
             array('orderBy' => app('request')->input('orderBy'), 'order' => app('request')->input('order')))
 @endif
 <div class="col-lg-10 offset-1">
+    {{--If array give is not empty, display events, otherwise diaplay a message--}}
     @if($events->first())
         <div id="event-container">
-            {{-- Events --}}
+            {{-- List events, show name, image category, short description, organiser time, venue and likes --}}
             @foreach($events as $event)
                 <div class="row">
                     <div class="col-lg-4">

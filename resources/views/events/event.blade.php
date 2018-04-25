@@ -23,14 +23,15 @@
             {{-- if creating a new event, create label and file input. otherwise, display event image --}}
             @if($create == true)
                 <input type="file" name="picture" id="picture" class="hidden-input" accept=".png,.jpg,.bmp,.svg"/>
-
                 <label for="picture">
                     @endif
                     {{-- if creating, display default. if not, display event image. if no image, fallback --}}
-                    <img id="event-image"
-                         src="{{ $event == null ? asset('img/events/default/default.svg') : $event->picture == null ?
-                         asset('img/events/default/default.svg') : asset($event->picture) }}"
-                         alt=""/>
+                    @if($create == true)
+                        <img id="event-image" src="{{asset('img/events/default/imagepick.svg')}}"/>
+                    @else
+                        <img id="event-image" src="{{ $event->picture == null ? asset('img/events/default/default.svg'):
+                         asset($event->picture) }}"/>
+                    @endif
                     @if($create == true)
                 </label>
             @endif

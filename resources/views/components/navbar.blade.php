@@ -28,6 +28,7 @@
             @endforeach
         </ul>
         <ul class="navbar-nav ml-auto">
+            {{-- Check if user is logged in to display user dropdown --}}
             @if(Auth::check())
                 <li class="nav-item active dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
@@ -39,6 +40,7 @@
                     </div>
                 </li>
             @else
+                {{-- Else display a login link --}}
                 <li class="nav-item"><a href="{{ url('/login') }}">Login/Register</a></li>
             @endif
         </ul>

@@ -25,7 +25,6 @@ class HomeController extends Controller
 	 */
 	public function index(Request $request)
 	{
-
 		$searchQuery = empty($request->input('search')) ? '' : $request->input('search');
 
 		$myEvents = Event::whereRaw("organiser_id = ".Auth::user()->id." and name like '%".$searchQuery."%'")->orderBy('time')->paginate(5);

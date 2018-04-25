@@ -9,6 +9,7 @@
     <h2>You'll soon be redirected to your account page.</h2>
     <h3>if not, click <a href="{{ url('/myAccount') }}">here</a></h3>
 
+    {{--Remove all localstorgage likes as they have been transfered to the database, then redirect to myaccount--}}
     <script>
         $(function(){
             try {
