@@ -248,11 +248,11 @@ class EventController extends Controller
 		if($event->user->id == Auth::user()->id){
 
 //			Delete likes for the event, so there are no foreign key constraint fails
-			$likes = Like::where('event_id', $event->id);
+			$likes = Like::where('event_id', $id);
 			$likes->delete();
 
-			//delete all its related events the user made
-			$related = RelatedEvent::where('event_id', $event->id);
+			//delete all its related events the user made and events that were related to this event
+			$related = RelatedEvent::whereRaw('event_id = '.$id.' or related_event_id = '.$id);
 			$related->delete();
 
 //			Delete the event

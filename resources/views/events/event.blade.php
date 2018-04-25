@@ -131,9 +131,16 @@
         @if($create == true)
             <div class="col-lg-10">
                 <h2>Related Events</h2>
+                <div class="form-group input-group col-lg-6 offset-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="">Search For:</span>
+                    </div>
+                    <input type="text" id="filter-search" class="form-control"
+                           onkeyup="filter()">
+                </div>
             </div>
             <div id="related-events" class="card col-lg-8 offset-1">
-                <div class="card-body row">
+                <div id="relatedContainer" class="card-body row">
                     @foreach($eventList as $relevent)
                         @if($event == null)
                             <div class="col-lg-6">
@@ -157,6 +164,27 @@
                     @endforeach
                 </div>
             </div>
+            <script>
+                function filter() {
+                    // Declare variables
+                    let input, filter, relatedContainer, checkBoxDivs, label, i;
+                    input = document.getElementById('filter-search');
+                    filter = input.value.toUpperCase();
+                    relatedContainer = document.getElementById("relatedContainer");
+                    checkBoxDivs = relatedContainer.getElementsByTagName('div');
+
+                    // Loop through all list items, and hide those who don't match the search query
+                    for (i = 0; i < checkBoxDivs.length; i++) {
+                        label = checkBoxDivs[i].getElementsByTagName("label")[0];
+                        if (label.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            checkBoxDivs[i].style.display = "";
+                            console.log("here");
+                        } else {
+                            checkBoxDivs[i].style.display = "none";
+                        }
+                    }
+                }
+            </script>
         @endif
     </div>
     @if($create == false && $event->relatedEvents->first())
