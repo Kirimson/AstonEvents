@@ -107,6 +107,8 @@
                     @endif
                 @endif
             </div>
+            {{--Show date/time of event when viewing, when creating show empty date time picker, when editing, show
+            date time picker filled with event's value--}}
             <h3>When</h3>
             <div>
                 @if($create == true)
@@ -122,15 +124,18 @@
                     {{ $event->readableTime }}
                 @endif
             </div>
+            {{--Show venue when viewing, empty textfield when creating, textfield filled with events venue--}}
             <h3>Where</h3>
             <div>
                 {{ $create == true ? Form::text('venue', $event == null ? '' : $event->venue, ['required' => 'required',
                 'class' => 'form-control', 'placeholder' => 'Contact details for the event']) : $event->UCVenue }}
             </div>
         </div>
+        {{--Related events, if creating, chow list of events, if viewing, use components.eventList to show events--}}
         @if($create == true)
             <div class="col-lg-10">
                 <h2>Related Events</h2>
+                {{--Text input linked to javascript function to filter out events to what the user searches--}}
                 <div class="form-group input-group col-lg-6 offset-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="">Search For:</span>
@@ -141,24 +146,27 @@
             </div>
             <div id="related-events" class="card col-lg-8 offset-1">
                 <div id="relatedContainer" class="card-body row">
-                    @foreach($eventList as $relevent)
-                        @if($event == null)
-                            <div class="col-lg-6">
-                                {{ Form::checkbox('related_events[]', $relevent->id,
-                                $event == null ? null :
-                                $event->RelatedEvents->contains($relevent) == true ? 'true' : null,
-                                ['id' => $relevent->urlname]) }}
+                    {{--Loop through each event, getting their name and id for a checkbox, and place into the card--}}
+                    @foreach($eventList as $relEvent)
 
-                                {{ Form::label($relevent->urlname, $relevent->name) }}
+                        {{--If create is true, show all events, else, check if relevent is same as event--}}
+                        @if($create == true)
+                            <div class="col-lg-6">
+                                {{ Form::checkbox('related_events[]', $relEvent->id,
+                                $event == null ? null :
+                                $event->RelatedEvents->contains($relEvent) == true ? 'true' : null,
+                                ['id' => $relEvent->urlname]) }}
+
+                                {{ Form::label($relEvent->urlname, $relEvent->name) }}
                             </div>
-                        @elseif($event->id != $relevent->id)
+                        @elseif($event->id != $relEvent->id)
                             <div class="col-lg-6">
-                                {{ Form::checkbox('related_events[]', $relevent->id,
+                                {{ Form::checkbox('related_events[]', $relEvent->id,
                                 $event == null ? null :
-                                $event->RelatedEvents->contains($relevent) == true ? 'true' : null,
-                                ['id' => $relevent->urlname]) }}
+                                $event->RelatedEvents->contains($relEvent) == true ? 'true' : null,
+                                ['id' => $relEvent->urlname]) }}
 
-                                {{ Form::label($relevent->urlname, $relevent->name) }}
+                                {{ Form::label($relEvent->urlname, $relEvent->name) }}
                             </div>
                         @endif
                     @endforeach
@@ -166,19 +174,17 @@
             </div>
             <script>
                 function filter() {
-                    // Declare variables
-                    let input, filter, relatedContainer, checkBoxDivs, label, i;
-                    input = document.getElementById('filter-search');
-                    filter = input.value.toUpperCase();
-                    relatedContainer = document.getElementById("relatedContainer");
-                    checkBoxDivs = relatedContainer.getElementsByTagName('div');
 
-                    // Loop through all list items, and hide those who don't match the search query
-                    for (i = 0; i < checkBoxDivs.length; i++) {
-                        label = checkBoxDivs[i].getElementsByTagName("label")[0];
-                        if (label.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                            checkBoxDivs[i].style.display = "";
-                            console.log("here");
+                    const input = document.getElementById('filter-search');
+                    const filter = input.value.toUpperCase();
+                    const relatedContainer = document.getElementById("relatedContainer");
+                    let checkBoxDivs = relatedContainer.getElementsByTagName('div');
+
+                    // loop through each event div, check if they match the filter. if not, set display to none
+                    for (let i = 0; i < checkBoxDivs.length; i++) {
+                        let label = checkBoxDivs[i].getElementsByTagName("label")[0];
+                        if (label.innerHTML.toUpperCase().indexOf(filter) !== -1) {
+                            checkBoxDivs[i].style.display = "block";
                         } else {
                             checkBoxDivs[i].style.display = "none";
                         }
