@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 class Event extends Model
 {
 
+//	Setup relation between Event and user, allowing the event to have access to its user
 	public function user()
 	{
 		return $this->belongsTo('App\User', 'organiser_id');

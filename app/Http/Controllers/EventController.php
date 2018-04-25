@@ -8,7 +8,6 @@ use App\RelatedEvent;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,16 +19,13 @@ class EventController extends Controller
 		$this->middleware('auth',['except' => ['show', 'like', 'main']]);
 	}
 
+//	Uses url parameters to make a complex search of events. Any attribute can be searched, with a set order and order type
 	public function findSpecifics(Request $request)
 	{
-		//Set default search terms if the input is empty
-		$attribute = null;
+		//Set default search terms if the input is empty, else set to the value in the parameter
 		empty($request->input('atr')) ? $attribute = 'name' : $attribute = $request->input('atr');
-		$search = null;
 		empty($request->input('search')) ? $search = '' : $search = $request->input('search');
-		$orderBy = null;
 		empty($request->input('orderBy')) ? $orderBy = 'name' : $orderBy = $request->input('orderBy');
-		$sortType = null;
 		empty($request->input('order')) ? $sortType = '0' : $sortType = $request->input('order');
 
 //		if sort type is set, convert it to its binary counterpart. done here so GET displays ascending/descending

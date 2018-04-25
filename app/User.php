@@ -10,10 +10,6 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    public function events(){
-    	return $this->hasMany('App\Event');
-    }
-
     /**
      * The attributes that are mass assignable.
      *
@@ -32,6 +28,7 @@ class User extends Authenticatable
         'password', 'remember_token', 'id'
     ];
 
+//    Get the user name, however if the user is the same as the current user, append (You) at the end
     public function getUserNameAttribute(){
     	if(Auth::check()) {
 		    if ($this->name === Auth::user()->name) {
